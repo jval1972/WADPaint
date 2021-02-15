@@ -9441,8 +9441,8 @@ object Form1: TForm1
     Top = 89
   end
   object OpenDialog1: TOpenDialog
-    DefaultExt = 'terrain'
-    Filter = 'Terrain files (*.terrain)|*.terrain'
+    DefaultExt = 'wadp'
+    Filter = 'WAD Painter Files (*.wadp)|*.wadp'
     Left = 281
     Top = 169
   end
@@ -9470,8 +9470,8 @@ object Form1: TForm1
     Top = 153
   end
   object SaveDialog1: TSaveDialog
-    DefaultExt = 'terrain'
-    Filter = 'Terrain files (*.terrain)|*.terrain'
+    DefaultExt = 'wadp'
+    Filter = 'WAD Painter Files (*.wadp)|*.wadp'
     Options = [ofOverwritePrompt, ofHideReadOnly, ofPathMustExist, ofEnableSizing]
     Left = 460
     Top = 88
@@ -9485,13 +9485,6 @@ object Form1: TForm1
     Options = [ofHideReadOnly, ofPathMustExist, ofFileMustExist, ofEnableSizing]
     Left = 481
     Top = 201
-  end
-  object SaveDialog2: TSaveDialog
-    DefaultExt = 'obj'
-    Filter = 'Obj Models (*.obj)|*.obj'
-    Options = [ofOverwritePrompt, ofHideReadOnly, ofPathMustExist, ofEnableSizing]
-    Left = 532
-    Top = 88
   end
   object OpenWADDialog: TOpenDialog
     DefaultExt = 'WAD'

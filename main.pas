@@ -109,7 +109,6 @@ type
     HistoryItem9: TMenuItem;
     EditPageControl: TPageControl;
     TabSheet1: TTabSheet;
-    SaveDialog2: TSaveDialog;
     OpenWADDialog: TOpenDialog;
     Panel1: TPanel;
     Label3: TLabel;
@@ -256,7 +255,6 @@ type
     procedure Redo1Click(Sender: TObject);
     procedure File1Click(Sender: TObject);
     procedure CopyTexture1Click(Sender: TObject);
-    procedure ExportObjModel1Click(Sender: TObject);
     procedure PaintBox1Paint(Sender: TObject);
     procedure SelectWADFileButtonClick(Sender: TObject);
     procedure WADFlatsListBoxClick(Sender: TObject);
@@ -934,23 +932,6 @@ begin
   fpensize := Round(PenSizeSlider.Position);
   ftexturescale := Round(TextureScaleSlider.Position);
   CalcPenMasks;
-end;
-
-procedure TForm1.ExportObjModel1Click(Sender: TObject);
-var
-  fs: TFileStream;
-begin
-  if SaveDialog2.Execute then
-  begin
-    BackupFile(SaveDialog2.FileName);
-    fs := TFileStream.Create(SaveDialog2.FileName, fmCreate);
-    try
-
-//      PT_SaveTreeToObj(tree, fs);
-    finally
-      fs.Free;
-    end;
-  end;
 end;
 
 procedure TForm1.PaintBox1Paint(Sender: TObject);
