@@ -267,9 +267,6 @@ type
     procedure PenSpeedButton1Click(Sender: TObject);
     procedure PenSpeedButton2Click(Sender: TObject);
     procedure PenSpeedButton3Click(Sender: TObject);
-    procedure PenSpeedButton4Click(Sender: TObject);
-    procedure PenSpeedButton5Click(Sender: TObject);
-    procedure PenSpeedButton6Click(Sender: TObject);
     procedure PasteTexture1Click(Sender: TObject);
     procedure PaletteSpeedButton1Click(Sender: TObject);
     procedure PaletteDefault1Click(Sender: TObject);
@@ -1779,24 +1776,6 @@ end;
 procedure TForm1.PenSpeedButton3Click(Sender: TObject);
 begin
   PaintBox1.Cursor := crPaint;
-  PaintBox1.Invalidate;
-end;
-
-procedure TForm1.PenSpeedButton4Click(Sender: TObject);
-begin
-  PaintBox1.Cursor := crEditMesh;
-  PaintBox1.Invalidate;
-end;
-
-procedure TForm1.PenSpeedButton5Click(Sender: TObject);
-begin
-  PaintBox1.Cursor := crElevateMesh;
-  PaintBox1.Invalidate;
-end;
-
-procedure TForm1.PenSpeedButton6Click(Sender: TObject);
-begin
-  PaintBox1.Cursor := crSmoothMesh;
   PaintBox1.Invalidate;
 end;
 

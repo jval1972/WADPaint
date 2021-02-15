@@ -68,7 +68,7 @@ type
     function textureheight: integer;
   end;
 
-function ter_validatetexturesize(const t: integer): integer;
+function wp_validatetexturesize(const t: integer): integer;
 
 const
   TEXTURE_MAGIC: integer = $50444157; // WADP
@@ -115,8 +115,8 @@ procedure TTexture.SetTextureSize(const wval, hval: integer);
 var
   nw, nh: integer;
 begin
-  nw := ter_validatetexturesize(wval);
-  nh := ter_validatetexturesize(hval);
+  nw := wp_validatetexturesize(wval);
+  nh := wp_validatetexturesize(hval);
   if (nw <> ftexture.Width) or (nh <> ftexture.Height) then
   begin
     ftexture.Width := nw;
@@ -258,7 +258,7 @@ begin
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
-function ter_validatetexturesize(const t: integer): integer;
+function wp_validatetexturesize(const t: integer): integer;
 begin
   if t < MINTEXTURESIZE then
     Result := MINTEXTURESIZE
