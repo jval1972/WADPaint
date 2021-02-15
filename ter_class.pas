@@ -37,9 +37,6 @@ const
   MINTEXTURESIZE = 32;
   MAXTEXTURESIZE = 2048;
 
-const
-  HMF_STRETCHTEXTURE = 1;
-
 type
   point2d_t = record
     X, Y: integer;
