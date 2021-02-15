@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 //
-//  DD_TERRAIN: Terrain Generator
-//  Copyright (C) 2020-2021 by Jim Valavanis
+//  WADPaint: Texture Generator from WAD resources
+//  Copyright (C) 2021 by Jim Valavanis
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -19,11 +19,11 @@
 //  02111-1307, USA.
 //
 // DESCRIPTION:
-//  Terrain class
+//  Texture class
 //
 //------------------------------------------------------------------------------
 //  E-Mail: jimmyvalavanis@yahoo.gr
-//  Site  : https://sourceforge.net/projects/DD-TERRAIN/
+//  Site  : https://sourceforge.net/projects/wad-painter/
 //------------------------------------------------------------------------------
 
 unit ter_class;
@@ -34,6 +34,7 @@ uses
   Windows, SysUtils, Classes, Graphics;
 
 const
+  MINTEXTURESIZE = 32;
   MAXTEXTURESIZE = 2048;
 
 const
@@ -262,19 +263,12 @@ end;
 ////////////////////////////////////////////////////////////////////////////////
 function ter_validatetexturesize(const t: integer): integer;
 begin
-  if (t = 256) or (t = 512) or (t = 1024) or (t = 2048) then
-  begin
-    Result := t;
-    Exit;
-  end;
-  if t < 256 then
-    Result := 256
-  else if t < 512 then
-    Result := 512
-  else if t < 1024 then
-    Result := 1024
+  if t < MINTEXTURESIZE then
+    Result := MINTEXTURESIZE
+  else if t > MAXTEXTURESIZE then
+    Result := MAXTEXTURESIZE
   else
-    Result := 2048;
+    Result := t;
 end;
 
 end.

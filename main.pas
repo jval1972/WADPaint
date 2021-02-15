@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 //
-//  DD_TERRAIN: Terrain Generator
-//  Copyright (C) 2020-2021 by Jim Valavanis
+//  WADPaint: Texture Generator from WAD resources
+//  Copyright (C) 2021 by Jim Valavanis
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -23,7 +23,7 @@
 //
 //------------------------------------------------------------------------------
 //  E-Mail: jimmyvalavanis@yahoo.gr
-//  Site  : https://sourceforge.net/projects/DD-TERRAIN/
+//  Site  : https://sourceforge.net/projects/wad-painter/
 //------------------------------------------------------------------------------
 
 unit main;
@@ -78,7 +78,6 @@ type
     Timer1: TTimer;
     StatusBar1: TStatusBar;
     SavePictureDialog1: TSavePictureDialog;
-    MNExport1: TMenuItem;
     SaveDialog1: TSaveDialog;
     N5: TMenuItem;
     N8: TMenuItem;
@@ -123,13 +122,8 @@ type
     PenSpeedButton2: TSpeedButton;
     PenSpeedButton3: TSpeedButton;
     Bevel2: TBevel;
-    N1: TMenuItem;
     PasteTexture1: TMenuItem;
-    PasteHeightmap1: TMenuItem;
     SaveWADDialog: TSaveDialog;
-    N4: TMenuItem;
-    Copy3dview1: TMenuItem;
-    CopyHeightmap1: TMenuItem;
     PalettePopupMenu1: TPopupMenu;
     PaletteDoom1: TMenuItem;
     PaletteHeretic1: TMenuItem;
@@ -153,7 +147,6 @@ type
     DirTabSheet: TTabSheet;
     Panel4: TPanel;
     Panel6: TPanel;
-    Import1: TMenuItem;
     MNImportTexture1: TMenuItem;
     TextureScaleResetLabel: TLabel;
     TextureScalePaintBox: TPaintBox;
@@ -347,12 +340,12 @@ type
     ColorPickerButton1: TColorPickerButton;
     procedure Idle(Sender: TObject; var Done: Boolean);
     function CheckCanClose: boolean;
-    procedure DoNewTerrain(const twidth, theight: integer);
-    procedure DoSaveTerrain(const fname: string);
+    procedure DoNewTexture(const twidth, theight: integer);
+    procedure DoSaveTexture(const fname: string);
     function DoLoadTerrain(const fname: string): boolean;
     procedure SetFileName(const fname: string);
-    procedure DoLoadTerrainBinaryUndo(s: TStream);
-    procedure DoSaveTerrainBinaryUndo(s: TStream);
+    procedure DoLoadTextureBinaryUndo(s: TStream);
+    procedure DoSaveTextureBinaryUndo(s: TStream);
     procedure SaveUndo(const dosavebitmap: boolean);
     procedure UpdateStausbar;
     procedure UpdateEnable;
@@ -509,8 +502,8 @@ begin
 
   undoManager := TUndoRedoManager.Create;
   undoManager.UndoLimit := 100;
-  undoManager.OnLoadFromStream := DoLoadTerrainBinaryUndo;
-  undoManager.OnSaveToStream := DoSaveTerrainBinaryUndo;
+  undoManager.OnLoadFromStream := DoLoadTextureBinaryUndo;
+  undoManager.OnSaveToStream := DoSaveTextureBinaryUndo;
 
   filemenuhistory := TFileMenuHistory.Create(self);
   filemenuhistory.MenuItem0 := HistoryItem0;
@@ -562,7 +555,7 @@ begin
   if DoCreate then
   begin
     SetFileName('');
-    DoNewTerrain(DEF_TEXTURE_WIDTH, DEF_TEXTURE_HEIGHT);
+    DoNewTexture(DEF_TEXTURE_WIDTH, DEF_TEXTURE_HEIGHT);
     undoManager.Clear;
   end;
 
@@ -617,10 +610,10 @@ begin
   twidth := terrain.texturewidth;
   theight := terrain.textureheight;
   if GetNewTextureSize(twidth, theight) then
-    DoNewTerrain(twidth, theight);
+    DoNewTexture(twidth, theight);
 end;
 
-procedure TForm1.DoNewTerrain(const twidth, theight: integer);
+procedure TForm1.DoNewTexture(const twidth, theight: integer);
 begin
   SetFileName('');
   changed := False;
@@ -657,10 +650,10 @@ begin
     end;
   end;
   BackupFile(ffilename);
-  DoSaveTerrain(ffilename);
+  DoSaveTexture(ffilename);
 end;
 
-procedure TForm1.DoSaveTerrain(const fname: string);
+procedure TForm1.DoSaveTexture(const fname: string);
 begin
   SetFileName(fname);
 
@@ -776,7 +769,7 @@ begin
   begin
     filemenuhistory.AddPath(SaveDialog1.FileName);
     BackupFile(SaveDialog1.FileName);
-    DoSaveTerrain(SaveDialog1.FileName);
+    DoSaveTexture(SaveDialog1.FileName);
   end;
 end;
 
@@ -818,7 +811,6 @@ begin
   Undo1.Enabled := undoManager.CanUndo;
   Redo1.Enabled := undoManager.CanRedo;
   PasteTexture1.Enabled := Clipboard.HasFormat(CF_BITMAP);
-  PasteHeightmap1.Enabled := Clipboard.HasFormat(CF_BITMAP);
 end;
 
 procedure TForm1.Undo1Click(Sender: TObject);
@@ -847,12 +839,12 @@ begin
   end;
 end;
 
-procedure TForm1.DoSaveTerrainBinaryUndo(s: TStream);
+procedure TForm1.DoSaveTextureBinaryUndo(s: TStream);
 begin
   terrain.SaveToStream(s, true, savebitmapundo);
 end;
 
-procedure TForm1.DoLoadTerrainBinaryUndo(s: TStream);
+procedure TForm1.DoLoadTextureBinaryUndo(s: TStream);
 begin
   terrain.LoadFromStream(s);
   TerrainToControls;

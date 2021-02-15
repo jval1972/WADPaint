@@ -9351,19 +9351,13 @@ object Form1: TForm1
       object N9: TMenuItem
         Caption = '-'
       end
-      object Import1: TMenuItem
+      object MNImportTexture1: TMenuItem
         Caption = 'Import'
-        object MNImportTexture1: TMenuItem
-          Caption = 'Terrain Texture'
-          OnClick = MNImportTexture1Click
-        end
+        OnClick = MNImportTexture1Click
       end
-      object MNExport1: TMenuItem
-        Caption = '&Export'
-        object MNExpoortTexture1: TMenuItem
-          Caption = 'Terrain Texture'
-          OnClick = MNExpoortTexture1Click
-        end
+      object MNExpoortTexture1: TMenuItem
+        Caption = 'Export'
+        OnClick = MNExpoortTexture1Click
       end
       object N2: TMenuItem
         Caption = '-'
@@ -9422,29 +9416,15 @@ object Form1: TForm1
       object N8: TMenuItem
         Caption = '-'
       end
-      object Copy3dview1: TMenuItem
-        Caption = 'Copy (3D View)'
-      end
-      object N1: TMenuItem
-        Caption = '-'
-      end
       object CopyTexture1: TMenuItem
-        Caption = 'Copy (Texture)'
+        Caption = 'Copy'
         ShortCut = 16451
         OnClick = CopyTexture1Click
       end
       object PasteTexture1: TMenuItem
-        Caption = 'Paste (Texture)'
+        Caption = 'Paste'
+        ShortCut = 16470
         OnClick = PasteTexture1Click
-      end
-      object N4: TMenuItem
-        Caption = '-'
-      end
-      object CopyHeightmap1: TMenuItem
-        Caption = 'Copy (Heightmap)'
-      end
-      object PasteHeightmap1: TMenuItem
-        Caption = 'Paste (Heightmap)'
       end
     end
     object Help1: TMenuItem

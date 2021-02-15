@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 //
-//  DD_TERRAIN: Terrain Generator
-//  Copyright (C) 2020-2021 by Jim Valavanis
+//  WADPaint: Texture Generator from WAD resources
+//  Copyright (C) 2021 by Jim Valavanis
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -23,7 +23,7 @@
 //
 //------------------------------------------------------------------------------
 //  E-Mail: jimmyvalavanis@yahoo.gr
-//  Site  : https://sourceforge.net/projects/DD-TERRAIN/
+//  Site  : https://sourceforge.net/projects/wad-painter/
 //------------------------------------------------------------------------------
 
 unit ter_wadreader;
