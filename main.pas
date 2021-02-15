@@ -33,8 +33,8 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, xTGA, jpeg, zBitmap, ComCtrls, ExtCtrls, Buttons, Menus, FileCtrl,
-  StdCtrls, AppEvnts, ExtDlgs, clipbrd, ToolWin, ter_class, ter_undo,
-  ter_filemenuhistory, ter_slider, PngImage1, ter_pk3, ter_colorpickerbutton,
+  StdCtrls, AppEvnts, ExtDlgs, clipbrd, ToolWin, wp_class, wp_undo,
+  wp_filemenuhistory, wp_slider, PngImage1, wp_pk3, wp_colorpickerbutton,
   xTIFF, ImgList;
 
 type
@@ -389,17 +389,17 @@ var
 implementation
 
 uses
-  ter_defs,
-  ter_utils,
+  wp_defs,
+  wp_utils,
   frm_newterrain,
-  ter_wadreader,
-  ter_palettes,
+  wp_wadreader,
+  wp_palettes,
   frm_loadimagehelper,
-  ter_colorpalettebmz,
-  ter_cursors,
-  ter_doomdata,
-  ter_doomutils,
-  ter_wad;
+  wp_colorpalettebmz,
+  wp_cursors,
+  wp_doomdata,
+  wp_doomutils,
+  wp_wad;
 
 {$R *.dfm}
 

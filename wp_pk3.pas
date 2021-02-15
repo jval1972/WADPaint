@@ -26,7 +26,7 @@
 //  Site  : https://sourceforge.net/projects/wad-painter/
 //------------------------------------------------------------------------------
 
-unit ter_pk3;
+unit wp_pk3;
 
 interface
 

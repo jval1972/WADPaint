@@ -26,7 +26,7 @@
 //  Site  : https://sourceforge.net/projects/wad-painter/
 //------------------------------------------------------------------------------
 
-unit ter_filemenuhistory;
+unit wp_filemenuhistory;
 
 interface
 
@@ -85,7 +85,7 @@ type
 implementation
 
 uses
-  ter_utils;
+  wp_utils;
 
 resourceString
   rsRangeCheckError = 'Index out of range.';

@@ -26,13 +26,13 @@
 //  Site  : https://sourceforge.net/projects/wad-painter/
 //------------------------------------------------------------------------------
 
-unit ter_quantize;
+unit wp_quantize;
 
 interface
 
 uses
   Windows,
-  ter_utils,
+  wp_utils,
   SysUtils,
   Graphics;
 

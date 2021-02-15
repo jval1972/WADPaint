@@ -26,7 +26,7 @@
 //  Site  : https://sourceforge.net/projects/wad-painter/
 //------------------------------------------------------------------------------
 
-unit ter_tmp;
+unit wp_tmp;
 
 interface
 

@@ -26,12 +26,12 @@
 //  Site  : https://sourceforge.net/projects/wad-painter/
 //------------------------------------------------------------------------------
 
-unit ter_wadreader;
+unit wp_wadreader;
 
 interface
 
 uses
-  Classes, SysUtils, ter_wad;
+  Classes, SysUtils, wp_wad;
 
 type
   TWadReader = class(TObject)

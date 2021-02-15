@@ -26,11 +26,11 @@
 //  Site  : https://sourceforge.net/projects/wad-painter/
 //------------------------------------------------------------------------------
 
-unit ter_undo;
+unit wp_undo;
 
 interface
 
-uses Windows, SysUtils, Classes, ter_binary, zLibPas;
+uses Windows, SysUtils, Classes, wp_binary, zLibPas;
 
 type
   TStreamType = (sstMemory, sstFile);

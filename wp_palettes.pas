@@ -26,7 +26,7 @@
 //  Site  : https://sourceforge.net/projects/wad-painter/
 //------------------------------------------------------------------------------
 
-unit ter_palettes;
+unit wp_palettes;
 
 interface
 

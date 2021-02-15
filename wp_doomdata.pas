@@ -26,12 +26,12 @@
 //  Site  : https://sourceforge.net/projects/wad-painter/
 //------------------------------------------------------------------------------
 
-unit ter_doomdata;
+unit wp_doomdata;
 
 interface
 
 uses
-  ter_wad;
+  wp_wad;
 
 const
 // Skill flags.

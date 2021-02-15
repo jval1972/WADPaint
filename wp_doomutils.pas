@@ -26,13 +26,13 @@
 //  Site  : https://sourceforge.net/projects/wad-painter/
 //------------------------------------------------------------------------------
 
-unit ter_doomutils;
+unit wp_doomutils;
 
 interface
 
 uses
   Graphics,
-  ter_utils;
+  wp_utils;
 
 function IsValidWADPatchImage(const buf: pointer; const size: integer): boolean;
 
@@ -42,7 +42,7 @@ function DoomPatchToBitmap(const buf: pointer; const size: integer;
 implementation
 
 uses
-  ter_doomdata;
+  wp_doomdata;
 
 function IsValidWADPatchImage(const buf: pointer; const size: integer): boolean;
 var

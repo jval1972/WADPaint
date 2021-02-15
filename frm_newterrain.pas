@@ -61,7 +61,7 @@ implementation
 {$R *.dfm}
 
 uses
-  ter_class;
+  wp_class;
 
 function GetNewTextureSize(var twidth, theight: integer): boolean;
 var

@@ -26,7 +26,7 @@
 //  Site  : https://sourceforge.net/projects/wad-painter/
 //------------------------------------------------------------------------------
 
-unit ter_class;
+unit wp_class;
 
 interface
 
@@ -80,7 +80,7 @@ const
 implementation
 
 uses
-  Math, ter_utils, zBitmap;
+  Math, wp_utils, zBitmap;
 
 constructor TTexture.Create;
 begin

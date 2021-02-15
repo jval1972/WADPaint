@@ -26,7 +26,7 @@
 //  Site  : https://sourceforge.net/projects/wad-painter/
 //------------------------------------------------------------------------------
 
-unit ter_colorpickerbutton;
+unit wp_colorpickerbutton;
 
 // This unit contains a special speed button which can be used to let the user select
 // a specific color. The control does not use the standard Windows color dialog, but

@@ -26,7 +26,7 @@
 //  Site  : https://sourceforge.net/projects/wad-painter/
 //------------------------------------------------------------------------------
 
-unit ter_wadwriter;
+unit wp_wadwriter;
 
 interface
 
@@ -54,7 +54,7 @@ function AddDataToWAD(const wad: TWADWriter; const lumpname, data: string): bool
 implementation
 
 uses
-  ter_wad;
+  wp_wad;
 
 constructor TWadWriter.Create;
 begin
