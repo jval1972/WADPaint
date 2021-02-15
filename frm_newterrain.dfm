@@ -1105,6 +1105,7 @@ object NewForm: TNewForm
       Height = 21
       TabOrder = 0
       Text = '64'
+      OnKeyPress = Edit1KeyPress
     end
     object Edit2: TEdit
       Left = 192
@@ -1113,6 +1114,7 @@ object NewForm: TNewForm
       Height = 21
       TabOrder = 1
       Text = '64'
+      OnKeyPress = Edit2KeyPress
     end
   end
 end

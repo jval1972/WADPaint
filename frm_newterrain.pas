@@ -44,6 +44,8 @@ type
     Edit1: TEdit;
     Edit2: TEdit;
     Label2: TLabel;
+    procedure Edit1KeyPress(Sender: TObject; var Key: Char);
+    procedure Edit2KeyPress(Sender: TObject; var Key: Char);
   private
     { Private declarations }
   public
@@ -75,8 +77,8 @@ begin
     f.ShowModal;
     if f.ModalResult = mrOK then
     begin
-      twidth := f.texWidth;
-      theight := f.texHeight;
+      twidth := wp_validatetexturesize(f.texWidth);
+      theight := wp_validatetexturesize(f.texHeight);
       Result := True;
     end;
   finally
@@ -102,6 +104,24 @@ end;
 procedure TNewForm.SetHeighSize(const theight: integer);
 begin
   Edit2.Text := IntToStr(theight);
+end;
+
+procedure TNewForm.Edit1KeyPress(Sender: TObject; var Key: Char);
+begin
+  if not (Key in [#8, '0'..'9']) then
+  begin
+    Key := #0;
+    Exit;
+  end;
+end;
+
+procedure TNewForm.Edit2KeyPress(Sender: TObject; var Key: Char);
+begin
+  if not (Key in [#8, '0'..'9']) then
+  begin
+    Key := #0;
+    Exit;
+  end;
 end;
 
 end.
