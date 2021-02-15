@@ -1100,7 +1100,7 @@ object Form1: TForm1
       Top = 2
       Width = 34
       Height = 34
-      Hint = 'Create a new Terrain'
+      Hint = 'Create a new Texture'
       Flat = True
       Glyph.Data = {
         360C0000424D360C000000000000360000002800000020000000200000000100
@@ -1208,7 +1208,7 @@ object Form1: TForm1
       Top = 2
       Width = 34
       Height = 34
-      Hint = 'Open a Terrain from disk'
+      Hint = 'Open a Texture from disk'
       Flat = True
       Glyph.Data = {
         360C0000424D360C000000000000360000002800000020000000200000000100
@@ -1324,7 +1324,7 @@ object Form1: TForm1
       Top = 2
       Width = 34
       Height = 34
-      Hint = 'Save Terrain to disk'
+      Hint = 'Save Texture to disk'
       Flat = True
       Glyph.Data = {
         360C0000424D360C000000000000360000002800000020000000200000000100
@@ -1432,7 +1432,7 @@ object Form1: TForm1
       Top = 2
       Width = 34
       Height = 34
-      Hint = 'Save Terrain to disk with new name'
+      Hint = 'Save Texture to disk with new name'
       Flat = True
       Glyph.Data = {
         360C0000424D360C000000000000360000002800000020000000200000000100
@@ -1798,7 +1798,7 @@ object Form1: TForm1
       Top = 2
       Width = 34
       Height = 34
-      Hint = 'About Terrain Generator'
+      Hint = 'About WAD Painter'
       Flat = True
       Glyph.Data = {
         360C0000424D360C000000000000360000002800000020000000200000000100
