@@ -38,28 +38,23 @@ type
   TNewForm = class(TForm)
     Panel1: TPanel;
     Panel2: TPanel;
-    TextureSizeRadioGroup: TRadioGroup;
-    HeightmapSizeRadioGroup: TRadioGroup;
     OKButton: TButton;
     CancelButton: TButton;
     Label1: TLabel;
+    Edit1: TEdit;
+    Edit2: TEdit;
     Label2: TLabel;
-    procedure TextureSizeRadioGroupClick(Sender: TObject);
-    procedure HeightmapSizeRadioGroupClick(Sender: TObject);
-    procedure FormCreate(Sender: TObject);
-    procedure FormShow(Sender: TObject);
   private
     { Private declarations }
-    procedure UpdateControls;
   public
     { Public declarations }
-    function TextureSize: integer;
-    procedure SetTextureSize(const tsize: integer);
-    function HeightmapSize: integer;
-    procedure SetHeightmapSize(const hsize: integer);
+    function texWidth: integer;
+    procedure SetWidthSize(const twidth: integer);
+    function texHeight: integer;
+    procedure SetHeighSize(const theight: integer);
   end;
 
-function GetNewTerrainSize(var tsize, hsize: integer): boolean;
+function GetNewTextureSize(var twidth, theight: integer): boolean;
 
 implementation
 
@@ -68,20 +63,20 @@ implementation
 uses
   ter_class;
 
-function GetNewTerrainSize(var tsize, hsize: integer): boolean;
+function GetNewTextureSize(var twidth, theight: integer): boolean;
 var
   f: TNewForm;
 begin
   Result := False;
   f := TNewForm.Create(nil);
   try
-    f.SetTextureSize(tsize);
-    f.SetHeightmapSize(hsize);
+    f.SetWidthSize(twidth);
+    f.SetHeighSize(theight);
     f.ShowModal;
     if f.ModalResult = mrOK then
     begin
-      tsize := f.TextureSize;
-      hsize := f.HeightmapSize;
+      twidth := f.texWidth;
+      theight := f.texHeight;
       Result := True;
     end;
   finally
@@ -89,66 +84,26 @@ begin
   end;
 end;
 
-procedure TNewForm.UpdateControls;
+function TNewForm.texWidth: integer;
 begin
-  Label1.Caption := Format('Mesh quad size: %d', [TextureSize div (HeightmapSize - 1)]);
-  Label2.Caption := Format('Resulting mesh triangles: %d', [2 * sqr(HeightmapSize - 1)]);
+  Result := StrToIntDef(Edit1.Text, 64);
 end;
 
-function TNewForm.TextureSize: integer;
+procedure TNewForm.SetWidthSize(const twidth: integer);
 begin
-  if TextureSizeRadioGroup.ItemIndex >= 0 then
-  begin
-    Result := StrToInt(TextureSizeRadioGroup.Items[TextureSizeRadioGroup.ItemIndex]);
-    Exit;
-  end;
-  Result := 1024;
+  Edit1.Text := IntToStr(twidth);
 end;
 
-procedure TNewForm.SetTextureSize(const tsize: integer);
+function TNewForm.texHeight: integer;
+begin
+  Result := StrToIntDef(Edit2.Text, 64);
+end;
+
+procedure TNewForm.SetHeighSize(const theight: integer);
 var
   sz: integer;
 begin
-  sz := ter_validatetexturesize(tsize);
-  TextureSizeRadioGroup.ItemIndex := TextureSizeRadioGroup.Items.IndexOf(IntToStr(sz));
-end;
-
-function TNewForm.HeightmapSize: integer;
-begin
-  if HeightmapSizeRadioGroup.ItemIndex >= 0 then
-  begin
-    Result := StrToInt(HeightmapSizeRadioGroup.Items[HeightmapSizeRadioGroup.ItemIndex]);
-    Exit;
-  end;
-  Result := 17;
-end;
-
-procedure TNewForm.SetHeightmapSize(const hsize: integer);
-var
-  sz: integer;
-begin
-  sz := ter_validateheightmapsize(hsize);
-  HeightmapSizeRadioGroup.ItemIndex := HeightmapSizeRadioGroup.Items.IndexOf(IntToStr(sz));
-end;
-
-procedure TNewForm.TextureSizeRadioGroupClick(Sender: TObject);
-begin
-  UpdateControls;
-end;
-
-procedure TNewForm.HeightmapSizeRadioGroupClick(Sender: TObject);
-begin
-  UpdateControls;
-end;
-
-procedure TNewForm.FormCreate(Sender: TObject);
-begin
-  UpdateControls;
-end;
-
-procedure TNewForm.FormShow(Sender: TObject);
-begin
-  UpdateControls;
+  Edit2.Text := IntToStr(theight);
 end;
 
 end.

@@ -42,8 +42,6 @@ type
   bigstring_p = ^bigstring_t;
 
 var
-  opt_renderevniroment: Boolean = True;
-  opt_renderwireframe: Boolean = False;
   opt_filemenuhistory0: bigstring_t;
   opt_filemenuhistory1: bigstring_t;
   opt_filemenuhistory2: bigstring_t;
@@ -78,25 +76,10 @@ type
   end;
 
 const
-  NUMSETTINGS = 19;
+  NUMSETTINGS = 16;
 
 var
   Settings: array[0..NUMSETTINGS - 1] of TSettingItem = (
-    (
-      desc: '[OpenGL]';
-      typeof: tstDevider;
-      location: nil;
-    ),
-    (
-      desc: 'GL_RENDERENVIROMENT';
-      typeof: tstBoolean;
-      location: @opt_renderevniroment;
-    ),
-    (
-      desc: 'GL_RENDERWIREFRAME';
-      typeof: tstBoolean;
-      location: @opt_renderwireframe;
-    ),
     (
       desc: '[File Menu History]';
       typeof: tstDevider;

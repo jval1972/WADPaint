@@ -33,10 +33,10 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, xTGA, jpeg, zBitmap, ComCtrls, ExtCtrls, Buttons, Menus, FileCtrl,
-  StdCtrls, AppEvnts, ExtDlgs, clipbrd, ToolWin, dglOpenGL, ter_class, ter_undo,
+  StdCtrls, AppEvnts, ExtDlgs, clipbrd, ToolWin, ter_class, ter_undo,
   ter_filemenuhistory, ter_slider, PngImage1, ter_pk3, ter_colorpickerbutton,
-  ter_wadexport, ter_voxelexport, xTIFF, ImgList;
-                           
+  xTIFF, ImgList;
+
 type
   drawlayeritem_t = packed record
     pass: byte;
@@ -47,20 +47,11 @@ type
   drawlayer_p = ^drawlayer_t;
 
 type
-  heightlayeritem_t = packed record
-    pass: boolean;
-  end;
-
-  heightlayer_t = packed array[0..MAXHEIGHTMAPSIZE - 1, 0..MAXHEIGHTMAPSIZE - 1] of heightlayeritem_t;
-  heightlayer_p = ^heightlayer_t;
-
-type
   colorbuffer_t = array[0..MAXTEXTURESIZE - 1, 0..MAXTEXTURESIZE - 1] of LongWord;
   colorbuffer_p = ^colorbuffer_t;
 
 const
   MAXPENSIZE = 128;
-  MAXHEIGHTSIZE = 128;
 
 const
   MINTEXTURESCALE = 10;
@@ -86,10 +77,8 @@ type
     OpenPictureDialog1: TOpenPictureDialog;
     Timer1: TTimer;
     StatusBar1: TStatusBar;
-    Options1: TMenuItem;
     SavePictureDialog1: TSavePictureDialog;
     MNExport1: TMenuItem;
-    ExportObjModel1: TMenuItem;
     SaveDialog1: TSaveDialog;
     N5: TMenuItem;
     N8: TMenuItem;
@@ -107,7 +96,6 @@ type
     ToolButton3: TToolButton;
     UndoButton1: TSpeedButton;
     RedoButton1: TSpeedButton;
-    ToolButton4: TToolButton;
     AboutButton1: TSpeedButton;
     N7: TMenuItem;
     HistoryItem0: TMenuItem;
@@ -122,17 +110,7 @@ type
     HistoryItem9: TMenuItem;
     EditPageControl: TPageControl;
     TabSheet1: TTabSheet;
-    ExportScreenshot1: TMenuItem;
-    Wireframe1: TMenuItem;
-    Renderenviroment1: TMenuItem;
     SaveDialog2: TSaveDialog;
-    MainPageControl: TPageControl;
-    TabSheet4: TTabSheet;
-    PaintScrollBox: TScrollBox;
-    PaintBox1: TPaintBox;
-    TabSheet5: TTabSheet;
-    OpenGLScrollBox: TScrollBox;
-    OpenGLPanel: TPanel;
     OpenWADDialog: TOpenDialog;
     Panel1: TPanel;
     Label3: TLabel;
@@ -141,28 +119,14 @@ type
     OpacityLabel: TLabel;
     OpacityPaintBox: TPaintBox;
     Label2: TLabel;
-    Label1: TLabel;
-    HeightPaintBox: TPaintBox;
-    HeightLabel: TLabel;
     PenSpeedButton1: TSpeedButton;
     PenSpeedButton2: TSpeedButton;
     PenSpeedButton3: TSpeedButton;
-    PenSpeedButton5: TSpeedButton;
-    PenSpeedButton6: TSpeedButton;
-    Bevel1: TBevel;
     Bevel2: TBevel;
-    Label4: TLabel;
-    SmoothPaintBox: TPaintBox;
-    SmoothLabel: TLabel;
     N1: TMenuItem;
     PasteTexture1: TMenuItem;
     PasteHeightmap1: TMenuItem;
-    PenSpeedButton4: TSpeedButton;
-    MNTools1: TMenuItem;
-    Scaleheightmap1: TMenuItem;
-    ExportWADFile1: TMenuItem;
     SaveWADDialog: TSaveDialog;
-    N3: TMenuItem;
     N4: TMenuItem;
     Copy3dview1: TMenuItem;
     CopyHeightmap1: TMenuItem;
@@ -177,7 +141,6 @@ type
     PaletteDefault1: TMenuItem;
     N6: TMenuItem;
     N9: TMenuItem;
-    MNResampleHeightmapX2: TMenuItem;
     Panel2: TPanel;
     TexturePageControl: TPageControl;
     WADTabSheet1: TTabSheet;
@@ -192,7 +155,6 @@ type
     Panel6: TPanel;
     Import1: TMenuItem;
     MNImportTexture1: TMenuItem;
-    MNImportHeightmap1: TMenuItem;
     TextureScaleResetLabel: TLabel;
     TextureScalePaintBox: TPaintBox;
     TextureScaleLabel: TLabel;
@@ -200,14 +162,10 @@ type
     ColorTabSheet: TTabSheet;
     SelectColorBackPanel: TPanel;
     Panel29: TPanel;
-    ExportHeightmap1: TMenuItem;
     SavePictureDialog2: TSavePictureDialog;
     ToolButton5: TToolButton;
-    ExportWADButton1: TSpeedButton;
-    N10: TMenuItem;
     MNExpoortTexture1: TMenuItem;
     SavePictureDialog3: TSavePictureDialog;
-    MNExportVoxel1: TMenuItem;
     Panel5: TPanel;
     WADPageControl1: TPageControl;
     WADFlatsTabSheet: TTabSheet;
@@ -288,7 +246,8 @@ type
     Panel41: TPanel;
     WADPatchSizeLabel: TLabel;
     WADPatchNameLabel: TLabel;
-    Onlinedocumentation1: TMenuItem;
+    PaintScrollBox: TScrollBox;
+    PaintBox1: TPaintBox;
     procedure FormCreate(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
     procedure NewButton1Click(Sender: TObject);
@@ -298,32 +257,13 @@ type
     procedure SaveAsButton1Click(Sender: TObject);
     procedure ExitButton1Click(Sender: TObject);
     procedure OpenButton1Click(Sender: TObject);
-    procedure FormMouseWheelDown(Sender: TObject; Shift: TShiftState;
-      MousePos: TPoint; var Handled: Boolean);
-    procedure FormMouseWheelUp(Sender: TObject; Shift: TShiftState;
-      MousePos: TPoint; var Handled: Boolean);
-    procedure OpenGLPanelResize(Sender: TObject);
     procedure ApplicationEvents1Idle(Sender: TObject; var Done: Boolean);
-    procedure OpenGLPanelMouseDown(Sender: TObject; Button: TMouseButton;
-      Shift: TShiftState; X, Y: Integer);
-    procedure OpenGLPanelMouseUp(Sender: TObject; Button: TMouseButton;
-      Shift: TShiftState; X, Y: Integer);
-    procedure OpenGLPanelMouseMove(Sender: TObject; Shift: TShiftState; X,
-      Y: Integer);
-    procedure OpenGLPanelDblClick(Sender: TObject);
     procedure Edit1Click(Sender: TObject);
     procedure Undo1Click(Sender: TObject);
     procedure Redo1Click(Sender: TObject);
-    procedure FormPaint(Sender: TObject);
-    procedure Timer1Timer(Sender: TObject);
     procedure File1Click(Sender: TObject);
     procedure CopyTexture1Click(Sender: TObject);
-    procedure Options1Click(Sender: TObject);
-    procedure Wireframe1Click(Sender: TObject);
-    procedure TrunkImageDblClick(Sender: TObject);
-    procedure Renderenviroment1Click(Sender: TObject);
     procedure ExportObjModel1Click(Sender: TObject);
-    procedure ExportScreenshot1Click(Sender: TObject);
     procedure PaintBox1Paint(Sender: TObject);
     procedure SelectWADFileButtonClick(Sender: TObject);
     procedure WADFlatsListBoxClick(Sender: TObject);
@@ -340,11 +280,6 @@ type
     procedure PenSpeedButton5Click(Sender: TObject);
     procedure PenSpeedButton6Click(Sender: TObject);
     procedure PasteTexture1Click(Sender: TObject);
-    procedure PasteHeightmap1Click(Sender: TObject);
-    procedure Scaleheightmap1Click(Sender: TObject);
-    procedure ExportWADFile1Click(Sender: TObject);
-    procedure Copy3dview1Click(Sender: TObject);
-    procedure CopyHeightmap1Click(Sender: TObject);
     procedure PaletteSpeedButton1Click(Sender: TObject);
     procedure PaletteDefault1Click(Sender: TObject);
     procedure PaletteDoom1Click(Sender: TObject);
@@ -354,12 +289,9 @@ type
     procedure PaletteRadix1Click(Sender: TObject);
     procedure PaletteGreyScale1Click(Sender: TObject);
     procedure PalettePopupMenu1Popup(Sender: TObject);
-    procedure MNTools1Click(Sender: TObject);
-    procedure MNResampleHeightmapX2Click(Sender: TObject);
     procedure SelectPK3FileButtonClick(Sender: TObject);
     procedure PK3TexListBoxClick(Sender: TObject);
     procedure MNImportTexture1Click(Sender: TObject);
-    procedure MNImportHeightmap1Click(Sender: TObject);
     procedure DIRTexListBoxClick(Sender: TObject);
     procedure SelectDIRFileButtonClick(Sender: TObject);
     procedure Splitter1Moved(Sender: TObject);
@@ -375,13 +307,10 @@ type
       Shift: TShiftState; X, Y: Integer);
     procedure ColorPaletteImageMouseUp(Sender: TObject;
       Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
-    procedure ExportHeightmap1Click(Sender: TObject);
     procedure TextureScaleResetLabelDblClick(Sender: TObject);
     procedure MNExpoortTexture1Click(Sender: TObject);
-    procedure MNExportVoxel1Click(Sender: TObject);
     procedure WADPatchListBoxClick(Sender: TObject);
     procedure WADPageControl1Change(Sender: TObject);
-    procedure Onlinedocumentation1Click(Sender: TObject);
   private
     { Private declarations }
     ffilename: string;
@@ -391,42 +320,26 @@ type
     fpk3reader: TZipFile;
     fdirdirectory: string;
     fdirlist: TStringList;
-    fexportwadoptions: exportwadoptions_t;
-    fexportvoxeloptions: exportvoxeloptions_t;
     fdrawcolor: TColor;
     lpickcolormousedown: boolean;
     drawlayer: drawlayer_p;
-    heightlayer: heightlayer_p;
     colorbuffersize: integer;
     colorbuffer: colorbuffer_p;
     changed: Boolean;
-    terrain: TTerrain;
-    rc: HGLRC;   // Rendering Context
-    dc: HDC;     // Device Context
-    glpanx, glpany: integer;
-    glmousedown: integer;
+    terrain: TTexture;
     undoManager: TUndoRedoManager;
     filemenuhistory: TFileMenuHistory;
-    glneedsupdate: boolean;
-    glneedstexturerecalc: boolean;
     fopacity: integer;
     fpensize: integer;
     ftexturescale: integer;
-    fheightsize: integer;
-    fsmoothfactor: integer;
     foldopacity: integer;
     foldpensize: integer;
     OpacitySlider: TSliderHook;
     TextureScaleSlider: TSliderHook;
     PenSizeSlider: TSliderHook;
-    HeightSlider: TSliderHook;
-    SmoothSlider: TSliderHook;
     closing: boolean;
     lmousedown: boolean;
     lmousedownx, lmousedowny: integer;
-    lmouseheightmapx, lmouseheightmapy: integer;
-    hmouseheightmapx, hmouseheightmapy: integer;
-    lasthmouseheightmapx, lasthmouseheightmapy: integer;
     pen2mask: array[-MAXPENSIZE div 2..MAXPENSIZE div 2, -MAXPENSIZE div 2..MAXPENSIZE div 2] of integer;
     pen3mask: array[-MAXPENSIZE div 2..MAXPENSIZE div 2, -MAXPENSIZE div 2..MAXPENSIZE div 2] of integer;
     bitmapbuffer: TBitmap;
@@ -434,7 +347,7 @@ type
     ColorPickerButton1: TColorPickerButton;
     procedure Idle(Sender: TObject; var Done: Boolean);
     function CheckCanClose: boolean;
-    procedure DoNewTerrain(const tsize, hsize: integer);
+    procedure DoNewTerrain(const twidth, theight: integer);
     procedure DoSaveTerrain(const fname: string);
     function DoLoadTerrain(const fname: string): boolean;
     procedure SetFileName(const fname: string);
@@ -444,8 +357,6 @@ type
     procedure UpdateStausbar;
     procedure UpdateEnable;
     procedure OnLoadTerrainFileMenuHistory(Sender: TObject; const fname: string);
-    procedure DoRenderGL;
-    procedure Get3dPreviewBitmap(const b: TBitmap);
     procedure SlidersToLabels;
     procedure TerrainToControls;
     procedure UpdateSliders;
@@ -468,7 +379,6 @@ type
     procedure CalcPenMasks;
     procedure DoRefreshPaintBox(const r: TRect);
     procedure CheckPaletteName;
-    procedure GetHeighmapFromBitmap(const tempBitmap1: TBitmap);
     procedure ChangeListHint(const lst: TListBox; const def: string);
     procedure ColorPickerButton1Click(Sender: TObject);
     procedure ColorPickerButton1Change(Sender: TObject);
@@ -488,20 +398,15 @@ var
 implementation
 
 uses
-  ter_gl,
   ter_defs,
   ter_utils,
   frm_newterrain,
   ter_wadreader,
-  frm_editheightmapitem,
   frm_scaleheightmap,
   ter_palettes,
   frm_loadimagehelper,
   ter_colorpalettebmz,
   ter_cursors,
-  frm_exportwadmap,
-  ter_voxels,
-  frm_exportvoxel,
   ter_doomdata,
   ter_doomutils,
   ter_wad;
@@ -509,7 +414,7 @@ uses
 {$R *.dfm}
 
 resourcestring
-  rsTitle = 'Terrain Generator';
+  rsTitle = 'WAD Painter';
 
 // Helper function
 procedure ClearList(const lst: TStringList);
@@ -523,8 +428,6 @@ end;
 
 procedure TForm1.FormCreate(Sender: TObject);
 var
-  pfd: TPIXELFORMATDESCRIPTOR;
-  pf: Integer;
   doCreate: boolean;
   i: integer;
 begin
@@ -542,24 +445,6 @@ begin
     if Components[i].InheritsFrom(TWinControl) then
       if not (Components[i] is TListBox) then
         (Components[i] as TWinControl).DoubleBuffered := True;
-
-  fexportwadoptions.engine := ENGINE_RAD;
-  fexportwadoptions.game := GAME_RADIX;
-  fexportwadoptions.levelname := 'E1M1';
-  fexportwadoptions.palette := @RadixPaletteRaw;
-  fexportwadoptions.defsidetex := 'RDXW0012';
-  fexportwadoptions.defceilingtex := 'F_SKY1';
-  fexportwadoptions.lowerid := 1255;
-  fexportwadoptions.raiseid := 1254;
-  fexportwadoptions.flags := ETF_CALCDXDY or ETF_TRUECOLORFLAT or ETF_MERGEFLATSECTORS or ETF_ADDPLAYERSTART or ETF_EXPORTFLAT;
-  fexportwadoptions.elevationmethod := ELEVATIONMETHOD_SLOPES;
-  fexportwadoptions.defceilingheight := 512;
-  fexportwadoptions.deflightlevel := 192;
-  fexportwadoptions.layerstep := 24;
-
-  fexportvoxeloptions.size := 256;
-  fexportvoxeloptions.minz := 0;
-  fexportvoxeloptions.maxz := 255;
 
   bitmapbuffer := TBitmap.Create;
   bitmapbuffer.PixelFormat := pf32bit;
@@ -580,11 +465,9 @@ begin
 
   EditPageControl.ActivePageIndex := 0;
   TexturePageControl.ActivePageIndex := 0;
-  MainPageControl.ActivePageIndex := 0;
   WADPageControl1.ActivePageIndex := 0;
 
   GetMem(drawlayer, SizeOf(drawlayer_t));
-  GetMem(heightlayer, SizeOf(heightlayer_t));
   GetMem(colorbuffer, SizeOf(colorbuffer_t));
   FillChar(colorbuffer^, SizeOf(colorbuffer_t), 255);
   colorbuffersize := 128;
@@ -616,19 +499,9 @@ begin
   lmousedownx := 0;
   lmousedowny := 0;
 
-  lmouseheightmapx := 0;
-  lmouseheightmapy := 0;
-
-  hmouseheightmapx := 0;
-  hmouseheightmapy := 0;
-  lasthmouseheightmapx := -1;
-  lasthmouseheightmapy := -1;
-
   fopacity := 100;
   fpensize := 64;
   ftexturescale := 100;
-  fheightsize := 64;
-  fsmoothfactor := 50;
   foldopacity := -1;
   foldpensize := -1;
   savebitmapundo := true;
@@ -664,51 +537,9 @@ begin
   filemenuhistory.AddPath(bigstringtostring(@opt_filemenuhistory1));
   filemenuhistory.AddPath(bigstringtostring(@opt_filemenuhistory0));
 
-  terrain := TTerrain.Create;
+  terrain := TTexture.Create;
 
   Scaled := False;
-
-  OpenGLPanel.Width := 3 * Screen.Width div 4;
-  OpenGLPanel.Height := 3 * Screen.Height div 4;
-  OpenGLPanel.DoubleBuffered := True;
-
-  glpanx := 0;
-  glpany := 0;
-  glmousedown := 0;
-
-  InitOpenGL;
-  ReadExtensions;
-  ReadImplementationProperties;
-
-  // OpenGL initialisieren
-  dc := GetDC(OpenGLPanel.Handle);
-
-  // PixelFormat
-  pfd.nSize := SizeOf(pfd);
-  pfd.nVersion := 1;
-  pfd.dwFlags := PFD_DRAW_TO_WINDOW or PFD_SUPPORT_OPENGL or PFD_DOUBLEBUFFER;
-  pfd.iPixelType := PFD_TYPE_RGBA;      // PFD_TYPE_RGBA or PFD_TYPEINDEX
-  pfd.cColorBits := 32;
-
-  pf := ChoosePixelFormat(dc, @pfd);   // Returns format that most closely matches above pixel format
-  SetPixelFormat(dc, pf, @pfd);
-
-  rc := wglCreateContext(dc);    // Rendering Context = window-glCreateContext
-  wglMakeCurrent(dc, rc);        // Make the DC (Form1) the rendering Context
-
-  // Initialize GL environment variables
-
-  glInit;
-
-  ResetCamera;
-
-  OpenGLPanelResize(sender);    // sets up the perspective
-
-  terraintexture := gld_CreateTexture(terrain.Texture, False);
-
-  glneedsupdate := True;
-
-  glneedstexturerecalc := True;
 
   TabSheet1.DoubleBuffered := True;
 
@@ -724,14 +555,6 @@ begin
   TextureScaleSlider.Min := MINTEXTURESCALE;
   TextureScaleSlider.Max := MAXTEXTURESCALE;
 
-  HeightSlider := TSliderHook.Create(HeightPaintBox);
-  HeightSlider.Min := -MAXHEIGHTSIZE;
-  HeightSlider.Max := MAXHEIGHTSIZE;
-
-  SmoothSlider := TSliderHook.Create(SmoothPaintBox);
-  SmoothSlider.Min := 0;
-  SmoothSlider.Max := 100;
-
   doCreate := True;
   if ParamCount > 0 then
     if DoLoadTerrain(ParamStr(1)) then
@@ -740,9 +563,7 @@ begin
   if DoCreate then
   begin
     SetFileName('');
-    DoNewTerrain(1024, 17);
-    glneedsupdate := True;
-    glneedstexturerecalc := True;
+    DoNewTerrain(DEF_TEXTURE_WIDTH, DEF_TEXTURE_HEIGHT);
     undoManager.Clear;
   end;
 
@@ -789,32 +610,27 @@ end;
 
 procedure TForm1.NewButton1Click(Sender: TObject);
 var
-  tsize, hsize: integer;
+  twidth, theight: integer;
 begin
   if not CheckCanClose then
     Exit;
 
-  tsize := terrain.texturesize;
-  hsize := terrain.heightmapsize;
-  if GetNewTerrainSize(tsize, hsize) then
-  begin
-    DoNewTerrain(tsize, hsize);
-    ResetCamera;
-  end;
+  twidth := terrain.texturewidth;
+  theight := terrain.textureheight;
+  if GetNewTextureSize(twidth, theight) then
+    DoNewTerrain(twidth, theight);
 end;
 
-procedure TForm1.DoNewTerrain(const tsize, hsize: integer);
+procedure TForm1.DoNewTerrain(const twidth, theight: integer);
 begin
   SetFileName('');
   changed := False;
-  terrain.Clear(tsize, hsize);
-  PaintBox1.Width := tsize;
-  PaintBox1.Height := tsize;
-  bitmapbuffer.Width := tsize;
-  bitmapbuffer.Height := tsize;
+  terrain.Clear(twidth, theight);
+  PaintBox1.Width := twidth;
+  PaintBox1.Height := theight;
+  bitmapbuffer.Width := twidth;
+  bitmapbuffer.Height := theight;
   TerrainToControls;
-  glneedsupdate := True;
-  glneedstexturerecalc := True;
   undoManager.Clear;
 end;
 
@@ -880,16 +696,14 @@ begin
     Screen.Cursor := crDefault;
   end;
 
-  PaintBox1.Width := terrain.texturesize;
-  PaintBox1.Height := terrain.texturesize;
-  bitmapbuffer.Width := terrain.texturesize;
-  bitmapbuffer.Height := terrain.texturesize;
+  PaintBox1.Width := terrain.texturewidth;
+  PaintBox1.Height := terrain.textureheight;
+  bitmapbuffer.Width := terrain.texturewidth;
+  bitmapbuffer.Height := terrain.textureheight;
 
   TerrainToControls;
   filemenuhistory.AddPath(fname);
   SetFileName(fname);
-  glneedsupdate := True;
-  glneedstexturerecalc := True;
   changed := False;
   Result := True;
 end;
@@ -899,10 +713,6 @@ begin
   closing := True;
   Timer1.Enabled := False;
   undoManager.Free;
-  wglMakeCurrent(0, 0);
-  wglDeleteContext(rc);
-
-  glDeleteTextures(1, @terraintexture);
 
   stringtobigstring(filemenuhistory.PathStringIdx(0), @opt_filemenuhistory0);
   stringtobigstring(filemenuhistory.PathStringIdx(1), @opt_filemenuhistory1);
@@ -927,11 +737,8 @@ begin
   TextureScaleSlider.Free;
   PenSizeSlider.Free;
 
-  HeightSlider.Free;
-  SmoothSlider.Free;
   terrain.Free;
   Freemem(drawlayer, SizeOf(drawlayer_t));
-  Freemem(heightlayer, SizeOf(heightlayer_t));
   Freemem(colorbuffer, SizeOf(colorbuffer_t));
 
   bitmapbuffer.Free;
@@ -957,8 +764,8 @@ begin
     Handle,
     PChar(Format('%s'#13#10 +
     'Version ' + I_VersionBuilt + #13#10 +
-    'Copyright (c) 2020-2021, jvalavanis@gmail.com'#13#10 +
-    #13#10'A tool to create Terrains.'#13#10#13#10,
+    'Copyright (c) 2021, jvalavanis@gmail.com'#13#10 +
+    #13#10'A tool to create WAD Textures.'#13#10#13#10,
         [rsTitle])),
     PChar(rsTitle),
     MB_OK or MB_ICONINFORMATION or MB_APPLMODAL);
@@ -985,69 +792,7 @@ begin
     Exit;
 
   if OpenDialog1.Execute then
-  begin
     DoLoadTerrain(OpenDialog1.FileName);
-    ResetCamera;
-  end;
-end;
-
-procedure TForm1.FormMouseWheelDown(Sender: TObject; Shift: TShiftState;
-  MousePos: TPoint; var Handled: Boolean);
-var
-  pt: TPoint;
-  r: TRect;
-  z: glfloat;
-begin
-  pt := OpenGLPanel.Parent.ScreenToClient(MousePos);
-  r := OpenGLPanel.ClientRect;
-  if r.Right > OpenGLScrollBox.Width then
-    r.Right := OpenGLScrollBox.Width;
-  if r.Bottom > OpenGLScrollBox.Height then
-    r.Bottom := OpenGLScrollBox.Height;
-  if PtInRect(r, pt) then
-  begin
-    z := camera.z - 0.5;
-    z := z / 0.99;
-    camera.z := z + 0.5;
-    if camera.z < -20.0 then
-      camera.z := -20.0;
-    glneedsupdate := True;
-  end;
-end;
-
-procedure TForm1.FormMouseWheelUp(Sender: TObject; Shift: TShiftState;
-  MousePos: TPoint; var Handled: Boolean);
-var
-  pt: TPoint;
-  r: TRect;
-  z: glfloat;
-begin
-  pt := OpenGLPanel.Parent.ScreenToClient(MousePos);
-  r := OpenGLPanel.ClientRect;
-  if r.Right > OpenGLScrollBox.Width then
-    r.Right := OpenGLScrollBox.Width;
-  if r.Bottom > OpenGLScrollBox.Height then
-    r.Bottom := OpenGLScrollBox.Height;
-  if PtInRect(r, pt) then
-  begin
-    z := camera.z - 0.5;
-    z := z * 0.99;
-    camera.z := z + 0.5;
-    if camera.z > 0.5 then
-      camera.z := 0.5;
-    glneedsupdate := True;
-  end;
-end;
-
-procedure TForm1.OpenGLPanelResize(Sender: TObject);
-begin
-  glViewport(0, 0, OpenGLPanel.Width, OpenGLPanel.Height);    // Set the viewport for the OpenGL window
-  glMatrixMode(GL_PROJECTION);        // Change Matrix Mode to Projection
-  glLoadIdentity;                     // Reset View
-  gluPerspective(45.0, OpenGLPanel.Width / OpenGLPanel.Height, 1.0, 500.0);  // Do the perspective calculations. Last value = max clipping depth
-
-  glMatrixMode(GL_MODELVIEW);         // Return to the modelview matrix
-  glneedsupdate := True;
 end;
 
 procedure TForm1.Idle(Sender: TObject; var Done: Boolean);
@@ -1060,84 +805,13 @@ begin
   Done := False;
 
   Sleep(1);
-  if glneedstexturerecalc then
-    glneedsupdate := True;
-
   UpdateStausbar;
-
-  if not glneedsupdate then
-    // jval: We don't need to render
-    Exit;
-
-  DoRenderGL;
-
-  glneedsupdate := False;
 end;
 
 procedure TForm1.ApplicationEvents1Idle(Sender: TObject;
   var Done: Boolean);
 begin
   Idle(Sender, Done);
-end;
-
-procedure TForm1.OpenGLPanelMouseDown(Sender: TObject;
-  Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
-begin
-  if Button in [mbLeft, mbRight] then
-  begin
-    glpanx := X;
-    glpany := Y;
-    if Button = mbLeft then
-      glmousedown := 1
-    else
-      glmousedown := 2;
-    SetCapture(OpenGLPanel.Handle);
-  end;
-end;
-
-procedure TForm1.OpenGLPanelMouseUp(Sender: TObject; Button: TMouseButton;
-  Shift: TShiftState; X, Y: Integer);
-begin
-  glmousedown := 0;
-  ReleaseCapture;
-end;
-
-procedure TForm1.OpenGLPanelMouseMove(Sender: TObject; Shift: TShiftState;
-  X, Y: Integer);
-begin
-  if glmousedown = 0 then
-    exit;
-
-  if glmousedown = 1 then
-  begin
-    camera.ay := camera.ay + (glpanx - X) ;/// OpenGLPanel.Width {* 2 * pi};
-    camera.ax := camera.ax + (glpany - Y) ; // / OpenGLPanel.Height {* 2 * pi};
-  end
-  else
-  begin
-    camera.x := camera.x + (glpanx - X) / OpenGLPanel.Width * (camera.z - 1.0);/// OpenGLPanel.Width {* 2 * pi};
-    if camera.x < -6.0 then
-      camera.x := -6.0
-    else if camera.x > 6.0 then
-      camera.x := 6.0;
-
-    camera.y := camera.y - (glpany - Y) / OpenGLPanel.Width * (camera.z - 1.0); // / OpenGLPanel.Height {* 2 * pi};
-    if camera.y < -6.0 then
-      camera.y := -6.0
-    else if camera.y > 6.0 then
-      camera.y := 6.0;
-  end;
-
-  glneedsupdate := True;
-
-  glpanx := X;
-  glpany := Y;
-end;
-
-procedure TForm1.OpenGLPanelDblClick(Sender: TObject);
-begin
-  ResetCamera;
-  glneedsupdate := True;
 end;
 
 procedure TForm1.Edit1Click(Sender: TObject);
@@ -1155,8 +829,6 @@ begin
     Screen.Cursor := crHourglass;
     try
       undoManager.Undo;
-      glneedsupdate := True;
-      glneedstexturerecalc := True;
     finally
       Screen.Cursor := crDefault;
     end;
@@ -1170,8 +842,6 @@ begin
     Screen.Cursor := crHourglass;
     try
       undoManager.Redo;
-      glneedsupdate := True;
-      glneedstexturerecalc := True;
     finally
       Screen.Cursor := crDefault;
     end;
@@ -1187,8 +857,6 @@ procedure TForm1.DoLoadTerrainBinaryUndo(s: TStream);
 begin
   terrain.LoadFromStream(s);
   TerrainToControls;
-  glneedsupdate := True;
-  glneedstexturerecalc := True;
 end;
 
 procedure TForm1.SaveUndo(const dosavebitmap: boolean);
@@ -1198,20 +866,9 @@ begin
   savebitmapundo := true;
 end;
 
-procedure TForm1.FormPaint(Sender: TObject);
-begin
-  glneedsupdate := True;
-end;
-
-procedure TForm1.Timer1Timer(Sender: TObject);
-begin
-  glneedsupdate := True;
-end;
-
 procedure TForm1.UpdateStausbar;
 begin
-  StatusBar1.Panels[2].Text := Format('Camera(x=%2.2f, y=%2.2f, z=%2.2f)', [camera.x, camera.y, camera.z]);
-  StatusBar1.Panels[3].Text := Format('Rendered triangles = %d', [t_rendredtriangles]);
+//  StatusBar1.Panels[2].Text := Format('Camera(x=%2.2f, y=%2.2f, z=%2.2f)', [camera.x, camera.y, camera.z]);
 end;
 
 procedure TForm1.UpdateEnable;
@@ -1228,7 +885,6 @@ begin
     Exit;
 
   DoLoadTerrain(fname);
-  ResetCamera;
 end;
 
 procedure TForm1.File1Click(Sender: TObject);
@@ -1236,90 +892,9 @@ begin
   filemenuhistory.RefreshMenuItems;
 end;
 
-procedure TForm1.DoRenderGL;
-begin
-  if glneedsupdate then
-  begin
-    glBeginScene(OpenGLPanel.Width, OpenGLPanel.Height);
-    try
-      if glneedstexturerecalc then
-      begin
-        glDeleteTextures(1, @terraintexture);
-        terraintexture := gld_CreateTexture(terrain.Texture, False);
-        glneedstexturerecalc := False;
-      end;
-      glRenderEnviroment(terrain);
-      glRenderTerrain(terrain);
-    finally
-      glEndScene(dc);
-    end;
-  end;
-end;
-
-procedure TForm1.Get3dPreviewBitmap(const b: TBitmap);
-type
-  long_a = array[0..$FFFF] of LongWord;
-  Plong_a = ^long_a;
-var
-  L, buf: Plong_a;
-  w, h: integer;
-  i, j: integer;
-  idx: integer;
-begin
-  w := OpenGLPanel.Width;
-  h := OpenGLPanel.Height;
-  b.Width := w;
-  b.Height := h;
-  b.PixelFormat := pf32bit;
-
-  GetMem(L, w * h * SizeOf(LongWord));
-  glReadPixels(0, 0, w, h, GL_BGRA, GL_UNSIGNED_BYTE, L);
-
-  idx := 0;
-  for j := 0 to h - 1 do
-  begin
-    buf := b.ScanLine[h - j - 1];
-    for i := 0 to w - 1 do
-    begin
-      buf[i] := L[idx];
-      Inc(idx);
-    end;
-  end;
-
-  FreeMem(L, w * h * SizeOf(LongWord));
-end;
-
 procedure TForm1.CopyTexture1Click(Sender: TObject);
 begin
   Clipboard.Assign(terrain.Texture);
-end;
-
-procedure TForm1.Options1Click(Sender: TObject);
-begin
-  Renderenviroment1.Checked := opt_renderevniroment;
-  Wireframe1.Checked := opt_renderwireframe;
-end;
-
-procedure TForm1.Wireframe1Click(Sender: TObject);
-begin
-  opt_renderwireframe := not opt_renderwireframe;
-  glneedsupdate := True;
-end;
-
-procedure TForm1.TrunkImageDblClick(Sender: TObject);
-begin
-  if OpenPictureDialog1.Execute then
-  begin
-//    TrunkImage.Picture.LoadFromFile(OpenPictureDialog1.FileName);
-    glDeleteTextures(1, @terraintexture);
-//    trunktexture := gld_CreateTexture(TrunkImage.Picture, False);
-  end;
-end;
-
-procedure TForm1.Renderenviroment1Click(Sender: TObject);
-begin
-  opt_renderevniroment := not opt_renderevniroment;
-  glneedsupdate := True;
 end;
 
 procedure TForm1.UpdateSliders;
@@ -1338,16 +913,6 @@ begin
   TextureScaleSlider.Position := ftexturescale;
   TextureScalePaintBox.Invalidate;
   TextureScaleSlider.OnSliderHookChange := UpdateFromSliders;
-
-  HeightSlider.OnSliderHookChange := nil;
-  HeightSlider.Position := fheightsize;
-  HeightPaintBox.Invalidate;
-  HeightSlider.OnSliderHookChange := UpdateFromSliders;
-
-  SmoothSlider.OnSliderHookChange := nil;
-  SmoothSlider.Position := fsmoothfactor;
-  SmoothPaintBox.Invalidate;
-  SmoothSlider.OnSliderHookChange := UpdateFromSliders;
 end;
 
 procedure TForm1.SlidersToLabels;
@@ -1355,8 +920,6 @@ begin
   OpacityLabel.Caption := Format('%d', [Round(OpacitySlider.Position)]);
   PenSizeLabel.Caption := Format('%d', [Round(PenSizeSlider.Position)]);
   TextureScaleLabel.Caption := Format('%d', [Round(TextureScaleSlider.Position)]);
-  HeightLabel.Caption := Format('%d', [Round(HeightSlider.Position)]);
-  SmoothLabel.Caption := Format('%d', [Round(SmoothSlider.Position)]);
 end;
 
 procedure TForm1.TerrainToControls;
@@ -1365,8 +928,7 @@ begin
     Exit;
 
   PaintBox1.Invalidate;
-  StatusBar1.Panels[0].Text := Format('Terrain Size: %dx%d', [Terrain.texturesize, Terrain.texturesize]);
-  StatusBar1.Panels[1].Text := Format('Heightmap Size: %dx%d', [Terrain.heightmapsize, Terrain.heightmapsize]);
+  StatusBar1.Panels[0].Text := Format('Texture Size: %dx%d', [Terrain.texturewidth, Terrain.textureheight]);
   UpdateSliders;
   SlidersToLabels;
 end;
@@ -1380,10 +942,7 @@ begin
   fopacity := Round(OpacitySlider.Position);
   fpensize := Round(PenSizeSlider.Position);
   ftexturescale := Round(TextureScaleSlider.Position);
-  fheightsize := Round(HeightSlider.Position);
-  fsmoothfactor := Round(HeightSlider.Position);
   CalcPenMasks;
-  glneedstexturerecalc := True;
 end;
 
 procedure TForm1.ExportObjModel1Click(Sender: TObject);
@@ -1403,29 +962,9 @@ begin
   end;
 end;
 
-procedure TForm1.ExportScreenshot1Click(Sender: TObject);
-var
-  b: TBitmap;
-  imgfname: string;
-begin
-  if SavePictureDialog1.Execute then
-  begin
-    imgfname := SavePictureDialog1.FileName;
-    BackupFile(imgfname);
-    b := TBitmap.Create;
-    try
-      DoRenderGL;
-      Get3dPreviewBitmap(b);
-      SaveImageToDisk(b, imgfname);
-    finally
-      b.Free;
-    end;
-  end;
-end;
-
 procedure TForm1.PaintBox1Paint(Sender: TObject);
 begin
-  DoRefreshPaintBox(Rect(0, 0, terrain.texturesize - 1, terrain.texturesize - 1));
+  DoRefreshPaintBox(Rect(0, 0, terrain.texturewidth - 1, terrain.textureheight - 1));
 end;
 
 function intersectRect(const r1, r2: TRect): boolean;
@@ -1444,127 +983,9 @@ end;
 procedure TForm1.DoRefreshPaintBox(const r: TRect);
 var
   C: TCanvas;
-  x, y, k, hsize, hstep, checkstep: integer;
-  drawx, drawy: integer;
-  pointx, pointy: integer;
-  pointrect: TRect;
-  hitem: heightbufferitem_t;
-  hx, hy: integer;
-  drawredpoints: boolean;
-  drawheightmap: boolean;
-
-  function hcolor: LongWord;
-  var
-    g: integer;
-  begin
-    g := GetIntInRange(Round(128 + hitem.height * 128 / HEIGHTMAPRANGE), 0, 255);
-    Result := RGB(g, g, g);
-  end;
-
 begin
   C := bitmapbuffer.Canvas;
   C.CopyRect(r, terrain.Texture.Canvas, r);
-
-  hsize := terrain.heightmapsize;
-  hstep := terrain.texturesize div (hsize - 1);
-  checkstep := MaxI(64, hstep * 3);
-
-  drawheightmap := PenSpeedButton5.Down or PenSpeedButton6.Down;
-  if drawheightmap then
-  begin
-    C.Pen.Style := psSolid;
-
-    drawx := 0;
-    for x := 0 to hsize - 1 do
-    begin
-      if intersectRange(drawx - checkstep - 1, drawx + checkstep + 1, r.Left, r.Right) then
-      begin
-        drawy := 0;
-        for y := 0 to hsize - 1 do
-        begin
-          if intersectRect(r, Rect(drawx - checkstep - 1, drawy - checkstep - 1, drawx + checkstep + 1, drawy + checkstep + 1)) then
-          begin
-            hitem := terrain.Heightmap[x, y];
-            C.Pen.Color := hcolor;
-            hx := drawx + hitem.dx;
-            hy := drawy + hitem.dy;
-            for k := -hstep div 2 to hstep + 2 do
-            begin
-              if (hy + k) mod 2 <> 1 then
-              begin
-                C.MoveTo(hx - hstep div 2, hy + k);
-                C.LineTo(hx + hstep div 2, hy + k);
-              end;
-              if (hx + k) mod 2 <> 1 then
-              begin
-                C.MoveTo(hx + k, hy - hstep div 2);
-                C.LineTo(hx + k, hy + hstep div 2);
-              end;
-            end;
-          end;
-          drawy := drawy + hstep;
-        end;
-      end;
-      drawx := drawx + hstep;
-    end;
-  end;
-
-  C.Pen.Style := psSolid;
-  C.Pen.Color := RGB(128, 255, 128);
-  C.Brush.Style := bsSolid;
-  C.Brush.Color := RGB(255, 0, 0);
-
-  drawx := 0;
-  for x := 0 to hsize - 2 do
-  begin
-    if intersectRange(drawx - checkstep - 1, drawx + checkstep + 1, r.Left, r.Right) then
-    begin
-      drawy := 0;
-      for y := 0 to hsize - 2 do
-      begin
-        if intersectRect(r, Rect(drawx - checkstep - 1, drawy - checkstep - 1, drawx + checkstep + 1, drawy + checkstep + 1)) then
-        begin
-          hitem := terrain.Heightmap[x, y];
-          C.MoveTo(drawx + hitem.dx, drawy + hitem.dy);
-          hitem := terrain.Heightmap[x + 1, y];
-          C.LineTo(drawx + hstep + hitem.dx, drawy + hitem.dy);
-          hitem := terrain.Heightmap[x, y + 1];
-          C.LineTo(drawx + hitem.dx, drawy + hstep + hitem.dy);
-          hitem := terrain.Heightmap[x + 1, y + 1];
-          C.LineTo(drawx + hstep + hitem.dx, drawy + hstep + hitem.dy);
-          hitem := terrain.Heightmap[x + 1, y];
-          C.LineTo(drawx + hstep + hitem.dx, drawy + hitem.dy);
-        end;
-        drawy := drawy + hstep;
-      end;
-    end;
-    drawx := drawx + hstep;
-  end;
-
-  drawredpoints := PenSpeedButton4.Down;
-  if drawredpoints then
-  begin
-    drawx := 0;
-    for x := 0 to hsize - 1 do
-    begin
-      if intersectRange(drawx, drawx + checkstep, r.Left, r.Right) then
-      begin
-        drawy := 0;
-        for y := 0 to hsize - 1 do
-        begin
-          hitem := terrain.Heightmap[x, y];
-          pointx := drawx + hitem.dx;
-          pointy := drawy + hitem.dy;
-          pointrect := Rect(pointx - 2, pointy - 2, pointx + 2, pointy + 2);
-          if intersectRect(r, pointrect) then
-            C.FillRect(pointrect);
-          drawy := drawy + hstep;
-        end;
-      end;
-      drawx := drawx + hstep;
-    end;
-  end;
-
   PaintBox1.Canvas.CopyRect(r, C, r);
 end;
 
@@ -2118,9 +1539,6 @@ end;
 
 procedure TForm1.PaintBox1MouseDown(Sender: TObject; Button: TMouseButton;
   Shift: TShiftState; X, Y: Integer);
-var
-  it: heightbufferitem_t;
-  iX, iY: integer;
 begin
   if button = mbLeft then
   begin
@@ -2130,26 +1548,9 @@ begin
     lmousedownx := X;
     lmousedowny := Y;
 
-    terrain.TerrainToHeightmapIndex(X, Y, lmouseheightmapx, lmouseheightmapy);
-    terrain.TerrainToHeightmapIndex(X, Y, hmouseheightmapx, hmouseheightmapy);
-
     ZeroMemory(drawlayer, SizeOf(drawlayer_t));
-    ZeroMemory(heightlayer, SizeOf(heightlayer_t));
 
     LLeftMousePaintTo(X, Y);
-  end
-  else if button = mbRight then
-  begin
-    terrain.TerrainToHeightmapIndex(X, Y, iX, iY);
-    it := terrain.Heightmap[iX, iY];
-    if EditHeightmapItem(it) then
-    begin
-      SaveUndo(false);
-      terrain.Heightmap[iX, iY] := it;
-      changed := True;
-      PaintBox1.Invalidate;
-      glneedsupdate := True;
-    end;
   end;
 end;
 
@@ -2158,15 +1559,10 @@ procedure TForm1.PaintBox1MouseUp(Sender: TObject; Button: TMouseButton;
 begin
   if button = mbLeft then
   begin
-    terrain.TerrainToHeightmapIndex(X, Y, hmouseheightmapx, hmouseheightmapy);
     LLeftMousePaintTo(X, Y);
     lmousedownx := X;
     lmousedowny := Y;
     lmousedown := False;
-    glneedstexturerecalc := PenSpeedButton1.Down or PenSpeedButton2.Down or PenSpeedButton3.Down;
-    glneedsupdate := True; 
-    lasthmouseheightmapx := -1;
-    lasthmouseheightmapy := -1;
   end;
 end;
 
@@ -2175,7 +1571,6 @@ procedure TForm1.PaintBox1MouseMove(Sender: TObject; Shift: TShiftState; X,
 begin
   if lmousedown then
   begin
-    terrain.TerrainToHeightmapIndex(X, Y, hmouseheightmapx, hmouseheightmapy);
     LLeftMousePaintTo(X, Y);
     lmousedownx := X;
     lmousedowny := Y;
@@ -2216,18 +1611,18 @@ var
   iX, iY: integer;
   iX1, iX2, iY1, iY2: integer;
   c, c1, c2: LongWord;
-  tsize: integer;
+  twidth, theight: integer;
   tline: PLongWordarray;
   newopacity: integer;
   hchanged: boolean;
-  hitem: heightbufferitem_t;
   ypos: integer;
 begin
-  tsize := terrain.texturesize;
-  iX1 := GetIntInRange(X - fpensize div 2, 0, tsize - 1);
-  iX2 := GetIntInRange(X + fpensize div 2, 0, tsize - 1);
-  iY1 := GetIntInRange(Y - fpensize div 2, 0, tsize - 1);
-  iY2 := GetIntInRange(Y + fpensize div 2, 0, tsize - 1);
+  twidth := terrain.texturewidth;
+  iX1 := GetIntInRange(X - fpensize div 2, 0, twidth - 1);
+  iX2 := GetIntInRange(X + fpensize div 2, 0, twidth - 1);
+  theight := terrain.textureheight;
+  iY1 := GetIntInRange(Y - fpensize div 2, 0, theight - 1);
+  iY2 := GetIntInRange(Y + fpensize div 2, 0, theight - 1);
 
   ftexturescale := GetIntInRange(ftexturescale, MINTEXTURESCALE, MAXTEXTURESCALE);
 
@@ -2301,58 +1696,6 @@ begin
     end;
     DoRefreshPaintBox(Rect(iX1, iY1, iX2, iY2));
     changed := True;
-  end
-  else if PenSpeedButton4.Down then
-  begin
-    hchanged := terrain.MoveHeightmapPoint(lmouseheightmapx, lmouseheightmapy, X, Y);
-    if hchanged then
-    begin
-      iX1 := terrain.HeightmapToCoord(lmouseheightmapx) - 2 * terrain.heightmapblocksize;
-      iX2 := terrain.HeightmapToCoord(lmouseheightmapx) + 2 * terrain.heightmapblocksize;
-      iY1 := terrain.HeightmapToCoord(lmouseheightmapy) - 2 * terrain.heightmapblocksize;
-      iY2 := terrain.HeightmapToCoord(lmouseheightmapy) + 2 * terrain.heightmapblocksize;
-      DoRefreshPaintBox(Rect(iX1, iY1, iX2, iY2));
-      changed := True;
-    end;
-  end
-  else if PenSpeedButton5.Down then
-  begin
-    hchanged := False;
-    if not heightlayer[hmouseheightmapx, hmouseheightmapy].pass then
-    begin
-      hchanged := True;
-      heightlayer[hmouseheightmapx, hmouseheightmapy].pass := True;
-      hitem := terrain.Heightmap[hmouseheightmapx, hmouseheightmapy];
-      hitem.height := terrain.Heightmap[hmouseheightmapx, hmouseheightmapy].height + fheightsize;
-      terrain.Heightmap[hmouseheightmapx, hmouseheightmapy] := hitem;
-      changed := True;
-    end;
-    if hchanged then
-    begin
-      iX1 := GetIntInRange(X - terrain.heightmapblocksize, 0, tsize - 1);
-      iX2 := GetIntInRange(X + terrain.heightmapblocksize, 0, tsize - 1);
-      iY1 := GetIntInRange(Y - terrain.heightmapblocksize, 0, tsize - 1);
-      iY2 := GetIntInRange(Y + terrain.heightmapblocksize, 0, tsize - 1);
-      DoRefreshPaintBox(Rect(iX1, iY1, iX2, iY2));
-    end;
-  end
-  else if PenSpeedButton6.Down then
-  begin
-    if (hmouseheightmapx <> lasthmouseheightmapx) or (lasthmouseheightmapy <> hmouseheightmapy) then
-    begin
-      lasthmouseheightmapx := hmouseheightmapx;
-      lasthmouseheightmapy := hmouseheightmapy;
-      hchanged := terrain.SmoothHeightmap(hmouseheightmapx, hmouseheightmapy, fsmoothfactor);
-      if hchanged then
-      begin
-        changed := True;
-        iX1 := GetIntInRange(X - terrain.heightmapblocksize, 0, tsize - 1);
-        iX2 := GetIntInRange(X + terrain.heightmapblocksize, 0, tsize - 1);
-        iY1 := GetIntInRange(Y - terrain.heightmapblocksize, 0, tsize - 1);
-        iY2 := GetIntInRange(Y + terrain.heightmapblocksize, 0, tsize - 1);
-        DoRefreshPaintBox(Rect(iX1, iY1, iX2, iY2));
-      end;
-    end;
   end;
 end;
 
@@ -2499,177 +1842,12 @@ begin
 
     tempBitmap.PixelFormat := pf32bit;
 
-    terrain.Texture.Canvas.StretchDraw(Rect(0, 0, terrain.texturesize, terrain.texturesize), tempBitmap);
+    terrain.Texture.Canvas.StretchDraw(Rect(0, 0, terrain.texturewidth, terrain.textureheight), tempBitmap);
 
     tempBitmap.Free;
 
     changed := True;
     PaintBox1.Invalidate;
-    glneedsupdate := True;
-    glneedstexturerecalc := True;
-  end;
-end;
-
-procedure TForm1.GetHeighmapFromBitmap(const tempBitmap1: TBitmap);
-var
-  tempBitmap2: TBitmap;
-  hX, hY: integer;
-  c: LongWord;
-  pt: TPoint;
-  h: integer;
-  it: heightbufferitem_t;
-begin
-  tempBitmap2 := TBitmap.Create;
-  tempBitmap2.PixelFormat := pf32bit;
-  tempBitmap2.Width := terrain.texturesize;
-  tempBitmap2.Height := terrain.texturesize;
-  tempBitmap2.Canvas.StretchDraw(Rect(0, 0, tempBitmap2.Width, tempBitmap2.Height), tempBitmap1);
-
-  for hX := 0 to terrain.heightmapsize - 1 do
-    for hY := 0 to terrain.heightmapsize - 1 do
-    begin
-      pt := terrain.HeightmapCoords(hX, hY);
-      c := tempBitmap2.Canvas.Pixels[GetIntInRange(pt.X, 0, tempBitmap2.Width - 1), GetIntInRange(pt.Y, 0, tempBitmap2.Height - 1)];
-      h := GetIntInRange(Round((GetRValue(c) + GetGValue(c) + GetBValue(c)) / 768 * 2 * HEIGHTMAPRANGE) - HEIGHTMAPRANGE, -HEIGHTMAPRANGE, HEIGHTMAPRANGE);
-      it := terrain.Heightmap[hX, hY];
-      it.height := h;
-      terrain.Heightmap[hX, hY] := it;
-    end;
-
-  tempBitmap2.Free;
-end;
-
-procedure TForm1.PasteHeightmap1Click(Sender: TObject);
-var
-  tempBitmap1: TBitmap;
-begin
-  // if there is an image on clipboard
-  if Clipboard.HasFormat(CF_BITMAP) then
-  begin
-    SaveUndo(false);
-
-    tempBitmap1 := TBitmap.Create;
-    tempBitmap1.LoadFromClipboardFormat(CF_BITMAP, ClipBoard.GetAsHandle(cf_Bitmap), 0);
-
-    tempBitmap1.PixelFormat := pf32bit;
-    try
-      GetHeighmapFromBitmap(tempBitmap1);
-    finally
-      tempBitmap1.Free;
-    end;
-
-    changed := True;
-    PaintBox1.Invalidate;
-    glneedsupdate := True;
-  end;
-end;
-
-procedure TForm1.Scaleheightmap1Click(Sender: TObject);
-var
-  amul, adiv, aadd: integer;
-  hX, hY: integer;
-  it: heightbufferitem_t;
-begin
-  amul := 1;
-  adiv := 1;
-  aadd := 0;
-  if GetScaleHeightmapInfo(amul, adiv, aadd) then
-  begin
-    SaveUndo(false);
-    for hX := 0 to terrain.heightmapsize - 1 do
-      for hY := 0 to terrain.heightmapsize - 1 do
-      begin
-        it := terrain.Heightmap[hX, hY];
-        it.height := GetIntInRange(round(it.height * amul / adiv + aadd), -HEIGHTMAPRANGE, HEIGHTMAPRANGE);
-        terrain.Heightmap[hX, hY] := it;
-      end;
-    changed := True;
-    PaintBox1.Invalidate;
-    glneedsupdate := True;
-  end;
-end;
-
-procedure TForm1.ExportWADFile1Click(Sender: TObject);
-var
-  fs: TFileStream;
-  ename: string;
-begin
-  if GetWADExportOptions(terrain, @fexportwadoptions, ename) then
-  begin
-    Screen.Cursor := crHourglass;
-    try
-      BackupFile(ename);
-      fs := TFileStream.Create(ename, fmCreate);
-      case fexportwadoptions.engine of
-        ENGINE_RAD:
-          if fexportwadoptions.game = GAME_HEXEN then
-            ExportTerrainToHexenFile(
-              terrain,
-              fs,
-              @fexportwadoptions
-            )
-          else
-            ExportTerrainToWADFile(
-              terrain,
-              fs,
-              @fexportwadoptions
-            );
-        ENGINE_VAVOOM:
-          ExportTerrainToHexenFile(
-            terrain,
-            fs,
-            @fexportwadoptions
-          );
-        ENGINE_UDMF:
-          ExportTerrainToUDMFFile(
-            terrain,
-            fs,
-            @fexportwadoptions
-          );
-        end;
-      fs.Free;
-    finally
-      Screen.Cursor := crDefault;
-    end;
-  end;
-end;
-
-procedure TForm1.Copy3dview1Click(Sender: TObject);
-var
-  b: TBitmap;
-begin
-  b := TBitmap.Create;
-  try
-    DoRenderGL; // JVAL: For some unknown reason this must be called before glReadPixels
-    Get3dPreviewBitmap(b);
-    Clipboard.Assign(b);
-  finally
-    b.Free;
-  end;
-end;
-
-procedure TForm1.CopyHeightmap1Click(Sender: TObject);
-var
-  b: TBitmap;
-  hX, hY: integer;
-  h: integer;
-  g: byte;
-begin
-  b := TBitmap.Create;
-  try
-    b.Width := terrain.heightmapsize;
-    b.Height := terrain.heightmapsize;
-    b.PixelFormat := pf24bit;
-    for hX := 0 to terrain.heightmapsize - 1 do
-      for hY := 0 to terrain.heightmapsize - 1 do
-      begin
-        h := terrain.Heightmap[hX, hY].height;
-        g := GetIntInRange(Round((h + HEIGHTMAPRANGE) * 256 / (2 * HEIGHTMAPRANGE)), 0, 255);
-        b.Canvas.Pixels[hX, hY] := RGB(g, g, g);
-      end;
-    Clipboard.Assign(b);
-  finally
-    b.Free;
   end;
 end;
 
@@ -2745,24 +1923,6 @@ begin
   PaletteRadix1.Checked := fpalettename = spalRADIX;
   PaletteGreyScale1.Checked := fpalettename = spalGRAYSCALE;
   PaletteDefault1.Checked := fpalettename = spalDEFAULT;
-end;
-
-procedure TForm1.MNTools1Click(Sender: TObject);
-begin
-  MNResampleHeightmapX2.Enabled := terrain.CanResampleHeightMapX2;
-end;
-
-procedure TForm1.MNResampleHeightmapX2Click(Sender: TObject);
-begin
-  if terrain.CanResampleHeightMapX2 then
-  begin
-    SaveUndo(false);
-    terrain.ResampleHeightMapX2;
-    TerrainToControls;
-    changed := True;
-    PaintBox1.Invalidate;
-    glneedsupdate := True;
-  end;
 end;
 
 procedure TForm1.SelectPK3FileButtonClick(Sender: TObject);
@@ -2906,45 +2066,13 @@ begin
     try
       f.Image1.Picture.LoadFromFile(OpenPictureDialog1.FileName);
       SaveUndo(True);
-      terrain.Texture.Canvas.StretchDraw(Rect(0, 0, terrain.texturesize, terrain.texturesize), f.Image1.Picture.Graphic);
-      glneedstexturerecalc := True;
-      glneedsupdate := True;
+      terrain.Texture.Canvas.StretchDraw(Rect(0, 0, terrain.texturewidth, terrain.textureheight), f.Image1.Picture.Graphic);
       changed := True;
       PaintBox1.Invalidate;
     finally
       f.Free;
     end;
     Screen.Cursor := crDefault;
-  end;
-end;
-
-procedure TForm1.MNImportHeightmap1Click(Sender: TObject);
-var
-  tempBitmap1: TBitmap;
-  f: TLoadImageHelperForm;
-begin
-  if OpenPictureDialog2.Execute then
-  begin
-    f := TLoadImageHelperForm.Create(nil);
-    try
-      f.Image1.Picture.LoadFromFile(OpenPictureDialog2.FileName);
-      SaveUndo(false);
-
-      tempBitmap1 := TBitmap.Create;
-      tempBitmap1.Assign(f.Image1.Picture.Graphic);
-      tempBitmap1.PixelFormat := pf32bit;
-      try
-        GetHeighmapFromBitmap(tempBitmap1);
-      finally
-        tempBitmap1.Free;
-      end;
-
-      changed := True;
-      PaintBox1.Invalidate;
-      glneedsupdate := True;
-    finally
-      f.Free;
-    end;
   end;
 end;
 
@@ -3215,47 +2343,6 @@ begin
   end;
 end;
 
-procedure TForm1.ExportHeightmap1Click(Sender: TObject);
-var
-  bmh: bitmapheightmap_p;
-  x, y: integer;
-  b: TBitmap;
-  imgfname: string;
-  l: PLongWordArray;
-  g: integer;
-begin
-  if SavePictureDialog2.Execute then
-  begin
-    Screen.Cursor := crHourglass;
-    imgfname := SavePictureDialog2.FileName;
-    BackupFile(imgfname);
-    b := TBitmap.Create;
-    try
-      GetMem(bmh, SizeOf(bitmapheightmap_t));
-      terrain.GenerateBitmapHeightmap(bmh, MAXBITMAPHEIGHTMAP);
-      b.Width := MAXBITMAPHEIGHTMAP;
-      b.Height := MAXBITMAPHEIGHTMAP;
-      b.PixelFormat := pf32bit;
-      for y := 0 to b.Height - 1 do
-      begin
-        l := b.ScanLine[y];
-        for x := 0 to b.Width - 1 do
-        begin
-          g := bmh[x, y];
-          g := GetIntInRange(Round((g + HEIGHTMAPRANGE) * 256 / (2 * HEIGHTMAPRANGE)), 0, 255);
-          l[x] := RGB(g, g, g);
-        end;
-      end;
-      FreeMem(bmh, SizeOf(bitmapheightmap_t));
-      SaveImageToDisk(b, imgfname);
-    finally
-      b.Free;
-    end;
-    Screen.Cursor := crDefault;
-  end;
-
-end;
-
 procedure TForm1.TextureScaleResetLabelDblClick(Sender: TObject);
 begin
   ftexturescale := 100;
@@ -3280,38 +2367,6 @@ begin
   end;
 end;
 
-procedure TForm1.MNExportVoxel1Click(Sender: TObject);
-var
-  buf: voxelbuffer_p;
-  ename: string;
-  voxoptions: exportvoxeloptions_t;
-  vox_typ: string;
-begin
-  GetMem(buf, SizeOf(voxelbuffer_t));
-
-  if GetVoxelExportOptions(terrain, buf, @fexportvoxeloptions, ename) then
-  begin
-    Screen.Cursor := crHourglass;
-    try
-      voxoptions := fexportvoxeloptions;
-      vox_typ := UpperCase(ExtractFileExt(ename));
-      if vox_typ = '.VOX' then // Special case: we can not have vox files 256x256x256
-        if voxoptions.size = 256 then
-          voxoptions.size := 255;
-      ExportTerrainToVoxel(terrain, buf, @voxoptions);
-      vox_shrinkyaxis(buf, voxoptions.size, voxoptions.minz, voxoptions.maxz);
-      if vox_typ = '.VOX' then
-        VXE_ExportVoxelToSlab6VOX(buf, voxoptions.size, ename)
-      else
-        VXE_ExportVoxelToDDVOX(buf, voxoptions.size, ename);
-    finally
-      Screen.Cursor := crDefault;
-    end;
-  end;
-
-  FreeMem(buf, SizeOf(voxelbuffer_t));
-end;
-
 procedure TForm1.WADPatchListBoxClick(Sender: TObject);
 begin
   NotifyWADPatchListBox;
@@ -3323,11 +2378,6 @@ begin
   0: NotifyFlatsListBox;
   1: NotifyWADPatchListBox;
   end;
-end;
-
-procedure TForm1.Onlinedocumentation1Click(Sender: TObject);
-begin
-  I_GoToWebPage('https://dd-terrain.sourceforge.io');
 end;
 
 end.

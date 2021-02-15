@@ -34,16 +34,12 @@ uses
   Windows,
   ter_utils,
   SysUtils,
-  Graphics,
-  ter_voxels;
+  Graphics;
 
 function V_FindAproxColorIndex(const pal: PLongWordArray; const c: LongWord;
   const start: integer = 0; const finish: integer = 255): integer;
 
 procedure ter_quantizebitmap(const bm: TBitmap; const numcolors: integer = 256);
-
-function vxe_getquantizevoxelpalette(const voxelbuffer: voxelbuffer_p; const voxelsize: Integer;
-  const pal: PLongWordArray; const numcolors: integer = 256): boolean;
 
 implementation
 
@@ -480,82 +476,6 @@ begin
     end;
   end;
 
-  FreeMem(imgdata, imgsize * SizeOf(LongWord));
-end;
-
-function vxe_getquantizevoxelpalette(const voxelbuffer: voxelbuffer_p; const voxelsize: Integer;
-  const pal: PLongWordArray; const numcolors: integer = 256): boolean;
-var
-  i: integer;
-  x, y, z: integer;
-  c: LongWord;
-  colorlist256: TDNumberList;
-  imgsize: integer;
-  imgdata: PLongWordArray;
-begin
-  if numcolors > 256 then
-  begin
-    Result := False;
-    Exit;
-  end;
-
-  colorlist256 := TDNumberList.Create;
-
-  imgsize := 0;
-  for x := 0 to voxelsize - 1 do
-    for y := 0 to voxelsize - 1 do
-      for z := 0 to voxelsize - 1 do
-      begin
-        c := voxelbuffer[x, y, z];
-        if c <> 0 then
-        begin
-          inc(imgsize);
-          if colorlist256.Count <= numcolors + 1 then
-            if colorlist256.IndexOf(c) < 0 then
-              colorlist256.Add(c);
-        end;
-      end;
-
-  // All colors can be mapped
-  if colorlist256.Count <= numcolors then
-  begin
-    for i := 0 to colorlist256.Count - 1 do
-      pal[i] := colorlist256.Numbers[i];
-    colorlist256.Free;
-    Result := True;
-    Exit;
-  end;
-
-  colorlist256.Clear;
-
-  GetMem(imgdata, imgsize * SizeOf(LongWord));
-
-  imgsize := 0;
-  for x := 0 to voxelsize - 1 do
-    for y := 0 to voxelsize - 1 do
-      for z := 0 to voxelsize - 1 do
-      begin
-        c := voxelbuffer[x, y, z];
-        if c <> 0 then
-        begin
-          imgdata[imgsize] := c;
-          inc(imgsize);
-        end;
-      end;
-
-  color_quantize_list(imgdata, imgsize, numcolors, colorlist256, False);
-
-  // All colors can be mapped
-  if colorlist256.Count <= numcolors then
-  begin
-    for i := 0 to colorlist256.Count - 1 do
-      pal[i] := colorlist256.Numbers[i];
-    Result := True;
-  end
-  else
-    Result := False;
-
-  colorlist256.Free;
   FreeMem(imgdata, imgsize * SizeOf(LongWord));
 end;
 

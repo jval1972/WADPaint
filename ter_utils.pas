@@ -141,6 +141,8 @@ procedure RotateBitmap90DegreesClockwise(var ABitmap: TBitmap);
 
 procedure I_GoToWebPage(const cmd: string);
 
+function RGBSwap(const l: LongWord): LongWord;
+
 implementation
 
 uses
@@ -2112,5 +2114,16 @@ begin
   FreeLibrary(inst);
 end;
 
+function RGBSwap(const l: LongWord): LongWord;
+var
+  A: packed array[0..3] of byte;
+  tmp: byte;
+begin
+  PLongWord(@A)^ := l;
+  tmp := A[0];
+  A[0] := A[2];
+  A[2] := tmp;
+  Result := PLongWord(@A)^;
+end;
 
 end.

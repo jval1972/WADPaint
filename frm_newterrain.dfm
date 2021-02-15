@@ -1,10 +1,10 @@
 object NewForm: TNewForm
-  Left = 592
-  Top = 209
+  Left = 562
+  Top = 262
   BorderIcons = [biSystemMenu]
   BorderStyle = bsDialog
-  Caption = 'New Terrain'
-  ClientHeight = 276
+  Caption = 'New Texture'
+  ClientHeight = 146
   ClientWidth = 348
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -1046,13 +1046,11 @@ object NewForm: TNewForm
     00000000000000000000000000000000000000000000000000000000}
   OldCreateOrder = False
   Position = poMainFormCenter
-  OnCreate = FormCreate
-  OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 13
   object Panel1: TPanel
     Left = 0
-    Top = 231
+    Top = 101
     Width = 348
     Height = 45
     Align = alBottom
@@ -1082,54 +1080,39 @@ object NewForm: TNewForm
     Left = 0
     Top = 0
     Width = 348
-    Height = 231
+    Height = 101
     Align = alClient
     Caption = ' '
     TabOrder = 1
     object Label1: TLabel
       Left = 24
-      Top = 184
-      Width = 94
+      Top = 40
+      Width = 34
       Height = 13
-      Caption = 'Mesh quad size: %d'
+      Caption = 'Width: '
     end
     object Label2: TLabel
-      Left = 24
-      Top = 200
-      Width = 134
+      Left = 144
+      Top = 40
+      Width = 37
       Height = 13
-      Caption = 'Resulting mesh triangles: %d'
+      Caption = 'Height: '
     end
-    object TextureSizeRadioGroup: TRadioGroup
-      Left = 24
-      Top = 24
-      Width = 129
-      Height = 113
-      Caption = ' Texture Size '
-      ItemIndex = 2
-      Items.Strings = (
-        '256'
-        '512'
-        '1024'
-        '2048')
+    object Edit1: TEdit
+      Left = 72
+      Top = 40
+      Width = 41
+      Height = 21
       TabOrder = 0
-      OnClick = TextureSizeRadioGroupClick
+      Text = '64'
     end
-    object HeightmapSizeRadioGroup: TRadioGroup
-      Left = 176
-      Top = 24
-      Width = 145
-      Height = 137
-      Caption = ' Heightmap Size '
-      ItemIndex = 2
-      Items.Strings = (
-        '5'
-        '9'
-        '17'
-        '33'
-        '65')
+    object Edit2: TEdit
+      Left = 192
+      Top = 40
+      Width = 41
+      Height = 21
       TabOrder = 1
-      OnClick = HeightmapSizeRadioGroupClick
+      Text = '64'
     end
   end
 end
