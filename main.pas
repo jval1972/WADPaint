@@ -402,7 +402,6 @@ uses
   ter_utils,
   frm_newterrain,
   ter_wadreader,
-  frm_scaleheightmap,
   ter_palettes,
   frm_loadimagehelper,
   ter_colorpalettebmz,
