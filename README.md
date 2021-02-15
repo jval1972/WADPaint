@@ -1,24 +1,14 @@
-# Terrain Generator (DD_TERRAIN)
-Terrain Generator is a simple terrain editor.
+# WAD Painter
+WADPaint is a tool that can create textures from DOOM WAD file resources.
+
 
 ## Features
-Export RAD (Radix game remake) maps 
+PNG, TIFF and BMP texture export
 
-Export DelphiDoom maps 
-
-Export UDMF GZdoom/K8Vavoom maps
-
-Export Zdoom/Vavoom maps (Hexen Format)
-
-Export Voxels in DelphiDOOM ddvox and Slab6 vox formats
-
-Import/Export elevation and texture as image files
-
-Export screenshots to disk
-
-Export screenshots to clipboard
+WAD & PK3 file system
 
 Multiple Undo/Redo
+
 
 ## Downloads
 [version 1.1.6.24 (20210110 - win32)](https://sourceforge.net/projects/dd-terrain/files/DD_Terrain_1.1.6.24/DD_Terrain_1.1.6.24_win32.zip/download)
