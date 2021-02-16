@@ -81,12 +81,10 @@ type
     OpenPictureDialog1: TOpenPictureDialog;
     Timer1: TTimer;
     StatusBar1: TStatusBar;
-    SavePictureDialog1: TSavePictureDialog;
     SaveDialog1: TSaveDialog;
     N5: TMenuItem;
     N8: TMenuItem;
     CopyTexture1: TMenuItem;
-    OpenPictureDialog2: TOpenPictureDialog;
     ToolBar1: TToolBar;
     PropertiesPanel: TPanel;
     Splitter1: TSplitter;
@@ -126,7 +124,6 @@ type
     PenSpeedButton3: TSpeedButton;
     Bevel2: TBevel;
     PasteTexture1: TMenuItem;
-    SaveWADDialog: TSaveDialog;
     PalettePopupMenu1: TPopupMenu;
     PaletteDoom1: TMenuItem;
     PaletteHeretic1: TMenuItem;
@@ -154,14 +151,12 @@ type
     TextureScaleResetLabel: TLabel;
     TextureScalePaintBox: TPaintBox;
     TextureScaleLabel: TLabel;
-    ImageList1: TImageList;
     ColorTabSheet: TTabSheet;
     SelectColorBackPanel: TPanel;
     Panel29: TPanel;
-    SavePictureDialog2: TSavePictureDialog;
     ToolButton5: TToolButton;
     MNExpoortTexture1: TMenuItem;
-    SavePictureDialog3: TSavePictureDialog;
+    SavePictureDialog1: TSavePictureDialog;
     Panel5: TPanel;
     WADPageControl1: TPageControl;
     WADFlatsTabSheet: TTabSheet;
@@ -1060,7 +1055,7 @@ begin
     PaintBox1.Canvas.CopyRect(r, C, r);
   end
   else
-    PaintBox1.Canvas.StretchDraw(Rect(0, 0, PaintBox1.Width, PaintBox1.Height), tex.Texture);
+    PaintBox1.Canvas.StretchDraw(Rect(0, 0, PaintBox1.Width - 1, PaintBox1.Height - 1), tex.Texture);
 
   if (LastiX1 <> 0) or (LastiX2 <> 0) or (LastiY1 <> 0) or (LastiY2 <> 0) then
   begin
@@ -2450,11 +2445,11 @@ procedure TForm1.MNExpoortTexture1Click(Sender: TObject);
 var
   imgfname: string;
 begin
-  if SavePictureDialog3.Execute then
+  if SavePictureDialog1.Execute then
   begin
     Screen.Cursor := crHourglass;
     try
-      imgfname := SavePictureDialog3.FileName;
+      imgfname := SavePictureDialog1.FileName;
       BackupFile(imgfname);
       SaveImageToDisk(tex.Texture, imgfname);
     finally
