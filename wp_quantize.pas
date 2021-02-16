@@ -39,7 +39,7 @@ uses
 function V_FindAproxColorIndex(const pal: PLongWordArray; const c: LongWord;
   const start: integer = 0; const finish: integer = 255): integer;
 
-procedure ter_quantizebitmap(const bm: TBitmap; const numcolors: integer = 256);
+procedure wp_quantizebitmap(const bm: TBitmap; const numcolors: integer = 256);
 
 implementation
 
@@ -440,7 +440,7 @@ begin
   FreeMem(heap.buf);
 end;
 
-procedure ter_quantizebitmap(const bm: TBitmap; const numcolors: integer = 256);
+procedure wp_quantizebitmap(const bm: TBitmap; const numcolors: integer = 256);
 var
   x, y: integer;
   imgsize: integer;

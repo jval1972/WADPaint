@@ -240,6 +240,12 @@ type
     WADPatchNameLabel: TLabel;
     PaintScrollBox: TScrollBox;
     PaintBox1: TPaintBox;
+    Colors1: TMenuItem;
+    Doom1: TMenuItem;
+    Heretic1: TMenuItem;
+    Hexen1: TMenuItem;
+    Strife1: TMenuItem;
+    Radix1: TMenuItem;
     procedure FormCreate(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
     procedure NewButton1Click(Sender: TObject);
@@ -299,6 +305,12 @@ type
     procedure MNExpoortTexture1Click(Sender: TObject);
     procedure WADPatchListBoxClick(Sender: TObject);
     procedure WADPageControl1Change(Sender: TObject);
+    procedure Quantize1Click(Sender: TObject);
+    procedure Doom1Click(Sender: TObject);
+    procedure Heretic1Click(Sender: TObject);
+    procedure Hexen1Click(Sender: TObject);
+    procedure Strife1Click(Sender: TObject);
+    procedure Radix1Click(Sender: TObject);
   private
     { Private declarations }
     ffilename: string;
@@ -337,14 +349,14 @@ type
     function CheckCanClose: boolean;
     procedure DoNewTexture(const twidth, theight: integer);
     procedure DoSaveTexture(const fname: string);
-    function DoLoadTerrain(const fname: string): boolean;
+    function DoLoadTexture(const fname: string): boolean;
     procedure SetFileName(const fname: string);
     procedure DoLoadTextureBinaryUndo(s: TStream);
     procedure DoSaveTextureBinaryUndo(s: TStream);
     procedure SaveUndo(const dosavebitmap: boolean);
     procedure UpdateStausbar;
     procedure UpdateEnable;
-    procedure OnLoadTerrainFileMenuHistory(Sender: TObject; const fname: string);
+    procedure OnLoadTextureFileMenuHistory(Sender: TObject; const fname: string);
     procedure SlidersToLabels;
     procedure TextureToControls;
     procedure UpdateSliders;
@@ -376,6 +388,7 @@ type
   protected
     // Made protected to avoid "Private symbol never used" warning.
     function DIRTexEditNameSize: integer;
+    procedure ConvertToPalette(const pname: string);
   public
     { Public declarations }
   end;
@@ -396,6 +409,7 @@ uses
   wp_cursors,
   wp_doomdata,
   wp_doomutils,
+  wp_quantize,
   wp_wad;
 
 {$R *.dfm}
@@ -511,7 +525,7 @@ begin
   filemenuhistory.MenuItem7 := HistoryItem7;
   filemenuhistory.MenuItem8 := HistoryItem8;
   filemenuhistory.MenuItem9 := HistoryItem9;
-  filemenuhistory.OnOpen := OnLoadTerrainFileMenuHistory;
+  filemenuhistory.OnOpen := OnLoadTextureFileMenuHistory;
 
   filemenuhistory.AddPath(bigstringtostring(@opt_filemenuhistory9));
   filemenuhistory.AddPath(bigstringtostring(@opt_filemenuhistory8));
@@ -544,7 +558,7 @@ begin
 
   doCreate := True;
   if ParamCount > 0 then
-    if DoLoadTerrain(ParamStr(1)) then
+    if DoLoadTexture(ParamStr(1)) then
       doCreate := False;
 
   if DoCreate then
@@ -662,7 +676,7 @@ begin
   changed := False;
 end;
 
-function TForm1.DoLoadTerrain(const fname: string): boolean;
+function TForm1.DoLoadTexture(const fname: string): boolean;
 var
   s: string;
 begin
@@ -779,7 +793,7 @@ begin
     Exit;
 
   if OpenDialog1.Execute then
-    DoLoadTerrain(OpenDialog1.FileName);
+    DoLoadTexture(OpenDialog1.FileName);
 end;
 
 procedure TForm1.Idle(Sender: TObject; var Done: Boolean);
@@ -865,12 +879,12 @@ begin
   RedoButton1.Enabled := undoManager.CanRedo;
 end;
 
-procedure TForm1.OnLoadTerrainFileMenuHistory(Sender: TObject; const fname: string);
+procedure TForm1.OnLoadTextureFileMenuHistory(Sender: TObject; const fname: string);
 begin
   if not CheckCanClose then
     Exit;
 
-  DoLoadTerrain(fname);
+  DoLoadTexture(fname);
 end;
 
 procedure TForm1.File1Click(Sender: TObject);
@@ -2331,6 +2345,83 @@ begin
   0: NotifyFlatsListBox;
   1: NotifyWADPatchListBox;
   end;
+end;
+
+procedure TForm1.Quantize1Click(Sender: TObject);
+begin
+  changed := True;
+  SaveUndo(true);
+  wp_quantizebitmap(tex.Texture, 255);
+  PaintBox1.Invalidate;
+end;
+
+procedure TForm1.ConvertToPalette(const pname: string);
+var
+  rp: rawpalette_p;
+  palette: array[0..255] of LongWord;
+  line: PLongWordArray;
+  x, y: integer;
+  cchanged: boolean;
+  c, cn: LongWord;
+begin
+  rp := GetPaletteFromName(pname);
+  if rp = nil then
+    Exit;
+
+  WP_RawPalette2PaletteArray(rp, @palette);
+
+  tex.Texture.PixelFormat := pf32bit;
+
+  cchanged := False;
+  for y := 0 to tex.textureheight - 1 do
+  begin
+    line := tex.Texture.ScanLine[y];
+    for x := 0 to tex.texturewidth - 1 do
+    begin
+      c := line[x];
+      cn := palette[V_FindAproxColorIndex(@palette, c, 0, 255)];
+      if cn <> c then
+      begin
+        if not cchanged then
+        begin
+          cchanged := True;
+          SaveUndo(True);
+        end;
+        line[x] := cn;
+      end;
+    end;
+  end;
+
+  if cchanged then
+  begin
+    changed := True;
+    PaintBox1.Invalidate;
+  end;
+end;
+
+procedure TForm1.Doom1Click(Sender: TObject);
+begin
+  ConvertToPalette(spalDOOM);
+end;
+
+procedure TForm1.Heretic1Click(Sender: TObject);
+begin
+  ConvertToPalette(spalHERETIC);
+end;
+
+procedure TForm1.Hexen1Click(Sender: TObject);
+begin
+  ConvertToPalette(spalHEXEN);
+end;
+
+procedure TForm1.Strife1Click(Sender: TObject);
+begin
+  ConvertToPalette(spalSTRIFE);
+end;
+
+procedure TForm1.Radix1Click(Sender: TObject);
+begin
+  ConvertToPalette(spalRADIX);
 end;
 
 end.

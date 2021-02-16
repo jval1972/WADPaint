@@ -2385,7 +2385,7 @@ object Form1: TForm1
                   object Panel7: TPanel
                     Left = 0
                     Top = 0
-                    Width = 232
+                    Width = 302
                     Height = 375
                     Align = alClient
                     BevelOuter = bvNone
@@ -2394,7 +2394,7 @@ object Form1: TForm1
                     object WADFlatListPanel: TPanel
                       Left = 0
                       Top = 0
-                      Width = 232
+                      Width = 302
                       Height = 212
                       Align = alClient
                       BevelOuter = bvNone
@@ -2403,7 +2403,7 @@ object Form1: TForm1
                       object Panel28: TPanel
                         Left = 0
                         Top = 0
-                        Width = 232
+                        Width = 302
                         Height = 212
                         Align = alClient
                         BorderWidth = 2
@@ -2412,7 +2412,7 @@ object Form1: TForm1
                         object WADFlatsListBox: TListBox
                           Left = 3
                           Top = 3
-                          Width = 226
+                          Width = 296
                           Height = 206
                           Align = alClient
                           BorderStyle = bsNone
@@ -5773,7 +5773,7 @@ object Form1: TForm1
                   object Panel16: TPanel
                     Left = 0
                     Top = 0
-                    Width = 232
+                    Width = 302
                     Height = 375
                     Align = alClient
                     BevelOuter = bvNone
@@ -5782,7 +5782,7 @@ object Form1: TForm1
                     object PK3TextureListPanel: TPanel
                       Left = 0
                       Top = 0
-                      Width = 232
+                      Width = 302
                       Height = 212
                       Align = alClient
                       BevelOuter = bvNone
@@ -5791,7 +5791,7 @@ object Form1: TForm1
                       object Panel34: TPanel
                         Left = 0
                         Top = 0
-                        Width = 232
+                        Width = 302
                         Height = 212
                         Align = alClient
                         BorderWidth = 2
@@ -5800,7 +5800,7 @@ object Form1: TForm1
                         object PK3TexListBox: TListBox
                           Left = 3
                           Top = 3
-                          Width = 226
+                          Width = 296
                           Height = 206
                           Align = alClient
                           BorderStyle = bsNone
@@ -7507,7 +7507,7 @@ object Form1: TForm1
                   object Panel17: TPanel
                     Left = 0
                     Top = 0
-                    Width = 232
+                    Width = 302
                     Height = 375
                     Align = alClient
                     BevelOuter = bvNone
@@ -7516,7 +7516,7 @@ object Form1: TForm1
                     object DIRTextureListPanel: TPanel
                       Left = 0
                       Top = 0
-                      Width = 232
+                      Width = 302
                       Height = 212
                       Align = alClient
                       BevelOuter = bvNone
@@ -7525,7 +7525,7 @@ object Form1: TForm1
                       object Panel36: TPanel
                         Left = 0
                         Top = 0
-                        Width = 232
+                        Width = 302
                         Height = 212
                         Align = alClient
                         BorderWidth = 2
@@ -7534,7 +7534,7 @@ object Form1: TForm1
                         object DIRTexListBox: TListBox
                           Left = 3
                           Top = 3
-                          Width = 226
+                          Width = 296
                           Height = 206
                           Align = alClient
                           BorderStyle = bsNone
@@ -9425,6 +9425,29 @@ object Form1: TForm1
         Caption = 'Paste'
         ShortCut = 16470
         OnClick = PasteTexture1Click
+      end
+    end
+    object Colors1: TMenuItem
+      Caption = 'Palette'
+      object Doom1: TMenuItem
+        Caption = 'Doom'
+        OnClick = Doom1Click
+      end
+      object Heretic1: TMenuItem
+        Caption = 'Heretic'
+        OnClick = Heretic1Click
+      end
+      object Hexen1: TMenuItem
+        Caption = 'Hexen'
+        OnClick = Hexen1Click
+      end
+      object Strife1: TMenuItem
+        Caption = 'Strife'
+        OnClick = Strife1Click
+      end
+      object Radix1: TMenuItem
+        Caption = 'Radix'
+        OnClick = Radix1Click
       end
     end
     object Help1: TMenuItem

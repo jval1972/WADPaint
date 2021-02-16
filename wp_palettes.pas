@@ -30,6 +30,9 @@ unit wp_palettes;
 
 interface
 
+uses
+  wp_utils;
+  
 const
   spalDEFAULT = 'DEFAULT';
   spalDOOM = 'DOOM';
@@ -321,8 +324,13 @@ const
 
 function GetPaletteFromName(const spal: string): rawpalette_p;
 
+procedure WP_RawPalette2PaletteArray(const rowpal: pointer; const palette: PLongWordArray);
+
 implementation
 
+uses
+  Windows;
+  
 function GetPaletteFromName(const spal: string): rawpalette_p;
 begin
   if spal = spalDOOM then
@@ -337,6 +345,22 @@ begin
     Result := @RadixPaletteRaw
   else
     Result := nil;
+end;
+
+procedure WP_RawPalette2PaletteArray(const rowpal: pointer; const palette: PLongWordArray);
+var
+  pb: PByte;
+  i: integer;
+  r, g, b: byte;
+begin
+  pb := rowpal;
+  for i := 0 to 255 do
+  begin
+    b := pb^; inc(pb);
+    g := pb^; inc(pb);
+    r := pb^; inc(pb);
+    palette[i] := RGB(r, g, b);
+  end;
 end;
 
 end.
