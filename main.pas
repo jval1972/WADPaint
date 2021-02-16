@@ -1057,6 +1057,7 @@ end;
 procedure TForm1.DoRefreshPaintBox(const r: TRect);
 var
   C: TCanvas;
+  oldc: LongWord;
 begin
   if fZoom = 1 then
   begin
@@ -1072,11 +1073,15 @@ begin
   begin
     PaintBox1.Canvas.Brush.Style := bsClear;
     PaintBox1.Canvas.Pen.Style := psDot;
+    oldc := PaintBox1.Canvas.Pen.Color;
     PaintBox1.Canvas.Pen.Color := RGB(255, 255, 255);
     if LastShape = 1 then
+      PaintBox1.Canvas.Rectangle(fZoom * LastiX1, fZoom * LastiY1, fZoom * LastiX2 + 2, fZoom * LastiY2 + 2)
     else if (LastShape = 2) or (LastShape = 3) then
+      PaintBox1.Canvas.Ellipse(fZoom * LastiX1, fZoom * LastiY1, fZoom * LastiX2 + 2, fZoom * LastiY2 + 2);
     PaintBox1.Canvas.Brush.Style := bsSolid;
     PaintBox1.Canvas.Pen.Style := psSolid;
+    PaintBox1.Canvas.Pen.Color := oldc;
     hasdrawPaintToolShape := True;
   end
   else
