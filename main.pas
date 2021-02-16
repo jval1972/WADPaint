@@ -314,7 +314,7 @@ type
     colorbuffersize: integer;
     colorbuffer: colorbuffer_p;
     changed: Boolean;
-    terrain: TTexture;
+    tex: TTexture;
     undoManager: TUndoRedoManager;
     filemenuhistory: TFileMenuHistory;
     fopacity: integer;
@@ -346,7 +346,7 @@ type
     procedure UpdateEnable;
     procedure OnLoadTerrainFileMenuHistory(Sender: TObject; const fname: string);
     procedure SlidersToLabels;
-    procedure TerrainToControls;
+    procedure TextureToControls;
     procedure UpdateSliders;
     procedure UpdateFromSliders(Sender: TObject);
     procedure BitmapToColorBuffer(const abitmap: TBitmap);
@@ -524,7 +524,7 @@ begin
   filemenuhistory.AddPath(bigstringtostring(@opt_filemenuhistory1));
   filemenuhistory.AddPath(bigstringtostring(@opt_filemenuhistory0));
 
-  terrain := TTexture.Create;
+  tex := TTexture.Create;
 
   Scaled := False;
 
@@ -602,8 +602,8 @@ begin
   if not CheckCanClose then
     Exit;
 
-  twidth := terrain.texturewidth;
-  theight := terrain.textureheight;
+  twidth := tex.texturewidth;
+  theight := tex.textureheight;
   if GetNewTextureSize(twidth, theight) then
     DoNewTexture(twidth, theight);
 end;
@@ -612,12 +612,12 @@ procedure TForm1.DoNewTexture(const twidth, theight: integer);
 begin
   SetFileName('');
   changed := False;
-  terrain.Clear(twidth, theight);
+  tex.Clear(twidth, theight);
   PaintBox1.Width := twidth;
   PaintBox1.Height := theight;
   bitmapbuffer.Width := twidth;
   bitmapbuffer.Height := theight;
-  TerrainToControls;
+  TextureToControls;
   undoManager.Clear;
 end;
 
@@ -654,7 +654,7 @@ begin
 
   Screen.Cursor := crHourglass;
   try
-    terrain.SaveToFile(fname);
+    tex.SaveToFile(fname);
   finally
     Screen.Cursor := crDefault;
   end;
@@ -678,17 +678,17 @@ begin
 
   Screen.Cursor := crHourglass;
   try
-    terrain.LoadFromFile(fname);
+    tex.LoadFromFile(fname);
   finally
     Screen.Cursor := crDefault;
   end;
 
-  PaintBox1.Width := terrain.texturewidth;
-  PaintBox1.Height := terrain.textureheight;
-  bitmapbuffer.Width := terrain.texturewidth;
-  bitmapbuffer.Height := terrain.textureheight;
+  PaintBox1.Width := tex.texturewidth;
+  PaintBox1.Height := tex.textureheight;
+  bitmapbuffer.Width := tex.texturewidth;
+  bitmapbuffer.Height := tex.textureheight;
 
-  TerrainToControls;
+  TextureToControls;
   filemenuhistory.AddPath(fname);
   SetFileName(fname);
   changed := False;
@@ -724,7 +724,7 @@ begin
   TextureScaleSlider.Free;
   PenSizeSlider.Free;
 
-  terrain.Free;
+  tex.Free;
   Freemem(drawlayer, SizeOf(drawlayer_t));
   Freemem(colorbuffer, SizeOf(colorbuffer_t));
 
@@ -836,13 +836,13 @@ end;
 
 procedure TForm1.DoSaveTextureBinaryUndo(s: TStream);
 begin
-  terrain.SaveToStream(s, true, savebitmapundo);
+  tex.SaveToStream(s, true, savebitmapundo);
 end;
 
 procedure TForm1.DoLoadTextureBinaryUndo(s: TStream);
 begin
-  terrain.LoadFromStream(s);
-  TerrainToControls;
+  tex.LoadFromStream(s);
+  TextureToControls;
 end;
 
 procedure TForm1.SaveUndo(const dosavebitmap: boolean);
@@ -880,7 +880,7 @@ end;
 
 procedure TForm1.CopyTexture1Click(Sender: TObject);
 begin
-  Clipboard.Assign(terrain.Texture);
+  Clipboard.Assign(tex.Texture);
 end;
 
 procedure TForm1.UpdateSliders;
@@ -908,13 +908,13 @@ begin
   TextureScaleLabel.Caption := Format('%d', [Round(TextureScaleSlider.Position)]);
 end;
 
-procedure TForm1.TerrainToControls;
+procedure TForm1.TextureToControls;
 begin
   if closing then
     Exit;
 
   PaintBox1.Invalidate;
-  StatusBar1.Panels[0].Text := Format('Texture Size: %dx%d', [Terrain.texturewidth, Terrain.textureheight]);
+  StatusBar1.Panels[0].Text := Format('Texture Size: %dx%d', [tex.texturewidth, tex.textureheight]);
   UpdateSliders;
   SlidersToLabels;
 end;
@@ -933,7 +933,7 @@ end;
 
 procedure TForm1.PaintBox1Paint(Sender: TObject);
 begin
-  DoRefreshPaintBox(Rect(0, 0, terrain.texturewidth - 1, terrain.textureheight - 1));
+  DoRefreshPaintBox(Rect(0, 0, tex.texturewidth - 1, tex.textureheight - 1));
 end;
 
 function intersectRect(const r1, r2: TRect): boolean;
@@ -954,7 +954,7 @@ var
   C: TCanvas;
 begin
   C := bitmapbuffer.Canvas;
-  C.CopyRect(r, terrain.Texture.Canvas, r);
+  C.CopyRect(r, tex.Texture.Canvas, r);
   PaintBox1.Canvas.CopyRect(r, C, r);
 end;
 
@@ -1586,10 +1586,10 @@ var
   hchanged: boolean;
   ypos: integer;
 begin
-  twidth := terrain.texturewidth;
+  twidth := tex.texturewidth;
   iX1 := GetIntInRange(X - fpensize div 2, 0, twidth - 1);
   iX2 := GetIntInRange(X + fpensize div 2, 0, twidth - 1);
-  theight := terrain.textureheight;
+  theight := tex.textureheight;
   iY1 := GetIntInRange(Y - fpensize div 2, 0, theight - 1);
   iY2 := GetIntInRange(Y + fpensize div 2, 0, theight - 1);
 
@@ -1599,7 +1599,7 @@ begin
   begin
     for iY := iY1 to iY2 do
     begin
-      tline := terrain.Texture.ScanLine[iY];
+      tline := tex.Texture.ScanLine[iY];
       ypos := Round(iY / ftexturescale * 100) mod colorbuffersize;
       for iX := iX1 to iX2 do
         if drawlayer[iX, iY].pass < fopacity then
@@ -1618,7 +1618,7 @@ begin
   begin
     for iY := iY1 to iY2 do
     begin
-      tline := terrain.Texture.ScanLine[iY];
+      tline := tex.Texture.ScanLine[iY];
       ypos := Round(iY / ftexturescale * 100) mod colorbuffersize;
       for iX := iX1 to iX2 do
       begin
@@ -1644,7 +1644,7 @@ begin
   begin
     for iY := iY1 to iY2 do
     begin
-      tline := terrain.Texture.ScanLine[iY];
+      tline := tex.Texture.ScanLine[iY];
       ypos := Round(iY / ftexturescale * 100) mod colorbuffersize;
       for iX := iX1 to iX2 do
       begin
@@ -1795,7 +1795,7 @@ begin
 
     tempBitmap.PixelFormat := pf32bit;
 
-    terrain.Texture.Canvas.StretchDraw(Rect(0, 0, terrain.texturewidth, terrain.textureheight), tempBitmap);
+    tex.Texture.Canvas.StretchDraw(Rect(0, 0, tex.texturewidth, tex.textureheight), tempBitmap);
 
     tempBitmap.Free;
 
@@ -2019,7 +2019,7 @@ begin
     try
       f.Image1.Picture.LoadFromFile(OpenPictureDialog1.FileName);
       SaveUndo(True);
-      terrain.Texture.Canvas.StretchDraw(Rect(0, 0, terrain.texturewidth, terrain.textureheight), f.Image1.Picture.Graphic);
+      tex.Texture.Canvas.StretchDraw(Rect(0, 0, tex.texturewidth, tex.textureheight), f.Image1.Picture.Graphic);
       changed := True;
       PaintBox1.Invalidate;
     finally
@@ -2313,7 +2313,7 @@ begin
     try
       imgfname := SavePictureDialog3.FileName;
       BackupFile(imgfname);
-      SaveImageToDisk(terrain.Texture, imgfname);
+      SaveImageToDisk(tex.Texture, imgfname);
     finally
       Screen.Cursor := crDefault;
     end;
