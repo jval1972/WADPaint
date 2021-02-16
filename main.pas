@@ -2530,14 +2530,20 @@ end;
 
 procedure TForm1.ZoomInButton1Click(Sender: TObject);
 begin
-  fZoom := GetIntInRange(fZoom + 1, MINZOOM, MAXZOOM);
-  PaintBox1.Invalidate;
+  if not lmousedown then
+  begin
+    fZoom := GetIntInRange(fZoom + 1, MINZOOM, MAXZOOM);
+    PaintBox1.Invalidate;
+  end;
 end;
 
 procedure TForm1.ZoomOutButton1Click(Sender: TObject);
 begin
-  fZoom := GetIntInRange(fZoom - 1, MINZOOM, MAXZOOM);
-  PaintBox1.Invalidate;
+  if not lmousedown then
+  begin
+    fZoom := GetIntInRange(fZoom - 1, MINZOOM, MAXZOOM);
+    PaintBox1.Invalidate;
+  end;
 end;
 
 procedure TForm1.FormMouseWheelDown(Sender: TObject; Shift: TShiftState;

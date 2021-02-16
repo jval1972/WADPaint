@@ -2607,7 +2607,7 @@ object Form1: TForm1
                 Top = 1
                 Width = 310
                 Height = 406
-                ActivePage = WADPatchesTabSheet
+                ActivePage = WADFlatsTabSheet
                 Align = alClient
                 Style = tsFlatButtons
                 TabOrder = 0
@@ -2666,7 +2666,7 @@ object Form1: TForm1
                       object Panel8: TPanel
                         Left = 0
                         Top = 0
-                        Width = 232
+                        Width = 302
                         Height = 25
                         Align = alTop
                         Caption = 'Preview'
@@ -2675,7 +2675,7 @@ object Form1: TForm1
                       object Panel9: TPanel
                         Left = 0
                         Top = 25
-                        Width = 232
+                        Width = 302
                         Height = 138
                         Align = alClient
                         Caption = ' '
@@ -4240,7 +4240,7 @@ object Form1: TForm1
                         object Panel11: TPanel
                           Left = 133
                           Top = 1
-                          Width = 98
+                          Width = 168
                           Height = 136
                           Align = alClient
                           BevelOuter = bvNone
@@ -5948,7 +5948,7 @@ object Form1: TForm1
               object Panel31: TPanel
                 Left = 4
                 Top = 4
-                Width = 234
+                Width = 304
                 Height = 41
                 Align = alClient
                 Caption = ' '
@@ -6054,7 +6054,7 @@ object Form1: TForm1
                       object Panel18: TPanel
                         Left = 0
                         Top = 0
-                        Width = 232
+                        Width = 302
                         Height = 25
                         Align = alTop
                         Caption = 'Preview'
@@ -6063,7 +6063,7 @@ object Form1: TForm1
                       object Panel19: TPanel
                         Left = 0
                         Top = 25
-                        Width = 232
+                        Width = 302
                         Height = 138
                         Align = alClient
                         Caption = ' '
@@ -7628,7 +7628,7 @@ object Form1: TForm1
                         object Panel21: TPanel
                           Left = 133
                           Top = 1
-                          Width = 98
+                          Width = 168
                           Height = 136
                           Align = alClient
                           BevelOuter = bvNone
@@ -7682,7 +7682,7 @@ object Form1: TForm1
               object Panel32: TPanel
                 Left = 4
                 Top = 4
-                Width = 234
+                Width = 304
                 Height = 41
                 Align = alClient
                 Caption = ' '
@@ -7788,7 +7788,7 @@ object Form1: TForm1
                       object Panel22: TPanel
                         Left = 0
                         Top = 0
-                        Width = 232
+                        Width = 302
                         Height = 25
                         Align = alTop
                         Caption = 'Preview'
@@ -7797,7 +7797,7 @@ object Form1: TForm1
                       object Panel23: TPanel
                         Left = 0
                         Top = 25
-                        Width = 232
+                        Width = 302
                         Height = 138
                         Align = alClient
                         Caption = ' '
@@ -9362,7 +9362,7 @@ object Form1: TForm1
                         object Panel25: TPanel
                           Left = 133
                           Top = 1
-                          Width = 98
+                          Width = 168
                           Height = 136
                           Align = alClient
                           BevelOuter = bvNone
