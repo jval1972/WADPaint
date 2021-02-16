@@ -2468,6 +2468,39 @@ object Form1: TForm1
             Height = 13
             Caption = '...'
           end
+          object SizeSpeedButton1: TSpeedButton
+            Left = 288
+            Top = 56
+            Width = 14
+            Height = 14
+            Cursor = crHandPoint
+            Hint = 'Set pen size'
+            Caption = '...'
+            Flat = True
+            OnClick = SizeSpeedButton1Click
+          end
+          object OpacitySpeedButton1: TSpeedButton
+            Left = 288
+            Top = 72
+            Width = 14
+            Height = 14
+            Cursor = crHandPoint
+            Hint = 'Set drawing opacity'
+            Caption = '...'
+            Flat = True
+            OnClick = OpacitySpeedButton1Click
+          end
+          object ScaleSpeedButton1: TSpeedButton
+            Left = 288
+            Top = 88
+            Width = 14
+            Height = 14
+            Cursor = crHandPoint
+            Hint = 'Set texture scale'
+            Caption = '...'
+            Flat = True
+            OnClick = ScaleSpeedButton1Click
+          end
         end
       end
     end
@@ -9721,6 +9754,12 @@ object Form1: TForm1
     end
     object Colors1: TMenuItem
       Caption = 'Colors'
+      object Grayscale1: TMenuItem
+        Caption = '&Gray Scale'
+      end
+      object N1: TMenuItem
+        Caption = '-'
+      end
       object Doom1: TMenuItem
         Caption = 'Doom Palette'
         OnClick = Doom1Click

@@ -267,6 +267,11 @@ type
     WADPatchRotateRadioGroup: TRadioGroup;
     PK3RotateRadioGroup: TRadioGroup;
     DIRRotateRadioGroup: TRadioGroup;
+    SizeSpeedButton1: TSpeedButton;
+    OpacitySpeedButton1: TSpeedButton;
+    ScaleSpeedButton1: TSpeedButton;
+    N1: TMenuItem;
+    Grayscale1: TMenuItem;
     procedure FormCreate(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
     procedure NewButton1Click(Sender: TObject);
@@ -360,6 +365,9 @@ type
     procedure WADPatchRotateRadioGroupClick(Sender: TObject);
     procedure PK3RotateRadioGroupClick(Sender: TObject);
     procedure DIRRotateRadioGroupClick(Sender: TObject);
+    procedure SizeSpeedButton1Click(Sender: TObject);
+    procedure OpacitySpeedButton1Click(Sender: TObject);
+    procedure ScaleSpeedButton1Click(Sender: TObject);
   private
     { Private declarations }
     ffilename: string;
@@ -460,6 +468,7 @@ uses
   wp_wadreader,
   wp_palettes,
   frm_loadimagehelper,
+  frm_inputnumber,
   wp_colorpalettebmz,
   wp_cursors,
   wp_doomdata,
@@ -1055,7 +1064,8 @@ begin
     PaintBox1.Canvas.CopyRect(r, C, r);
   end
   else
-    PaintBox1.Canvas.StretchDraw(Rect(0, 0, PaintBox1.Width - 1, PaintBox1.Height - 1), tex.Texture);
+//    PaintBox1.Canvas.StretchDraw(Rect(0, 0, PaintBox1.Width - 1, PaintBox1.Height - 1), tex.Texture);
+    PaintBox1.Canvas.StretchDraw(Rect(0, 0, PaintBox1.Width, PaintBox1.Height), tex.Texture);
 
   if (LastiX1 <> 0) or (LastiX2 <> 0) or (LastiY1 <> 0) or (LastiY2 <> 0) then
   begin
@@ -3040,6 +3050,24 @@ end;
 procedure TForm1.DIRRotateRadioGroupClick(Sender: TObject);
 begin
   NotifyDIRListBox;
+end;
+
+procedure TForm1.SizeSpeedButton1Click(Sender: TObject);
+begin
+  if GetInputNumber('Enter value', 'Size: ', 1, 128, fpensize) then
+    UpdateSliders;
+end;
+
+procedure TForm1.OpacitySpeedButton1Click(Sender: TObject);
+begin
+  if GetInputNumber('Enter value', 'Opacity: ', 1, 100, fopacity) then
+    UpdateSliders;
+end;
+
+procedure TForm1.ScaleSpeedButton1Click(Sender: TObject);
+begin
+  if GetInputNumber('Enter value', 'Scale %: ', 10, 400, ftexturescale) then
+    UpdateSliders;
 end;
 
 end.
