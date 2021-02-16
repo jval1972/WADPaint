@@ -325,6 +325,8 @@ type
       MousePos: TPoint; var Handled: Boolean);
     procedure FormMouseWheelUp(Sender: TObject; Shift: TShiftState;
       MousePos: TPoint; var Handled: Boolean);
+    procedure Label2DblClick(Sender: TObject);
+    procedure Label3DblClick(Sender: TObject);
   private
     { Private declarations }
     ffilename: string;
@@ -975,6 +977,7 @@ begin
   SlidersToLabels;
   fopacity := Round(OpacitySlider.Position);
   fpensize := Round(PenSizeSlider.Position);
+  ftexturescale := Round(TextureScaleSlider.Position);
   CalcPenMasks;
 end;
 
@@ -2536,6 +2539,20 @@ begin
     r.Bottom := PaintScrollBox.Height;
   if PtInRect(r, pt) then
     ZoomInButton1Click(Sender);
+end;
+
+procedure TForm1.Label2DblClick(Sender: TObject);
+begin
+  fopacity := 100;
+  UpdateSliders;
+  SlidersToLabels;
+end;
+
+procedure TForm1.Label3DblClick(Sender: TObject);
+begin
+  fpensize := 64;
+  UpdateSliders;
+  SlidersToLabels;
 end;
 
 end.

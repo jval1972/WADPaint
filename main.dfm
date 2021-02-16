@@ -2174,6 +2174,7 @@ object Form1: TForm1
             Width = 26
             Height = 13
             Caption = 'Size: '
+            OnDblClick = Label3DblClick
           end
           object PenSizePaintBox: TPaintBox
             Left = 56
@@ -2209,6 +2210,7 @@ object Form1: TForm1
             Width = 44
             Height = 13
             Caption = 'Opacity: '
+            OnDblClick = Label2DblClick
           end
           object PenSpeedButton1: TSpeedButton
             Left = 10
