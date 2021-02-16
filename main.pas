@@ -439,7 +439,7 @@ begin
   Randomize;
 
   CreateCustomCursors;
-  PaintBox1.Cursor := crPaint;
+  PaintBox1.Cursor := crCross; //crPaint;
 
   colorbuffer := nil;
 
@@ -1823,19 +1823,19 @@ end;
 
 procedure TForm1.PenSpeedButton1Click(Sender: TObject);
 begin
-  PaintBox1.Cursor := crPaint;
+  PaintBox1.Cursor := crCross; //crPaint;
   PaintBox1.Invalidate;
 end;
 
 procedure TForm1.PenSpeedButton2Click(Sender: TObject);
 begin
-  PaintBox1.Cursor := crPaint;
+  PaintBox1.Cursor := crCross; //crPaint;
   PaintBox1.Invalidate;
 end;
 
 procedure TForm1.PenSpeedButton3Click(Sender: TObject);
 begin
-  PaintBox1.Cursor := crPaint;
+  PaintBox1.Cursor := crCross; //crPaint;
   PaintBox1.Invalidate;
 end;
 
