@@ -253,6 +253,21 @@ type
     ToolButton4: TToolButton;
     ZoomInButton1: TSpeedButton;
     ZoomOutButton1: TSpeedButton;
+    Filter1: TMenuItem;
+    FilterLaplace1: TMenuItem;
+    FilterHiPass1: TMenuItem;
+    FilterFindEdges1: TMenuItem;
+    FilterSharpen1: TMenuItem;
+    FilterEdgeEnhance1: TMenuItem;
+    FilterColorEmboss1: TMenuItem;
+    FilterSoften1: TMenuItem;
+    FilterSofterless1: TMenuItem;
+    FilterBlur1: TMenuItem;
+    FilterBlurmore1: TMenuItem;
+    FilterBlurmax1: TMenuItem;
+    FilterGrease1: TMenuItem;
+    FilterLithograph1: TMenuItem;
+    FilterPsychedelicDistillation1: TMenuItem;
     procedure FormCreate(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
     procedure NewButton1Click(Sender: TObject);
@@ -327,6 +342,21 @@ type
       MousePos: TPoint; var Handled: Boolean);
     procedure Label2DblClick(Sender: TObject);
     procedure Label3DblClick(Sender: TObject);
+    procedure FilterLaplace1Click(Sender: TObject);
+    procedure FilterHiPass1Click(Sender: TObject);
+    procedure FilterFindEdges1Click(Sender: TObject);
+    procedure FilterSharpen1Click(Sender: TObject);
+    procedure FilterEdgeEnhance1Click(Sender: TObject);
+    procedure FilterColorEmboss1Click(Sender: TObject);
+    procedure FilterSoften1Click(Sender: TObject);
+    procedure FilterSofterless1Click(Sender: TObject);
+    procedure FilterBlur1Click(Sender: TObject);
+    procedure FilterGrease1Click(Sender: TObject);
+    procedure FilterSimpleEmboss1Click(Sender: TObject);
+    procedure FilterLithograph1Click(Sender: TObject);
+    procedure FilterPsychedelicDistillation1Click(Sender: TObject);
+    procedure FilterBlurmore1Click(Sender: TObject);
+    procedure FilterBlurmax1Click(Sender: TObject);
   private
     { Private declarations }
     ffilename: string;
@@ -429,6 +459,7 @@ uses
   wp_doomdata,
   wp_doomutils,
   wp_quantize,
+  wp_filters,
   wp_wad;
 
 {$R *.dfm}
@@ -2553,6 +2584,357 @@ begin
   fpensize := 64;
   UpdateSliders;
   SlidersToLabels;
+end;
+
+procedure TForm1.FilterLaplace1Click(Sender: TObject);
+var 
+  flt: TImageFilter3x3;
+begin
+  Screen.Cursor := crHourglass;
+  try
+    with flt do
+    begin
+      RAY[0] := -1; RAY[1] := -1; RAY[2] := -1;
+      RAY[3] := -1; RAY[4] :=  8; RAY[5] := -1;
+      RAY[6] := -1; RAY[7] := -1; RAY[8] := -1;
+      DIVFACTOR := 1;
+      BIAS := 0;
+    end;
+    SaveUndo(True);
+    ApplyFilter3x3ToBitmap(flt, tex.Texture);
+    changed := true;
+    PaintBox1.Invalidate;
+  finally
+    Screen.Cursor := crDefault;
+  end;
+end;
+
+procedure TForm1.FilterHiPass1Click(Sender: TObject);
+var 
+  flt: TImageFilter3x3;
+begin
+  Screen.Cursor := crHourglass;
+  try
+    with flt do
+    begin
+      RAY[0] := -1; RAY[1] := -1; RAY[2] := -1;
+      RAY[3] := -1; RAY[4] :=  9; RAY[5] := -1;
+      RAY[6] := -1; RAY[7] := -1; RAY[8] := -1;
+      DIVFACTOR := 1;
+      BIAS := 0;
+    end;
+    SaveUndo(True);
+    ApplyFilter3x3ToBitmap(flt, tex.Texture);
+    changed := true;
+    PaintBox1.Invalidate;
+  finally
+    Screen.Cursor := crDefault;
+  end;
+end;
+
+procedure TForm1.FilterFindEdges1Click(Sender: TObject);
+var 
+  flt: TImageFilter3x3;
+begin
+  Screen.Cursor := crHourglass;
+  try
+    with flt do
+    begin
+      RAY[0] :=  1; RAY[1] :=  1; RAY[2] :=  1;
+      RAY[3] :=  1; RAY[4] := -2; RAY[5] :=  1;
+      RAY[6] := -1; RAY[7] := -1; RAY[8] := -1;
+      DIVFACTOR := 1;
+      BIAS := 0;
+    end;
+    SaveUndo(True);
+    ApplyFilter3x3ToBitmap(flt, tex.Texture);
+    changed := true;
+    PaintBox1.Invalidate;
+  finally
+    Screen.Cursor := crDefault;
+  end;
+end;
+
+procedure TForm1.FilterSharpen1Click(Sender: TObject);
+var 
+  flt: TImageFilter3x3;
+begin
+  Screen.Cursor := crHourglass;
+  try
+    with flt do
+    begin
+      RAY[0] := -1; RAY[1] := -1; RAY[2] := -1;
+      RAY[3] := -1; RAY[4] := 16; RAY[5] := -1;
+      RAY[6] := -1; RAY[7] := -1; RAY[8] := -1;
+      DIVFACTOR := 8;
+      BIAS := 0;
+    end;
+    SaveUndo(True);
+    ApplyFilter3x3ToBitmap(flt, tex.Texture);
+    changed := true;
+    PaintBox1.Invalidate;
+  finally
+    Screen.Cursor := crDefault;
+  end;
+end;
+
+procedure TForm1.FilterEdgeEnhance1Click(Sender: TObject);
+var 
+  flt: TImageFilter3x3;
+begin
+  Screen.Cursor := crHourglass;
+  try
+    with flt do
+    begin
+      RAY[0] :=  0; RAY[1] := -1; RAY[2] :=  0;
+      RAY[3] := -1; RAY[4] :=  5; RAY[5] := -1;
+      RAY[6] :=  0; RAY[7] := -1; RAY[8] :=  0;
+      DIVFACTOR := 1;
+      BIAS := 0;
+    end;
+    SaveUndo(True);
+    ApplyFilter3x3ToBitmap(flt, tex.Texture);
+    changed := true;
+    PaintBox1.Invalidate;
+  finally
+    Screen.Cursor := crDefault;
+  end;
+end;
+
+procedure TForm1.FilterColorEmboss1Click(Sender: TObject);
+var 
+  flt: TImageFilter3x3;
+begin
+  Screen.Cursor := crHourglass;
+  try
+    with flt do
+    begin
+      RAY[0] :=  1; RAY[1] :=  0; RAY[2] :=  1;
+      RAY[3] :=  0; RAY[4] :=  0; RAY[5] :=  0;
+      RAY[6] :=  1; RAY[7] :=  0; RAY[8] := -2;
+      DIVFACTOR := 1;
+      BIAS := 0;
+    end;
+    SaveUndo(True);
+    ApplyFilter3x3ToBitmap(flt, tex.Texture);
+    changed := true;
+    PaintBox1.Invalidate;
+  finally
+    Screen.Cursor := crDefault;
+  end;
+end;
+
+procedure TForm1.FilterSoften1Click(Sender: TObject);
+var 
+  flt: TImageFilter3x3;
+begin
+  Screen.Cursor := crHourglass;
+  try
+    with flt do
+    begin
+      RAY[0] :=  2; RAY[1] :=  2; RAY[2] :=  2;
+      RAY[3] :=  2; RAY[4] :=  0; RAY[5] :=  2;
+      RAY[6] :=  2; RAY[7] :=  2; RAY[8] :=  2;
+      DIVFACTOR := 16;
+      BIAS := 0;
+    end;
+    SaveUndo(True);
+    ApplyFilter3x3ToBitmap(flt, tex.Texture);
+    changed := true;
+    PaintBox1.Invalidate;
+  finally
+    Screen.Cursor := crDefault;
+  end;
+end;
+
+procedure TForm1.FilterSofterless1Click(Sender: TObject);
+var 
+  flt: TImageFilter3x3;
+begin
+  Screen.Cursor := crHourglass;
+  try
+    with flt do
+    begin
+      RAY[0] :=  0; RAY[1] :=  1; RAY[2] :=  0;
+      RAY[3] :=  1; RAY[4] :=  2; RAY[5] :=  1;
+      RAY[6] :=  0; RAY[7] :=  1; RAY[8] :=  0;
+      DIVFACTOR := 6;
+      BIAS := 0;
+    end;
+    SaveUndo(True);
+    ApplyFilter3x3ToBitmap(flt, tex.Texture);
+    changed := true;
+    PaintBox1.Invalidate;
+  finally
+    Screen.Cursor := crDefault;
+  end;
+end;
+
+procedure TForm1.FilterBlur1Click(Sender: TObject);
+var 
+  flt: TImageFilter3x3;
+begin
+  Screen.Cursor := crHourglass;
+  try
+    with flt do
+    begin
+      RAY[0] :=  3; RAY[1] :=  3; RAY[2] :=  3;
+      RAY[3] :=  3; RAY[4] :=  8; RAY[5] :=  3;
+      RAY[6] :=  3; RAY[7] :=  3; RAY[8] :=  3;
+      DIVFACTOR := 32;
+      BIAS := 0;
+    end;
+    SaveUndo(True);
+    ApplyFilter3x3ToBitmap(flt, tex.Texture);
+    changed := true;
+    PaintBox1.Invalidate;
+  finally
+    Screen.Cursor := crDefault;
+  end;
+end;
+
+procedure TForm1.FilterGrease1Click(Sender: TObject);
+var 
+  flt: TImageFilter3x3;
+begin
+  Screen.Cursor := crHourglass;
+  try
+    with flt do
+    begin
+      RAY[0] :=  1; RAY[1] :=  1; RAY[2] :=  1;
+      RAY[3] :=  1; RAY[4] := -7; RAY[5] :=  1;
+      RAY[6] :=  1; RAY[7] :=  1; RAY[8] :=  1;
+      DIVFACTOR := 1;
+      BIAS := 0;
+    end;
+    SaveUndo(True);
+    ApplyFilter3x3ToBitmap(flt, tex.Texture);
+    changed := true;
+    PaintBox1.Invalidate;
+  finally
+    Screen.Cursor := crDefault;
+  end;
+end;
+
+procedure TForm1.FilterSimpleEmboss1Click(Sender: TObject);
+var 
+  flt: TImageFilter3x3;
+begin
+  Screen.Cursor := crHourglass;
+  try
+    with flt do
+    begin
+      RAY[0] := -1; RAY[1] :=  0; RAY[2] :=  1;
+      RAY[3] := -1; RAY[4] :=  0; RAY[5] :=  1;
+      RAY[6] := -1; RAY[7] :=  0; RAY[8] :=  1;
+      DIVFACTOR := 1;
+      BIAS := 128;
+    end;
+    SaveUndo(True);
+    ApplyFilter3x3ToBitmap(flt, tex.Texture);
+    changed := true;
+    PaintBox1.Invalidate;
+  finally
+    Screen.Cursor := crDefault;
+  end;
+end;
+
+procedure TForm1.FilterLithograph1Click(Sender: TObject);
+var 
+  flt: TImageFilter5x5;
+begin
+  Screen.Cursor := crHourglass;
+  try
+    with flt do
+    begin
+      RAY[ 0] := -1; RAY[ 1] := -1; RAY[ 2] := -1; RAY[ 3] := -1; RAY[ 4] := -1;
+      RAY[ 5] := -1; RAY[ 6] :=-10; RAY[ 7] :=-10; RAY[ 8] :=-10; RAY[ 9] := -1;
+      RAY[10] := -1; RAY[11] :=-10; RAY[12] := 98; RAY[13] :=-10; RAY[14] := -1;
+      RAY[15] := -1; RAY[16] :=-10; RAY[17] :=-10; RAY[18] :=-10; RAY[19] := -1;
+      RAY[20] := -1; RAY[21] := -1; RAY[22] := -1; RAY[23] := -1; RAY[24] := -1;
+      DIVFACTOR := 1;
+      BIAS := 0;
+    end;
+    SaveUndo(True);
+    ApplyFilter5x5ToBitmap(flt, tex.Texture);
+    changed := true;
+    PaintBox1.Invalidate;
+  finally
+    Screen.Cursor := crDefault;
+  end;
+end;
+
+procedure TForm1.FilterPsychedelicDistillation1Click(Sender: TObject);
+var 
+  flt: TImageFilter5x5;
+begin
+  Screen.Cursor := crHourglass;
+  try
+    with flt do
+    begin
+      RAY[ 0] :=  0; RAY[ 1] := -1; RAY[ 2] := -2; RAY[ 3] := -3; RAY[ 4] := -4;
+      RAY[ 5] :=  0; RAY[ 6] := -1; RAY[ 7] :=  3; RAY[ 8] :=  2; RAY[ 9] :=  1;
+      RAY[10] :=  0; RAY[11] := -1; RAY[12] := 10; RAY[13] :=  2; RAY[14] :=  1;
+      RAY[15] :=  0; RAY[16] := -1; RAY[17] :=  3; RAY[18] :=  2; RAY[19] :=  1;
+      RAY[20] :=  0; RAY[21] := -1; RAY[22] := -2; RAY[23] := -3; RAY[24] := -4;
+      DIVFACTOR := 1;
+      BIAS := 0;
+    end;
+    SaveUndo(True);
+    ApplyFilter5x5ToBitmap(flt, tex.Texture);
+    changed := true;
+    PaintBox1.Invalidate;
+  finally
+    Screen.Cursor := crDefault;
+  end;
+end;
+
+procedure TForm1.FilterBlurmore1Click(Sender: TObject);
+var 
+  flt: TImageFilter3x3;
+begin
+  Screen.Cursor := crHourglass;
+  try
+    with flt do
+    begin
+      RAY[0] :=  1; RAY[1] :=  1; RAY[2] :=  1;
+      RAY[3] :=  1; RAY[4] :=  1; RAY[5] :=  1;
+      RAY[6] :=  1; RAY[7] :=  1; RAY[8] :=  1;
+      DIVFACTOR := 9;
+      BIAS := 0;
+    end;
+    SaveUndo(True);
+    ApplyFilter3x3ToBitmap(flt, tex.Texture);
+    changed := true;
+    PaintBox1.Invalidate;
+  finally
+    Screen.Cursor := crDefault;
+  end;
+end;
+
+procedure TForm1.FilterBlurmax1Click(Sender: TObject);
+var 
+  flt: TImageFilter5x5;
+begin
+  Screen.Cursor := crHourglass;
+  try
+    with flt do
+    begin
+      RAY[ 0] :=  1; RAY[ 1] :=  1; RAY[ 2] :=  1; RAY[ 3] :=  1; RAY[ 4] :=  1;
+      RAY[ 5] :=  1; RAY[ 6] :=  1; RAY[ 7] :=  1; RAY[ 8] :=  1; RAY[ 9] :=  1;
+      RAY[10] :=  1; RAY[11] :=  1; RAY[12] :=  1; RAY[13] :=  1; RAY[14] :=  1;
+      RAY[15] :=  1; RAY[16] :=  1; RAY[17] :=  1; RAY[18] :=  1; RAY[19] :=  1;
+      RAY[20] :=  1; RAY[21] :=  1; RAY[22] :=  1; RAY[23] :=  1; RAY[24] :=  1;
+      DIVFACTOR := 25;
+      BIAS := 0;
+    end;
+    SaveUndo(True);
+    ApplyFilter5x5ToBitmap(flt, tex.Texture);
+    changed := true;
+    PaintBox1.Invalidate;
+  finally
+    Screen.Cursor := crDefault;
+  end;
 end;
 
 end.

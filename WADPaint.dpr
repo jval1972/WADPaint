@@ -63,7 +63,8 @@ uses
   LibJpegDelphi in 'LibJpegDelphi.pas',
   LibTiffDelphi in 'LibTiffDelphi.pas',
   wp_tmp in 'wp_tmp.pas',
-  wp_doomutils in 'wp_doomutils.pas';
+  wp_doomutils in 'wp_doomutils.pas',
+  wp_filters in 'wp_filters.pas';
 
 {$R *.res}
 

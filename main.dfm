@@ -9682,6 +9682,65 @@ object Form1: TForm1
         OnClick = Radix1Click
       end
     end
+    object Filter1: TMenuItem
+      Caption = 'Filter'
+      object FilterLaplace1: TMenuItem
+        Caption = 'Laplace'
+        OnClick = FilterLaplace1Click
+      end
+      object FilterHiPass1: TMenuItem
+        Caption = 'Hi Pass'
+        OnClick = FilterHiPass1Click
+      end
+      object FilterFindEdges1: TMenuItem
+        Caption = 'Find Edges'
+        OnClick = FilterFindEdges1Click
+      end
+      object FilterSharpen1: TMenuItem
+        Caption = 'Sharpen'
+        OnClick = FilterSharpen1Click
+      end
+      object FilterEdgeEnhance1: TMenuItem
+        Caption = 'Edge Enhance'
+        OnClick = FilterEdgeEnhance1Click
+      end
+      object FilterColorEmboss1: TMenuItem
+        Caption = 'Color Emboss'
+        OnClick = FilterColorEmboss1Click
+      end
+      object FilterSoften1: TMenuItem
+        Caption = 'Soften'
+        OnClick = FilterSoften1Click
+      end
+      object FilterSofterless1: TMenuItem
+        Caption = 'Softer (less)'
+        OnClick = FilterSofterless1Click
+      end
+      object FilterBlur1: TMenuItem
+        Caption = 'Blur'
+        OnClick = FilterBlur1Click
+      end
+      object FilterBlurmore1: TMenuItem
+        Caption = 'Blur (more)'
+        OnClick = FilterBlurmore1Click
+      end
+      object FilterBlurmax1: TMenuItem
+        Caption = 'Blur (max)'
+        OnClick = FilterBlurmax1Click
+      end
+      object FilterGrease1: TMenuItem
+        Caption = 'Grease'
+        OnClick = FilterGrease1Click
+      end
+      object FilterLithograph1: TMenuItem
+        Caption = 'Lithograph'
+        OnClick = FilterLithograph1Click
+      end
+      object FilterPsychedelicDistillation1: TMenuItem
+        Caption = 'Psychedelic Distillation'
+        OnClick = FilterPsychedelicDistillation1Click
+      end
+    end
     object Help1: TMenuItem
       Caption = '&Help'
       object About1: TMenuItem
