@@ -1076,9 +1076,9 @@ begin
     oldc := PaintBox1.Canvas.Pen.Color;
     PaintBox1.Canvas.Pen.Color := RGB(255, 255, 255);
     if LastShape = 1 then
-      PaintBox1.Canvas.Rectangle(fZoom * LastiX1, fZoom * LastiY1, fZoom * LastiX2 + 2, fZoom * LastiY2 + 2)
+      PaintBox1.Canvas.Rectangle(fZoom * LastiX1, fZoom * LastiY1, fZoom * (1 + LastiX2), fZoom * (1 + LastiY2))
     else if (LastShape = 2) or (LastShape = 3) then
-      PaintBox1.Canvas.Ellipse(fZoom * LastiX1, fZoom * LastiY1, fZoom * LastiX2 + 2, fZoom * LastiY2 + 2);
+      PaintBox1.Canvas.Ellipse(fZoom * LastiX1, fZoom * LastiY1, fZoom * (1 + LastiX2), fZoom * (1 + LastiY2));
     PaintBox1.Canvas.Brush.Style := bsSolid;
     PaintBox1.Canvas.Pen.Style := psSolid;
     PaintBox1.Canvas.Pen.Color := oldc;
