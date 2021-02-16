@@ -400,6 +400,7 @@ type
     savebitmapundo: boolean;
     ColorPickerButton1: TColorPickerButton;
     LastiX1, LastiX2, LastiY1, LastiY2: integer;
+    hasdrawPaintToolShape: boolean;
     LastShape: integer;
     fZoom: integer;
     procedure Idle(Sender: TObject; var Done: Boolean);
@@ -627,6 +628,7 @@ begin
   LastiY1 := 0;
   LastiY2 := 0;
   LastShape := 0;
+  hasdrawPaintToolShape := false;
 
   WADFlatRotateRadioGroup.ItemIndex := 0;
   WADPatchRotateRadioGroup.ItemIndex := 0;
@@ -1063,7 +1065,10 @@ begin
       PaintBox1.Canvas.Ellipse(LastiX1, LastiY1, LastiX2, LastiY2);
     PaintBox1.Canvas.Brush.Style := bsSolid;
     PaintBox1.Canvas.Pen.Style := psSolid;
-  end;
+    hasdrawPaintToolShape := True;
+  end
+  else
+    hasdrawPaintToolShape := False;
 end;
 
 procedure TForm1.SelectWADFileButtonClick(Sender: TObject);
@@ -2541,9 +2546,32 @@ begin
 end;
 
 procedure TForm1.Timer1Timer(Sender: TObject);
+var
+  pt: TPoint;
+  r: TRect;
 begin
   ZoomInButton1.Enabled := fZoom < MAXZOOM;
   ZoomOutButton1.Enabled := fZoom > MINZOOM;
+  
+  if hasdrawPaintToolShape then
+  begin
+    GetCursorPos(pt);
+    pt := PaintBox1.Parent.ScreenToClient(pt);
+    r := PaintBox1.ClientRect;
+    if r.Right > PaintScrollBox.Width then
+      r.Right := PaintScrollBox.Width;
+    if r.Bottom > PaintScrollBox.Height then
+      r.Bottom := PaintScrollBox.Height;
+    if not PtInRect(r, pt) then
+    begin
+      LastiX1 := 0;
+      LastiX2 := 0;
+      LastiY1 := 0;
+      LastiY2 := 0;
+      LastShape := 0;
+      PaintBox1.Invalidate;
+    end;
+  end;
 end;
 
 procedure TForm1.ZoomInButton1Click(Sender: TObject);
