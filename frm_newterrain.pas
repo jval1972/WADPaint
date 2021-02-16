@@ -19,7 +19,7 @@
 //  02111-1307, USA.
 //
 // DESCRIPTION:
-//  New Terrain Form
+//  New Texture Form
 //
 //------------------------------------------------------------------------------
 //  E-Mail: jimmyvalavanis@yahoo.gr
