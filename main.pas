@@ -59,7 +59,7 @@ const
 
 const
   MINZOOM = 1;
-  MAXZOOM = 4;
+  MAXZOOM = 8;
 
 type
   TForm1 = class(TForm)
@@ -444,6 +444,7 @@ type
     procedure RecreateColorPickPalette;
     procedure PickColorPalette(const X, Y: integer);
     procedure RotateBitmapFromRadiogroupIndex(var bm: TBitmap; const rg: TRadioGroup);
+    function ZoomValue(const x: integer): integer;
   protected
     // Made protected to avoid "Private symbol never used" warning.
     function DIRTexEditNameSize: integer;
@@ -703,6 +704,7 @@ begin
   SetFileName('');
   changed := False;
   tex.Clear(twidth, theight);
+  fZoom := 1;
   PaintBox1.Width := twidth;
   PaintBox1.Height := theight;
   bitmapbuffer.Width := twidth;
@@ -778,6 +780,7 @@ begin
     Screen.Cursor := crDefault;
   end;
 
+  fZoom := 1;
   PaintBox1.Width := tex.texturewidth;
   PaintBox1.Height := tex.textureheight;
   bitmapbuffer.Width := tex.texturewidth;
@@ -949,7 +952,7 @@ end;
 
 procedure TForm1.UpdateStausbar;
 begin
-//  StatusBar1.Panels[2].Text := Format('Camera(x=%2.2f, y=%2.2f, z=%2.2f)', [camera.x, camera.y, camera.z]);
+  StatusBar1.Panels[1].Text := Format('Zoom = %d%s', [fZoom * 100, '%']);
 end;
 
 procedure TForm1.UpdateEnable;
@@ -1050,9 +1053,14 @@ procedure TForm1.DoRefreshPaintBox(const r: TRect);
 var
   C: TCanvas;
 begin
-  C := bitmapbuffer.Canvas;
-  C.CopyRect(r, tex.Texture.Canvas, r);
-  PaintBox1.Canvas.CopyRect(r, C, r);
+  if fZoom = 1 then
+  begin
+    C := bitmapbuffer.Canvas;
+    C.CopyRect(r, tex.Texture.Canvas, r);
+    PaintBox1.Canvas.CopyRect(r, C, r);
+  end
+  else
+    PaintBox1.Canvas.StretchDraw(Rect(0, 0, PaintBox1.Width, PaintBox1.Height), tex.Texture);
 
   if (LastiX1 <> 0) or (LastiX2 <> 0) or (LastiY1 <> 0) or (LastiY2 <> 0) then
   begin
@@ -1060,9 +1068,9 @@ begin
     PaintBox1.Canvas.Pen.Style := psDot;
     PaintBox1.Canvas.Pen.Color := RGB(255, 255, 255);
     if LastShape = 1 then
-      PaintBox1.Canvas.Rectangle(LastiX1, LastiY1, LastiX2, LastiY2)
+      PaintBox1.Canvas.Rectangle(fZoom * LastiX1, fZoom * LastiY1, fZoom * LastiX2, fZoom * LastiY2)
     else if (LastShape = 2) or (LastShape = 3) then
-      PaintBox1.Canvas.Ellipse(LastiX1, LastiY1, LastiX2, LastiY2);
+      PaintBox1.Canvas.Ellipse(fZoom * LastiX1, fZoom * LastiY1, fZoom * LastiX2, fZoom * LastiY2);
     PaintBox1.Canvas.Brush.Style := bsSolid;
     PaintBox1.Canvas.Pen.Style := psSolid;
     hasdrawPaintToolShape := True;
@@ -1629,12 +1637,12 @@ begin
     CalcPenMasks;
     SaveUndo(PenSpeedButton1.Down or PenSpeedButton2.Down or PenSpeedButton3.Down);
     lmousedown := True;
-    lmousedownx := X;
-    lmousedowny := Y;
+    lmousedownx := ZoomValue(X);
+    lmousedowny := ZoomValue(Y);
 
     ZeroMemory(drawlayer, SizeOf(drawlayer_t));
 
-    LLeftMousePaintTo(X, Y);
+    LLeftMousePaintTo(ZoomValue(X), ZoomValue(Y));
   end;
 end;
 
@@ -1643,9 +1651,9 @@ procedure TForm1.PaintBox1MouseUp(Sender: TObject; Button: TMouseButton;
 begin
   if button = mbLeft then
   begin
-    LLeftMousePaintTo(X, Y);
-    lmousedownx := X;
-    lmousedowny := Y;
+    LLeftMousePaintTo(ZoomValue(X), ZoomValue(Y));
+    lmousedownx := ZoomValue(X);
+    lmousedowny := ZoomValue(Y);
     lmousedown := False;
   end;
 end;
@@ -1659,16 +1667,16 @@ begin
     LastiX2 := 0;
     LastiY1 := 0;
     LastiY2 := 0;
-    LLeftMousePaintTo(X, Y);
-    lmousedownx := X;
-    lmousedowny := Y;
+    LLeftMousePaintTo(ZoomValue(X), ZoomValue(Y));
+    lmousedownx := ZoomValue(X);
+    lmousedowny := ZoomValue(Y);
   end
   else
   begin
-    LastiX1 := X - fpensize div 2;
-    LastiX2 := X + fpensize div 2;
-    LastiY1 := Y - fpensize div 2;
-    LastiY2 := Y + fpensize div 2;
+    LastiX1 := ZoomValue(X) - fpensize div 2;
+    LastiX2 := ZoomValue(X) + fpensize div 2;
+    LastiY1 := ZoomValue(Y) - fpensize div 2;
+    LastiY2 := ZoomValue(Y) + fpensize div 2;
     if PenSpeedButton1.Down then
       LastShape := 1
     else if PenSpeedButton2.Down then
@@ -2575,20 +2583,36 @@ begin
 end;
 
 procedure TForm1.ZoomInButton1Click(Sender: TObject);
+var
+  z: integer;
 begin
   if not lmousedown then
   begin
-    fZoom := GetIntInRange(fZoom + 1, MINZOOM, MAXZOOM);
-    PaintBox1.Invalidate;
+    z := GetIntInRange(fZoom + 1, MINZOOM, MAXZOOM);
+    if z <> fZoom then
+    begin
+      fZoom := z;
+      PaintBox1.Width := tex.texturewidth * fZoom;
+      PaintBox1.Height := tex.textureheight * fZoom;
+      PaintBox1.Invalidate;
+    end;
   end;
 end;
 
 procedure TForm1.ZoomOutButton1Click(Sender: TObject);
+var
+  z: integer;
 begin
   if not lmousedown then
   begin
-    fZoom := GetIntInRange(fZoom - 1, MINZOOM, MAXZOOM);
-    PaintBox1.Invalidate;
+    z := GetIntInRange(fZoom - 1, MINZOOM, MAXZOOM);
+    if z <> fZoom then
+    begin
+      fZoom := z;
+      PaintBox1.Width := tex.texturewidth * fZoom;
+      PaintBox1.Height := tex.textureheight * fZoom;
+      PaintBox1.Invalidate;
+    end;
   end;
 end;
 
@@ -2996,6 +3020,11 @@ begin
     2: begin RotateBitmap90DegreesClockwise(bm); RotateBitmap90DegreesClockwise(bm); end;
     3: RotateBitmap90DegreesCounterClockwise(bm);
   end;
+end;
+
+function TForm1.ZoomValue(const x: integer): integer;
+begin
+  Result := x div fZoom;
 end;
 
 procedure TForm1.WADFlatRotateRadioGroupClick(Sender: TObject);
