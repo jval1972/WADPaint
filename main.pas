@@ -368,6 +368,7 @@ type
     procedure SizeSpeedButton1Click(Sender: TObject);
     procedure OpacitySpeedButton1Click(Sender: TObject);
     procedure ScaleSpeedButton1Click(Sender: TObject);
+    procedure Grayscale1Click(Sender: TObject);
   private
     { Private declarations }
     ffilename: string;
@@ -1073,9 +1074,7 @@ begin
     PaintBox1.Canvas.Pen.Style := psDot;
     PaintBox1.Canvas.Pen.Color := RGB(255, 255, 255);
     if LastShape = 1 then
-      PaintBox1.Canvas.Rectangle(fZoom * LastiX1, fZoom * LastiY1, fZoom * LastiX2, fZoom * LastiY2)
     else if (LastShape = 2) or (LastShape = 3) then
-      PaintBox1.Canvas.Ellipse(fZoom * LastiX1, fZoom * LastiY1, fZoom * LastiX2, fZoom * LastiY2);
     PaintBox1.Canvas.Brush.Style := bsSolid;
     PaintBox1.Canvas.Pen.Style := psSolid;
     hasdrawPaintToolShape := True;
@@ -1746,18 +1745,15 @@ begin
     for iY := iY1 to iY2 do
     begin
       tline := tex.Texture.ScanLine[iY];
-      ypos := Round(iY / ftexturescale * 100) mod colorbuffersize;
       for iX := iX1 to iX2 do
         if drawlayer[iX, iY].pass < fopacity then
         begin
           drawlayer[iX, iY].pass := fopacity;
-          c1 := colorbuffer[Round(iX / ftexturescale * 100) mod colorbuffersize, ypos];
           c2 := RGBSwap(tline[iX]);
           c := coloraverage(c2, c1, fopacity);
           tline[iX] := RGBSwap(c);
         end;
     end;
-    DoRefreshPaintBox(Rect(iX1, iY1, iX2, iY2));
     changed := True;
   end
   else if PenSpeedButton2.Down then
@@ -1765,7 +1761,6 @@ begin
     for iY := iY1 to iY2 do
     begin
       tline := tex.Texture.ScanLine[iY];
-      ypos := Round(iY / ftexturescale * 100) mod colorbuffersize;
       for iX := iX1 to iX2 do
       begin
         newopacity := pen2mask[iX - X, iY - Y];
@@ -1777,13 +1772,11 @@ begin
             c2 := drawlayer[iX, iY].color;
           drawlayer[iX, iY].color := c2;
           drawlayer[iX, iY].pass := newopacity;
-          c1 := colorbuffer[Round(iX / ftexturescale * 100) mod colorbuffersize, ypos];
           c := coloraverage(c2, c1, fopacity);
           tline[iX] := RGBSwap(c);
         end;
       end;
     end;
-    DoRefreshPaintBox(Rect(iX1, iY1, iX2, iY2));
     changed := True;
   end
   else if PenSpeedButton3.Down then
@@ -1791,7 +1784,6 @@ begin
     for iY := iY1 to iY2 do
     begin
       tline := tex.Texture.ScanLine[iY];
-      ypos := Round(iY / ftexturescale * 100) mod colorbuffersize;
       for iX := iX1 to iX2 do
       begin
         newopacity := pen3mask[iX - X, iY - Y];
@@ -1803,13 +1795,12 @@ begin
             c2 := drawlayer[iX, iY].color;
           drawlayer[iX, iY].color := c2;
           drawlayer[iX, iY].pass := newopacity;
-          c1 := colorbuffer[Round(iX / ftexturescale * 100) mod colorbuffersize, ypos];
           c := coloraverage(c2, c1, newopacity);
           tline[iX] := RGBSwap(c);
         end;
       end;
     end;
-    DoRefreshPaintBox(Rect(iX1, iY1, iX2, iY2));
+    DoRefreshPaintBox(Rect(iX1 - 1, iY1 - 1, iX2 + 1, iY2 + 1));
     changed := True;
   end;
 end;
@@ -3068,6 +3059,51 @@ procedure TForm1.ScaleSpeedButton1Click(Sender: TObject);
 begin
   if GetInputNumber('Enter value', 'Scale %: ', 10, 400, ftexturescale) then
     UpdateSliders;
+  end;
+end;
+
+procedure TForm1.Grayscale1Click(Sender: TObject);
+var
+  r, g, b: byte;
+  line: PLongWordArray;
+  x, y: integer;
+  cchanged: boolean;
+  c, cn: LongWord;
+begin
+  tex.Texture.PixelFormat := pf32bit;
+
+  cchanged := False;
+  for y := 0 to tex.textureheight - 1 do
+  begin
+    line := tex.Texture.ScanLine[y];
+    for x := 0 to tex.texturewidth - 1 do
+    begin
+      c := line[x];
+      r := (c shr 16) and $ff;
+      g := (c shr 8) and $ff;
+      b := c and $ff;
+
+      cn := Trunc(r * 0.299 + g * 0.587 + b * 0.114); // Human perceive;
+      if cn > 255 then cn := 255;
+      cn := cn + cn shl 8 + cn shl 16;
+      if cn <> c then
+      begin
+        if not cchanged then
+        begin
+          cchanged := True;
+          SaveUndo(True);
+        end;
+        line[x] := cn;
+      end;
+    end;
+  end;
+
+  if cchanged then
+  begin
+    changed := True;
+    PaintBox1.Invalidate;
+  end;
+
 end;
 
 end.

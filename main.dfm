@@ -9756,6 +9756,7 @@ object Form1: TForm1
       Caption = 'Colors'
       object Grayscale1: TMenuItem
         Caption = '&Gray Scale'
+        OnClick = Grayscale1Click
       end
       object N1: TMenuItem
         Caption = '-'
