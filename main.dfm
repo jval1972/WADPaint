@@ -1055,7 +1055,7 @@ object Form1: TForm1
   PixelsPerInch = 96
   TextHeight = 13
   object Splitter1: TSplitter
-    Left = 250
+    Left = 320
     Top = 40
     Height = 638
     OnMoved = Splitter1Moved
@@ -1905,17 +1905,17 @@ object Form1: TForm1
   object PropertiesPanel: TPanel
     Left = 0
     Top = 40
-    Width = 250
+    Width = 320
     Height = 638
     Align = alLeft
     BevelOuter = bvNone
     Caption = ' '
-    Constraints.MinWidth = 250
+    Constraints.MinWidth = 320
     TabOrder = 2
     object EditPageControl: TPageControl
       Left = 0
       Top = 0
-      Width = 250
+      Width = 320
       Height = 153
       ActivePage = TabSheet1
       Align = alTop
@@ -1925,7 +1925,7 @@ object Form1: TForm1
         object Panel1: TPanel
           Left = 0
           Top = 0
-          Width = 242
+          Width = 312
           Height = 209
           Align = alTop
           BevelOuter = bvNone
@@ -1934,7 +1934,7 @@ object Form1: TForm1
           object Bevel2: TBevel
             Left = 8
             Top = 8
-            Width = 225
+            Width = 295
             Height = 40
             Style = bsRaised
           end
@@ -1948,19 +1948,19 @@ object Form1: TForm1
           object PenSizePaintBox: TPaintBox
             Left = 56
             Top = 56
-            Width = 153
+            Width = 223
             Height = 12
             Hint = 'Select drawing pen size'
           end
           object PenSizeLabel: TLabel
-            Left = 213
+            Left = 285
             Top = 56
             Width = 12
             Height = 13
             Caption = '...'
           end
           object OpacityLabel: TLabel
-            Left = 213
+            Left = 285
             Top = 72
             Width = 12
             Height = 13
@@ -1969,7 +1969,7 @@ object Form1: TForm1
           object OpacityPaintBox: TPaintBox
             Left = 56
             Top = 72
-            Width = 153
+            Width = 223
             Height = 12
             Hint = 'Select drawing opacity'
           end
@@ -2225,12 +2225,12 @@ object Form1: TForm1
           object TextureScalePaintBox: TPaintBox
             Left = 56
             Top = 88
-            Width = 153
+            Width = 223
             Height = 12
             Hint = 'Texture scale percentage'
           end
           object TextureScaleLabel: TLabel
-            Left = 213
+            Left = 285
             Top = 88
             Width = 12
             Height = 13
@@ -2242,7 +2242,7 @@ object Form1: TForm1
     object Panel2: TPanel
       Left = 0
       Top = 153
-      Width = 250
+      Width = 320
       Height = 485
       Align = alClient
       BevelOuter = bvNone
@@ -2251,7 +2251,7 @@ object Form1: TForm1
       object TexturePageControl: TPageControl
         Left = 0
         Top = 0
-        Width = 250
+        Width = 320
         Height = 485
         ActivePage = WADTabSheet1
         Align = alClient
@@ -2262,7 +2262,7 @@ object Form1: TForm1
           object OpenWADMainPanel: TPanel
             Left = 0
             Top = 0
-            Width = 242
+            Width = 312
             Height = 457
             Align = alClient
             BevelOuter = bvNone
@@ -2271,7 +2271,7 @@ object Form1: TForm1
             object Panel3: TPanel
               Left = 0
               Top = 0
-              Width = 242
+              Width = 312
               Height = 49
               Align = alTop
               BevelOuter = bvNone
@@ -2281,7 +2281,7 @@ object Form1: TForm1
               object Panel30: TPanel
                 Left = 4
                 Top = 4
-                Width = 234
+                Width = 304
                 Height = 41
                 Align = alClient
                 Caption = ' '
@@ -2363,7 +2363,7 @@ object Form1: TForm1
             object Panel5: TPanel
               Left = 0
               Top = 49
-              Width = 242
+              Width = 312
               Height = 408
               Align = alClient
               BevelOuter = bvNone
@@ -2373,7 +2373,7 @@ object Form1: TForm1
               object WADPageControl1: TPageControl
                 Left = 1
                 Top = 1
-                Width = 240
+                Width = 310
                 Height = 406
                 ActivePage = WADPatchesTabSheet
                 Align = alClient
@@ -2425,7 +2425,7 @@ object Form1: TForm1
                     object WADPreviewFlatPanel: TPanel
                       Left = 0
                       Top = 212
-                      Width = 232
+                      Width = 302
                       Height = 163
                       Align = alBottom
                       BevelOuter = bvNone
@@ -4039,7 +4039,7 @@ object Form1: TForm1
                   object Panel35: TPanel
                     Left = 0
                     Top = 0
-                    Width = 232
+                    Width = 302
                     Height = 375
                     Align = alClient
                     BevelOuter = bvNone
@@ -4048,7 +4048,7 @@ object Form1: TForm1
                     object WADPatchListPanel: TPanel
                       Left = 0
                       Top = 0
-                      Width = 232
+                      Width = 302
                       Height = 212
                       Align = alClient
                       BevelOuter = bvNone
@@ -4057,7 +4057,7 @@ object Form1: TForm1
                       object Panel37: TPanel
                         Left = 0
                         Top = 0
-                        Width = 232
+                        Width = 302
                         Height = 212
                         Align = alClient
                         BorderWidth = 2
@@ -4066,7 +4066,7 @@ object Form1: TForm1
                         object WADPatchListBox: TListBox
                           Left = 3
                           Top = 3
-                          Width = 226
+                          Width = 296
                           Height = 206
                           Align = alClient
                           BorderStyle = bsNone
@@ -4079,7 +4079,7 @@ object Form1: TForm1
                     object WADPreviewPatchPanel: TPanel
                       Left = 0
                       Top = 212
-                      Width = 232
+                      Width = 302
                       Height = 163
                       Align = alBottom
                       BevelOuter = bvNone
@@ -4088,7 +4088,7 @@ object Form1: TForm1
                       object Panel38: TPanel
                         Left = 0
                         Top = 0
-                        Width = 232
+                        Width = 302
                         Height = 25
                         Align = alTop
                         Caption = 'Preview'
@@ -4097,7 +4097,7 @@ object Form1: TForm1
                       object Panel39: TPanel
                         Left = 0
                         Top = 25
-                        Width = 232
+                        Width = 302
                         Height = 138
                         Align = alClient
                         Caption = ' '
@@ -5662,7 +5662,7 @@ object Form1: TForm1
                         object Panel41: TPanel
                           Left = 133
                           Top = 1
-                          Width = 98
+                          Width = 168
                           Height = 136
                           Align = alClient
                           BevelOuter = bvNone
@@ -5697,7 +5697,7 @@ object Form1: TForm1
           object Panel12: TPanel
             Left = 0
             Top = 0
-            Width = 242
+            Width = 312
             Height = 457
             Align = alClient
             BevelOuter = bvNone
@@ -5706,7 +5706,7 @@ object Form1: TForm1
             object Panel13: TPanel
               Left = 0
               Top = 0
-              Width = 242
+              Width = 312
               Height = 49
               Align = alTop
               BevelOuter = bvNone
@@ -5752,7 +5752,7 @@ object Form1: TForm1
             object Panel15: TPanel
               Left = 0
               Top = 49
-              Width = 242
+              Width = 312
               Height = 408
               Align = alClient
               BevelOuter = bvNone
@@ -5762,7 +5762,7 @@ object Form1: TForm1
               object PK3PageControl: TPageControl
                 Left = 1
                 Top = 1
-                Width = 240
+                Width = 310
                 Height = 406
                 ActivePage = PK3TexturesTabSheet
                 Align = alClient
@@ -5813,7 +5813,7 @@ object Form1: TForm1
                     object PK3PreviewTexturePanel: TPanel
                       Left = 0
                       Top = 212
-                      Width = 232
+                      Width = 302
                       Height = 163
                       Align = alBottom
                       BevelOuter = bvNone
@@ -7431,7 +7431,7 @@ object Form1: TForm1
           object Panel4: TPanel
             Left = 0
             Top = 0
-            Width = 242
+            Width = 312
             Height = 457
             Align = alClient
             BevelOuter = bvNone
@@ -7440,7 +7440,7 @@ object Form1: TForm1
             object Panel6: TPanel
               Left = 0
               Top = 0
-              Width = 242
+              Width = 312
               Height = 49
               Align = alTop
               BevelOuter = bvNone
@@ -7486,7 +7486,7 @@ object Form1: TForm1
             object Panel14: TPanel
               Left = 0
               Top = 49
-              Width = 242
+              Width = 312
               Height = 408
               Align = alClient
               BevelOuter = bvNone
@@ -7496,7 +7496,7 @@ object Form1: TForm1
               object DirPageControl: TPageControl
                 Left = 1
                 Top = 1
-                Width = 240
+                Width = 310
                 Height = 406
                 ActivePage = DirTexturesTabSheet
                 Align = alClient
@@ -7547,7 +7547,7 @@ object Form1: TForm1
                     object DIRPreviewTexturePanel: TPanel
                       Left = 0
                       Top = 212
-                      Width = 232
+                      Width = 302
                       Height = 163
                       Align = alBottom
                       BevelOuter = bvNone
@@ -9165,7 +9165,7 @@ object Form1: TForm1
           object SelectColorBackPanel: TPanel
             Left = 0
             Top = 0
-            Width = 242
+            Width = 312
             Height = 457
             Align = alClient
             BevelOuter = bvNone
@@ -9174,7 +9174,7 @@ object Form1: TForm1
             object Panel29: TPanel
               Left = 0
               Top = 0
-              Width = 242
+              Width = 312
               Height = 49
               Align = alTop
               BevelOuter = bvNone
@@ -9210,7 +9210,7 @@ object Form1: TForm1
             object Panel26: TPanel
               Left = 0
               Top = 49
-              Width = 242
+              Width = 312
               Height = 408
               Align = alClient
               BevelOuter = bvNone
@@ -9220,7 +9220,7 @@ object Form1: TForm1
               object ColorPalettePageControl: TPageControl
                 Left = 1
                 Top = 1
-                Width = 240
+                Width = 310
                 Height = 406
                 ActivePage = ColorPaletteTabSheet
                 Align = alClient
@@ -9297,9 +9297,9 @@ object Form1: TForm1
     end
   end
   object PaintScrollBox: TScrollBox
-    Left = 253
+    Left = 323
     Top = 40
-    Width = 768
+    Width = 698
     Height = 638
     Align = alClient
     BorderStyle = bsNone
