@@ -345,6 +345,8 @@ type
     bitmapbuffer: TBitmap;
     savebitmapundo: boolean;
     ColorPickerButton1: TColorPickerButton;
+    LastiX1, LastiX2, LastiY1, LastiY2: integer;
+    LastShape: integer;
     procedure Idle(Sender: TObject; var Done: Boolean);
     function CheckCanClose: boolean;
     procedure DoNewTexture(const twidth, theight: integer);
@@ -561,6 +563,12 @@ begin
     if DoLoadTexture(ParamStr(1)) then
       doCreate := False;
 
+  LastiX1 := 0;
+  LastiX2 := 0;
+  LastiY1 := 0;
+  LastiY2 := 0;
+  LastShape := 0;
+
   if DoCreate then
   begin
     SetFileName('');
@@ -633,6 +641,11 @@ begin
   bitmapbuffer.Height := theight;
   TextureToControls;
   undoManager.Clear;
+  LastiX1 := 0;
+  LastiX2 := 0;
+  LastiY1 := 0;
+  LastiY2 := 0;
+  LastShape := 0;
 end;
 
 procedure TForm1.SetFileName(const fname: string);
@@ -970,6 +983,19 @@ begin
   C := bitmapbuffer.Canvas;
   C.CopyRect(r, tex.Texture.Canvas, r);
   PaintBox1.Canvas.CopyRect(r, C, r);
+
+  if (LastiX1 <> 0) or (LastiX2 <> 0) or (LastiY1 <> 0) or (LastiY2 <> 0) then
+  begin
+    PaintBox1.Canvas.Brush.Style := bsClear;
+    PaintBox1.Canvas.Pen.Style := psDot;
+    PaintBox1.Canvas.Pen.Color := RGB(255, 255, 255);
+    if LastShape = 1 then
+      PaintBox1.Canvas.Rectangle(LastiX1, LastiY1, LastiX2, LastiY2)
+    else if (LastShape = 2) or (LastShape = 3) then
+      PaintBox1.Canvas.Ellipse(LastiX1, LastiY1, LastiX2, LastiY2);
+    PaintBox1.Canvas.Brush.Style := bsSolid;
+    PaintBox1.Canvas.Pen.Style := psSolid;
+  end;
 end;
 
 procedure TForm1.SelectWADFileButtonClick(Sender: TObject);
@@ -1554,9 +1580,27 @@ procedure TForm1.PaintBox1MouseMove(Sender: TObject; Shift: TShiftState; X,
 begin
   if lmousedown then
   begin
+    LastiX1 := 0;
+    LastiX2 := 0;
+    LastiY1 := 0;
+    LastiY2 := 0;
     LLeftMousePaintTo(X, Y);
     lmousedownx := X;
     lmousedowny := Y;
+  end
+  else
+  begin
+    LastiX1 := X - fpensize div 2;
+    LastiX2 := X + fpensize div 2;
+    LastiY1 := Y - fpensize div 2;
+    LastiY2 := Y + fpensize div 2;
+    if PenSpeedButton1.Down then
+      LastShape := 1
+    else if PenSpeedButton2.Down then
+      LastShape := 2
+    else if PenSpeedButton3.Down then
+      LastShape := 3;
+    PaintBox1.Invalidate;
   end;
 end;
 
