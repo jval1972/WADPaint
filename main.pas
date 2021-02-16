@@ -268,6 +268,10 @@ type
     FilterGrease1: TMenuItem;
     FilterLithograph1: TMenuItem;
     FilterPsychedelicDistillation1: TMenuItem;
+    WADFlatRotateRadioGroup: TRadioGroup;
+    WADPatchRotateRadioGroup: TRadioGroup;
+    PK3RotateRadioGroup: TRadioGroup;
+    DIRRotateRadioGroup: TRadioGroup;
     procedure FormCreate(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
     procedure NewButton1Click(Sender: TObject);
@@ -357,6 +361,10 @@ type
     procedure FilterPsychedelicDistillation1Click(Sender: TObject);
     procedure FilterBlurmore1Click(Sender: TObject);
     procedure FilterBlurmax1Click(Sender: TObject);
+    procedure WADFlatRotateRadioGroupClick(Sender: TObject);
+    procedure WADPatchRotateRadioGroupClick(Sender: TObject);
+    procedure PK3RotateRadioGroupClick(Sender: TObject);
+    procedure DIRRotateRadioGroupClick(Sender: TObject);
   private
     { Private declarations }
     ffilename: string;
@@ -434,6 +442,7 @@ type
     procedure NotifyColor;
     procedure RecreateColorPickPalette;
     procedure PickColorPalette(const X, Y: integer);
+    procedure RotateBitmapFromRadiogroupIndex(var bm: TBitmap; const rg: TRadioGroup);
   protected
     // Made protected to avoid "Private symbol never used" warning.
     function DIRTexEditNameSize: integer;
@@ -619,8 +628,13 @@ begin
   LastiY2 := 0;
   LastShape := 0;
 
+  WADFlatRotateRadioGroup.ItemIndex := 0;
+  WADPatchRotateRadioGroup.ItemIndex := 0;
+  PK3RotateRadioGroup.ItemIndex := 0;
+  DIRRotateRadioGroup.ItemIndex := 0;
+
   Timer1.Enabled := True;
-  
+
   if DoCreate then
   begin
     SetFileName('');
@@ -1175,6 +1189,7 @@ begin
 
   bm := GetWADFlatAsBitmap(fwadfilename, WADFlatsListBox.Items[idx]);
 
+  RotateBitmapFromRadiogroupIndex(bm, WADFlatRotateRadioGroup);
   BitmapToColorBuffer(bm);
 
   colorbuffersize := MinI(bm.Height, MAXTEXTURESIZE);
@@ -1395,6 +1410,7 @@ begin
 
   bm := GetWADPatchAsBitmap(fwadfilename, WADPatchListBox.Items[idx]);
 
+  RotateBitmapFromRadiogroupIndex(bm, WADPatchRotateRadioGroup);
   BitmapToColorBuffer(bm);
 
   colorbuffersize := MinI(bm.Height, MAXTEXTURESIZE);
@@ -2053,6 +2069,7 @@ begin
     Screen.Cursor := crDefault;
   end;
 
+  RotateBitmapFromRadiogroupIndex(bm, PK3RotateRadioGroup);
   BitmapToColorBuffer(bm);
 
   colorbuffersize := MinI(bm.Height, MAXTEXTURESIZE);
@@ -2203,6 +2220,7 @@ begin
     f.Free;
   end;
 
+  RotateBitmapFromRadiogroupIndex(bm, DIRRotateRadioGroup);
   BitmapToColorBuffer(bm);
 
   colorbuffersize := MinI(bm.Height, MAXTEXTURESIZE);
@@ -2919,7 +2937,7 @@ begin
 end;
 
 procedure TForm1.FilterBlurmax1Click(Sender: TObject);
-var 
+var
   flt: TImageFilter5x5;
 begin
   Screen.Cursor := crHourglass;
@@ -2941,6 +2959,35 @@ begin
   finally
     Screen.Cursor := crDefault;
   end;
+end;
+
+procedure TForm1.RotateBitmapFromRadiogroupIndex(var bm: TBitmap; const rg: TRadioGroup);
+begin
+  case rg.ItemIndex of
+    1: RotateBitmap90DegreesClockwise(bm);
+    2: begin RotateBitmap90DegreesClockwise(bm); RotateBitmap90DegreesClockwise(bm); end;
+    3: RotateBitmap90DegreesCounterClockwise(bm);
+  end;
+end;
+
+procedure TForm1.WADFlatRotateRadioGroupClick(Sender: TObject);
+begin
+  NotifyFlatsListBox;
+end;
+
+procedure TForm1.WADPatchRotateRadioGroupClick(Sender: TObject);
+begin
+  NotifyWADPatchListBox;
+end;
+
+procedure TForm1.PK3RotateRadioGroupClick(Sender: TObject);
+begin
+  NotifyPK3ListBox;
+end;
+
+procedure TForm1.DIRRotateRadioGroupClick(Sender: TObject);
+begin
+  NotifyDIRListBox;
 end;
 
 end.

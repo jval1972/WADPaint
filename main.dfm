@@ -2485,7 +2485,7 @@ object Form1: TForm1
         Top = 0
         Width = 320
         Height = 485
-        ActivePage = WADTabSheet1
+        ActivePage = DirTabSheet
         Align = alClient
         TabOrder = 0
         OnChange = TexturePageControlChange
@@ -2607,7 +2607,7 @@ object Form1: TForm1
                 Top = 1
                 Width = 310
                 Height = 406
-                ActivePage = WADFlatsTabSheet
+                ActivePage = WADPatchesTabSheet
                 Align = alClient
                 Style = tsFlatButtons
                 TabOrder = 0
@@ -4259,6 +4259,21 @@ object Form1: TForm1
                             Width = 101
                             Height = 13
                             Caption = 'WAADFlatNameLabel'
+                          end
+                          object WADFlatRotateRadioGroup: TRadioGroup
+                            Left = 8
+                            Top = 40
+                            Width = 121
+                            Height = 89
+                            Caption = ' Rotation '
+                            ItemIndex = 0
+                            Items.Strings = (
+                              'None'
+                              '90 degreess'
+                              '180 degreess'
+                              '270 degreess')
+                            TabOrder = 0
+                            OnClick = WADFlatRotateRadioGroupClick
                           end
                         end
                       end
@@ -5913,6 +5928,21 @@ object Form1: TForm1
                             Width = 103
                             Height = 13
                             Caption = 'WADPatchNameLabel'
+                          end
+                          object WADPatchRotateRadioGroup: TRadioGroup
+                            Left = 8
+                            Top = 40
+                            Width = 121
+                            Height = 89
+                            Caption = ' Rotation '
+                            ItemIndex = 0
+                            Items.Strings = (
+                              'None'
+                              '90 degreess'
+                              '180 degreess'
+                              '270 degreess')
+                            TabOrder = 0
+                            OnClick = WADPatchRotateRadioGroupClick
                           end
                         end
                       end
@@ -7648,6 +7678,21 @@ object Form1: TForm1
                             Height = 13
                             Caption = 'PK3TextureNameLabel'
                           end
+                          object PK3RotateRadioGroup: TRadioGroup
+                            Left = 8
+                            Top = 40
+                            Width = 121
+                            Height = 89
+                            Caption = ' Rotation '
+                            ItemIndex = 0
+                            Items.Strings = (
+                              'None'
+                              '90 degreess'
+                              '180 degreess'
+                              '270 degreess')
+                            TabOrder = 0
+                            OnClick = PK3RotateRadioGroupClick
+                          end
                         end
                       end
                     end
@@ -9381,6 +9426,21 @@ object Form1: TForm1
                             Width = 108
                             Height = 13
                             Caption = 'DIRTextureNameLabel'
+                          end
+                          object DIRRotateRadioGroup: TRadioGroup
+                            Left = 8
+                            Top = 40
+                            Width = 121
+                            Height = 89
+                            Caption = ' Rotation '
+                            ItemIndex = 0
+                            Items.Strings = (
+                              'None'
+                              '90 degreess'
+                              '180 degreess'
+                              '270 degreess')
+                            TabOrder = 0
+                            OnClick = DIRRotateRadioGroupClick
                           end
                         end
                       end
