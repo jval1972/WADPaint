@@ -3065,19 +3065,27 @@ end;
 procedure TForm1.SizeSpeedButton1Click(Sender: TObject);
 begin
   if GetInputNumber('Enter value', 'Size: ', 1, 128, fpensize) then
+  begin
     UpdateSliders;
+    SlidersToLabels;
+  end;
 end;
 
 procedure TForm1.OpacitySpeedButton1Click(Sender: TObject);
 begin
   if GetInputNumber('Enter value', 'Opacity: ', 1, 100, fopacity) then
+  begin
     UpdateSliders;
+    SlidersToLabels;
+  end;
 end;
 
 procedure TForm1.ScaleSpeedButton1Click(Sender: TObject);
 begin
   if GetInputNumber('Enter value', 'Scale %: ', 10, 400, ftexturescale) then
+  begin
     UpdateSliders;
+    SlidersToLabels;
   end;
 end;
 
