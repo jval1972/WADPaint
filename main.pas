@@ -1750,10 +1750,14 @@ begin
     for iY := iY1 to iY2 do
     begin
       tline := tex.Texture.ScanLine[iY];
+//      ypos := Round(iY / ftexturescale * 100) mod colorbuffersize;
+      ypos := (iY * 100 div ftexturescale) mod colorbuffersize;
       for iX := iX1 to iX2 do
         if drawlayer[iX, iY].pass < fopacity then
         begin
           drawlayer[iX, iY].pass := fopacity;
+//          c1 := colorbuffer[Round(iX / ftexturescale * 100) mod colorbuffersize, ypos];
+          c1 := colorbuffer[(iX * 100 div ftexturescale) mod colorbuffersize, ypos];
           c2 := RGBSwap(tline[iX]);
           c := coloraverage(c2, c1, fopacity);
           tline[iX] := RGBSwap(c);
@@ -1766,6 +1770,8 @@ begin
     for iY := iY1 to iY2 do
     begin
       tline := tex.Texture.ScanLine[iY];
+//      ypos := Round(iY / ftexturescale * 100) mod colorbuffersize;
+      ypos := (iY * 100 div ftexturescale) mod colorbuffersize;
       for iX := iX1 to iX2 do
       begin
         newopacity := pen2mask[iX - X, iY - Y];
@@ -1777,6 +1783,8 @@ begin
             c2 := drawlayer[iX, iY].color;
           drawlayer[iX, iY].color := c2;
           drawlayer[iX, iY].pass := newopacity;
+//          c1 := colorbuffer[Round(iX / ftexturescale * 100) mod colorbuffersize, ypos];
+          c1 := colorbuffer[(iX * 100 div ftexturescale) mod colorbuffersize, ypos];
           c := coloraverage(c2, c1, fopacity);
           tline[iX] := RGBSwap(c);
         end;
@@ -1789,6 +1797,8 @@ begin
     for iY := iY1 to iY2 do
     begin
       tline := tex.Texture.ScanLine[iY];
+//      ypos := Round(iY / ftexturescale * 100) mod colorbuffersize;
+      ypos := (iY * 100 div ftexturescale) mod colorbuffersize;
       for iX := iX1 to iX2 do
       begin
         newopacity := pen3mask[iX - X, iY - Y];
@@ -1800,6 +1810,8 @@ begin
             c2 := drawlayer[iX, iY].color;
           drawlayer[iX, iY].color := c2;
           drawlayer[iX, iY].pass := newopacity;
+//          c1 := colorbuffer[Round(iX / ftexturescale * 100) mod colorbuffersize, ypos];
+          c1 := colorbuffer[(iX * 100 div ftexturescale) mod colorbuffersize, ypos];
           c := coloraverage(c2, c1, newopacity);
           tline[iX] := RGBSwap(c);
         end;
