@@ -1763,6 +1763,7 @@ begin
           tline[iX] := RGBSwap(c);
         end;
     end;
+    DoRefreshPaintBox(Rect(iX1 - 1, iY1 - 1, iX2 + 1, iY2 + 1));
     changed := True;
   end
   else if PenSpeedButton2.Down then
@@ -1790,6 +1791,7 @@ begin
         end;
       end;
     end;
+    DoRefreshPaintBox(Rect(iX1 - 1, iY1 - 1, iX2 + 1, iY2 + 1));
     changed := True;
   end
   else if PenSpeedButton3.Down then
