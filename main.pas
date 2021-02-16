@@ -57,6 +57,10 @@ const
   MINTEXTURESCALE = 10;
   MAXTEXTURESCALE = 400;
 
+const
+  MINZOOM = 1;
+  MAXZOOM = 4;
+
 type
   TForm1 = class(TForm)
     ColorDialog1: TColorDialog;
@@ -246,6 +250,9 @@ type
     Hexen1: TMenuItem;
     Strife1: TMenuItem;
     Radix1: TMenuItem;
+    ToolButton4: TToolButton;
+    ZoomInButton1: TSpeedButton;
+    ZoomOutButton1: TSpeedButton;
     procedure FormCreate(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
     procedure NewButton1Click(Sender: TObject);
@@ -311,6 +318,13 @@ type
     procedure Hexen1Click(Sender: TObject);
     procedure Strife1Click(Sender: TObject);
     procedure Radix1Click(Sender: TObject);
+    procedure Timer1Timer(Sender: TObject);
+    procedure ZoomInButton1Click(Sender: TObject);
+    procedure ZoomOutButton1Click(Sender: TObject);
+    procedure FormMouseWheelDown(Sender: TObject; Shift: TShiftState;
+      MousePos: TPoint; var Handled: Boolean);
+    procedure FormMouseWheelUp(Sender: TObject; Shift: TShiftState;
+      MousePos: TPoint; var Handled: Boolean);
   private
     { Private declarations }
     ffilename: string;
@@ -347,6 +361,7 @@ type
     ColorPickerButton1: TColorPickerButton;
     LastiX1, LastiX2, LastiY1, LastiY2: integer;
     LastShape: integer;
+    fZoom: integer;
     procedure Idle(Sender: TObject; var Done: Boolean);
     function CheckCanClose: boolean;
     procedure DoNewTexture(const twidth, theight: integer);
@@ -511,6 +526,8 @@ begin
 
   CalcPenMasks;
 
+  fZoom := 1;
+
   undoManager := TUndoRedoManager.Create;
   undoManager.UndoLimit := 100;
   undoManager.OnLoadFromStream := DoLoadTextureBinaryUndo;
@@ -569,6 +586,8 @@ begin
   LastiY2 := 0;
   LastShape := 0;
 
+  Timer1.Enabled := True;
+  
   if DoCreate then
   begin
     SetFileName('');
@@ -890,6 +909,8 @@ begin
   Redo1.Enabled := undoManager.CanRedo;
   UndoButton1.Enabled := undoManager.CanUndo;
   RedoButton1.Enabled := undoManager.CanRedo;
+  ZoomInButton1.Enabled := fZoom < MAXZOOM;
+  ZoomOutButton1.Enabled := fZoom > MINZOOM;
 end;
 
 procedure TForm1.OnLoadTextureFileMenuHistory(Sender: TObject; const fname: string);
@@ -954,7 +975,6 @@ begin
   SlidersToLabels;
   fopacity := Round(OpacitySlider.Position);
   fpensize := Round(PenSizeSlider.Position);
-  ftexturescale := Round(TextureScaleSlider.Position);
   CalcPenMasks;
 end;
 
@@ -2466,6 +2486,56 @@ end;
 procedure TForm1.Radix1Click(Sender: TObject);
 begin
   ConvertToPalette(spalRADIX);
+end;
+
+procedure TForm1.Timer1Timer(Sender: TObject);
+begin
+  ZoomInButton1.Enabled := fZoom < MAXZOOM;
+  ZoomOutButton1.Enabled := fZoom > MINZOOM;
+end;
+
+procedure TForm1.ZoomInButton1Click(Sender: TObject);
+begin
+  fZoom := GetIntInRange(fZoom + 1, MINZOOM, MAXZOOM);
+  PaintBox1.Invalidate;
+end;
+
+procedure TForm1.ZoomOutButton1Click(Sender: TObject);
+begin
+  fZoom := GetIntInRange(fZoom - 1, MINZOOM, MAXZOOM);
+  PaintBox1.Invalidate;
+end;
+
+procedure TForm1.FormMouseWheelDown(Sender: TObject; Shift: TShiftState;
+  MousePos: TPoint; var Handled: Boolean);
+var
+  pt: TPoint;
+  r: TRect;
+begin
+  pt := PaintBox1.Parent.ScreenToClient(MousePos);
+  r := PaintBox1.ClientRect;
+  if r.Right > PaintScrollBox.Width then
+    r.Right := PaintScrollBox.Width;
+  if r.Bottom > PaintScrollBox.Height then
+    r.Bottom := PaintScrollBox.Height;
+  if PtInRect(r, pt) then
+    ZoomOutButton1Click(Sender);
+end;
+
+procedure TForm1.FormMouseWheelUp(Sender: TObject; Shift: TShiftState;
+  MousePos: TPoint; var Handled: Boolean);
+var
+  pt: TPoint;
+  r: TRect;
+begin
+  pt := PaintBox1.Parent.ScreenToClient(MousePos);
+  r := PaintBox1.ClientRect;
+  if r.Right > PaintScrollBox.Width then
+    r.Right := PaintScrollBox.Width;
+  if r.Bottom > PaintScrollBox.Height then
+    r.Bottom := PaintScrollBox.Height;
+  if PtInRect(r, pt) then
+    ZoomInButton1Click(Sender);
 end;
 
 end.
