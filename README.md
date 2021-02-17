@@ -9,8 +9,13 @@ WAD & PK3 file system
 
 Multiple Undo/Redo
 
+Graphic Filters
+
+Color manipulation
 
 ## Downloads
+[version 1.1.2.26 (20210217 - win32)](https://sourceforge.net/projects/wad-painter/files/WADPAINT_1.1/WADPAINT_1.1.2.26_win32.zip/download)
+
 [version 1.0.1.24 (20210215 - win32)](https://sourceforge.net/projects/wad-painter/files/WADPAINT_1.0/WADPAINT_1.0.1.24_win32.zip/download)
 
 ## Screenshots
