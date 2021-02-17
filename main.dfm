@@ -9808,6 +9808,13 @@ object Form1: TForm1
         Caption = 'Radix Palette'
         OnClick = Radix1Click
       end
+      object N4: TMenuItem
+        Caption = '-'
+      end
+      object NegativeImage1: TMenuItem
+        Caption = 'Negative Image'
+        OnClick = NegativeImage1Click
+      end
     end
     object Filter1: TMenuItem
       Caption = 'Filter'

@@ -279,6 +279,8 @@ type
     LinearScaleCheckBox1: TCheckBox;
     ColorDialog2: TColorDialog;
     ColorScale1: TMenuItem;
+    N4: TMenuItem;
+    NegativeImage1: TMenuItem;
     procedure FormCreate(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
     procedure NewButton1Click(Sender: TObject);
@@ -380,6 +382,7 @@ type
     procedure GreenScale1Click(Sender: TObject);
     procedure BlueScale1Click(Sender: TObject);
     procedure ColorScale1Click(Sender: TObject);
+    procedure NegativeImage1Click(Sender: TObject);
   private
     { Private declarations }
     ffilename: string;
@@ -3347,6 +3350,51 @@ procedure TForm1.ColorScale1Click(Sender: TObject);
 begin
   if ColorDialog2.Execute then
     ColorScaleTexture(GetRValue(ColorDialog2.Color), GetGValue(ColorDialog2.Color), GetBValue(ColorDialog2.Color));
+end;
+
+procedure TForm1.NegativeImage1Click(Sender: TObject);
+var
+  r, g, b: byte;
+  line: PLongWordArray;
+  x, y: integer;
+  cchanged: boolean;
+  c, cn: LongWord;
+begin
+  tex.Texture.PixelFormat := pf32bit;
+
+  cchanged := False;
+  for y := 0 to tex.textureheight - 1 do
+  begin
+    line := tex.Texture.ScanLine[y];
+    for x := 0 to tex.texturewidth - 1 do
+    begin
+      c := line[x];
+      r := (c shr 16) and $ff;
+      g := (c shr 8) and $ff;
+      b := c and $ff;
+
+      r := 255 - r;
+      g := 255 - g;
+      b := 255 - b;
+      cn := b + g shl 8 + r shl 16;
+      if cn <> c then
+      begin
+        if not cchanged then
+        begin
+          cchanged := True;
+          SaveUndo(True);
+        end;
+        line[x] := cn;
+      end;
+    end;
+  end;
+
+  if cchanged then
+  begin
+    changed := True;
+    PaintBox1.Invalidate;
+  end;
+
 end;
 
 end.
