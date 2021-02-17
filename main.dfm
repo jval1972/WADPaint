@@ -2179,19 +2179,19 @@ object Form1: TForm1
           object PenSizePaintBox: TPaintBox
             Left = 56
             Top = 56
-            Width = 203
+            Width = 200
             Height = 12
             Hint = 'Select drawing pen size'
           end
           object PenSizeLabel: TLabel
-            Left = 265
+            Left = 258
             Top = 56
             Width = 12
             Height = 13
             Caption = '...'
           end
           object OpacityLabel: TLabel
-            Left = 265
+            Left = 258
             Top = 72
             Width = 12
             Height = 13
@@ -2200,7 +2200,7 @@ object Form1: TForm1
           object OpacityPaintBox: TPaintBox
             Left = 56
             Top = 72
-            Width = 203
+            Width = 200
             Height = 12
             Hint = 'Select drawing opacity'
           end
@@ -2457,12 +2457,12 @@ object Form1: TForm1
           object TextureScalePaintBox: TPaintBox
             Left = 56
             Top = 88
-            Width = 203
+            Width = 200
             Height = 12
             Hint = 'Texture scale percentage'
           end
           object TextureScaleLabel: TLabel
-            Left = 265
+            Left = 258
             Top = 88
             Width = 12
             Height = 13

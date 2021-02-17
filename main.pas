@@ -1008,9 +1008,9 @@ end;
 
 procedure TForm1.SlidersToLabels;
 begin
-  OpacityLabel.Caption := Format('%d', [Round(OpacitySlider.Position)]);
+  OpacityLabel.Caption := Format('%d%s', [Round(OpacitySlider.Position), '%']);
   PenSizeLabel.Caption := Format('%d', [Round(PenSizeSlider.Position)]);
-  TextureScaleLabel.Caption := Format('%d', [Round(TextureScaleSlider.Position)]);
+  TextureScaleLabel.Caption := Format('%d%s', [Round(TextureScaleSlider.Position) div 2 * 2, '%']);
 end;
 
 procedure TForm1.TextureToControls;
@@ -1032,7 +1032,7 @@ begin
   SlidersToLabels;
   fopacity := Round(OpacitySlider.Position);
   fpensize := Round(PenSizeSlider.Position);
-  ftexturescale := Round(TextureScaleSlider.Position);
+  ftexturescale := Round(TextureScaleSlider.Position) div 2 * 2;
   CalcPenMasks;
 end;
 
