@@ -56,6 +56,7 @@ var
   opt_defaultpalette: bigstring_t;
   opt_lastpk3file: bigstring_t;
   opt_lastdirectory: bigstring_t;
+  opt_linearscaling: boolean = true;
 
 function bigstringtostring(const bs: bigstring_p): string;
 
@@ -76,7 +77,7 @@ type
   end;
 
 const
-  NUMSETTINGS = 16;
+  NUMSETTINGS = 18;
 
 var
   Settings: array[0..NUMSETTINGS - 1] of TSettingItem = (
@@ -159,6 +160,16 @@ var
       desc: 'DIRECTORY';
       typeof: tstBigString;
       location: @opt_lastdirectory;
+    ),
+    (
+      desc: '[Options]';
+      typeof: tstDevider;
+      location: nil;
+    ),
+    (
+      desc: 'LINEARSCALING';
+      typeof: tstBoolean;
+      location: @opt_linearscaling;
     )
   );
 

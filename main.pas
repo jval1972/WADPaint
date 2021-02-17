@@ -272,6 +272,12 @@ type
     ScaleSpeedButton1: TSpeedButton;
     N1: TMenuItem;
     Grayscale1: TMenuItem;
+    RedScale1: TMenuItem;
+    GreenScale1: TMenuItem;
+    BlueScale1: TMenuItem;
+    N3: TMenuItem;
+    Options1: TMenuItem;
+    LinearScaling1: TMenuItem;
     procedure FormCreate(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
     procedure NewButton1Click(Sender: TObject);
@@ -369,6 +375,11 @@ type
     procedure OpacitySpeedButton1Click(Sender: TObject);
     procedure ScaleSpeedButton1Click(Sender: TObject);
     procedure Grayscale1Click(Sender: TObject);
+    procedure RedScale1Click(Sender: TObject);
+    procedure GreenScale1Click(Sender: TObject);
+    procedure BlueScale1Click(Sender: TObject);
+    procedure Options1Click(Sender: TObject);
+    procedure LinearScaling1Click(Sender: TObject);
   private
     { Private declarations }
     ffilename: string;
@@ -381,8 +392,11 @@ type
     fdrawcolor: TColor;
     lpickcolormousedown: boolean;
     drawlayer: drawlayer_p;
+    flinearscaling: boolean;
     colorbuffersize: integer;
     colorbuffer: colorbuffer_p;
+    colorbuffersize2: integer;
+    colorbuffer2: colorbuffer_p;
     changed: Boolean;
     tex: TTexture;
     undoManager: TUndoRedoManager;
@@ -424,6 +438,7 @@ type
     procedure UpdateSliders;
     procedure UpdateFromSliders(Sender: TObject);
     procedure BitmapToColorBuffer(const abitmap: TBitmap);
+    procedure ColorBufferHalftoneAdjust;
     procedure PopulateFlatsListBox(const wadname: string);
     procedure NotifyFlatsListBox;
     function GetWADFlatAsBitmap(const fwad: string; const flat: string): TBitmap;
@@ -449,6 +464,7 @@ type
     procedure PickColorPalette(const X, Y: integer);
     procedure RotateBitmapFromRadiogroupIndex(var bm: TBitmap; const rg: TRadioGroup);
     function ZoomValue(const x: integer): integer;
+    procedure ColorScaleTexture(const aR, aG, aB: byte);
   protected
     // Made protected to avoid "Private symbol never used" warning.
     function DIRTexEditNameSize: integer;
@@ -506,6 +522,7 @@ begin
   PaintBox1.Cursor := crCross; //crPaint;
 
   colorbuffer := nil;
+  colorbuffer2 := nil;
 
   DoubleBuffered := True;
   for i := 0 to ComponentCount - 1 do
@@ -539,6 +556,10 @@ begin
   FillChar(colorbuffer^, SizeOf(colorbuffer_t), 255);
   colorbuffersize := 128;
 
+  GetMem(colorbuffer2, SizeOf(colorbuffer_t));
+  FillChar(colorbuffer2^, SizeOf(colorbuffer_t), 255);
+  colorbuffersize2 := 128;
+
   // Set palette
   fpalettename := bigstringtostring(@opt_defaultpalette);
   CheckPaletteName;
@@ -561,6 +582,8 @@ begin
 //  DIRFileNameEdit.Text := MkShortName(fdirdirectory, DIRTexEditNameSize);
   DIRFileNameEdit.Text := fdirdirectory;
   PopulateDirListBox;
+
+  flinearscaling := opt_linearscaling;
 
   lmousedown := False;
   lmousedownx := 0;
@@ -818,6 +841,7 @@ begin
   stringtobigstring(fpalettename, @opt_defaultpalette);
   stringtobigstring(fpk3filename, @opt_lastpk3file);
   stringtobigstring(fdirdirectory, @opt_lastdirectory);
+  opt_linearscaling := flinearscaling;
 
   ter_SaveSettingsToFile(ChangeFileExt(ParamStr(0), '.ini'));
 
@@ -830,6 +854,7 @@ begin
   tex.Free;
   Freemem(drawlayer, SizeOf(drawlayer_t));
   Freemem(colorbuffer, SizeOf(colorbuffer_t));
+  Freemem(colorbuffer2, SizeOf(colorbuffer_t));
 
   bitmapbuffer.Free;
 
@@ -1025,6 +1050,8 @@ begin
 end;
 
 procedure TForm1.UpdateFromSliders(Sender: TObject);
+var
+  oldscale: integer;
 begin
   if closing then
     Exit;
@@ -1032,7 +1059,11 @@ begin
   SlidersToLabels;
   fopacity := Round(OpacitySlider.Position);
   fpensize := Round(PenSizeSlider.Position);
+  oldscale := ftexturescale;
   ftexturescale := Round(TextureScaleSlider.Position) div 2 * 2;
+  if oldscale <> ftexturescale then
+    ColorBufferHalftoneAdjust;
+
   CalcPenMasks;
 end;
 
@@ -1161,6 +1192,42 @@ begin
   end;
 end;
 
+procedure TForm1.ColorBufferHalftoneAdjust;
+var
+  i, j: integer;
+  A: PLongWordArray;
+  bm1, bm2: TBitmap;
+begin
+  bm1 := TBitmap.Create;
+  bm1.PixelFormat := pf32bit;
+  bm1.Width := colorbuffersize;
+  bm1.Height := colorbuffersize;
+  for j := 0 to MinI(bm1.Height - 1, MAXTEXTURESIZE - 1) do
+  begin
+    A := bm1.ScanLine[j];
+    for i := 0 to MinI(bm1.Width - 1, MAXTEXTURESIZE - 1) do
+      A[i] := RGBSwap(colorbuffer[i, j]);
+  end;
+
+  bm2 := TBitmap.Create;
+  bm2.PixelFormat := pf32bit;
+  bm2.Width := bm1.Width * ftexturescale div 100;
+  bm2.Height := bm2.Width;
+  BitmapHalftoneDraw(bm1, bm2.Canvas, Rect(0, 0, bm2.Width, bm2.Height));
+  bm1.Free;
+
+  // Copy to colorbuffer2
+  for j := 0 to MinI(bm2.Height - 1, MAXTEXTURESIZE - 1) do
+  begin
+    A := bm2.ScanLine[j];
+    for i := 0 to MinI(bm2.Width - 1, MAXTEXTURESIZE - 1) do
+      colorbuffer2[i, j] := RGBSwap(A[i]);
+  end;
+  colorbuffersize2 := bm2.Width;
+
+  bm2.Free;
+end;
+
 procedure TForm1.PopulateFlatsListBox(const wadname: string);
 var
   wad: TWADReader;
@@ -1206,6 +1273,7 @@ begin
     FlatSizeLabel.Caption := Format('(%dx%d)', [128, 128]);
     colorbuffersize := 128;
     FillChar(colorbuffer^, SizeOf(colorbuffer_t), 255);
+    ColorBufferHalftoneAdjust;
     exit;
   end;
 
@@ -1215,6 +1283,7 @@ begin
   BitmapToColorBuffer(bm);
 
   colorbuffersize := MinI(bm.Height, MAXTEXTURESIZE);
+  ColorBufferHalftoneAdjust;
   WADFlatPreviewImage.Picture.Bitmap.Canvas.StretchDraw(Rect(0, 0, 128, 128), bm);
   WAADFlatNameLabel.Caption := WADFlatsListBox.Items[idx];
   FlatSizeLabel.Caption := Format('(%dx%d)', [bm.Width, bm.Height]);
@@ -1427,6 +1496,7 @@ begin
     WADPatchSizeLabel.Caption := Format('(%dx%d)', [128, 128]);
     colorbuffersize := 128;
     FillChar(colorbuffer^, SizeOf(colorbuffer_t), 255);
+    ColorBufferHalftoneAdjust;
     Exit;
   end;
 
@@ -1436,6 +1506,7 @@ begin
   BitmapToColorBuffer(bm);
 
   colorbuffersize := MinI(bm.Height, MAXTEXTURESIZE);
+  ColorBufferHalftoneAdjust;
   WADPatchPreviewImage.Picture.Bitmap.Canvas.StretchDraw(Rect(0, 0, 128, 128), bm);
   WADPatchNameLabel.Caption := WADPatchListBox.Items[idx];
   WADPatchSizeLabel.Caption := Format('(%dx%d)', [bm.Width, bm.Height]);
@@ -1745,82 +1816,154 @@ begin
 
   ftexturescale := GetIntInRange(ftexturescale, MINTEXTURESCALE, MAXTEXTURESCALE);
 
-  if PenSpeedButton1.Down then
+  if flinearscaling then
   begin
-    for iY := iY1 to iY2 do
+    if PenSpeedButton1.Down then
     begin
-      tline := tex.Texture.ScanLine[iY];
-//      ypos := Round(iY / ftexturescale * 100) mod colorbuffersize;
-      ypos := (iY * 100 div ftexturescale) mod colorbuffersize;
-      for iX := iX1 to iX2 do
-        if drawlayer[iX, iY].pass < fopacity then
-        begin
-          drawlayer[iX, iY].pass := fopacity;
-//          c1 := colorbuffer[Round(iX / ftexturescale * 100) mod colorbuffersize, ypos];
-          c1 := colorbuffer[(iX * 100 div ftexturescale) mod colorbuffersize, ypos];
-          c2 := RGBSwap(tline[iX]);
-          c := coloraverage(c2, c1, fopacity);
-          tline[iX] := RGBSwap(c);
-        end;
-    end;
-    DoRefreshPaintBox(Rect(iX1 - 1, iY1 - 1, iX2 + 1, iY2 + 1));
-    changed := True;
-  end
-  else if PenSpeedButton2.Down then
-  begin
-    for iY := iY1 to iY2 do
-    begin
-      tline := tex.Texture.ScanLine[iY];
-//      ypos := Round(iY / ftexturescale * 100) mod colorbuffersize;
-      ypos := (iY * 100 div ftexturescale) mod colorbuffersize;
-      for iX := iX1 to iX2 do
+      for iY := iY1 to iY2 do
       begin
-        newopacity := pen2mask[iX - X, iY - Y];
-        if drawlayer[iX, iY].pass < newopacity then
+        tline := tex.Texture.ScanLine[iY];
+        ypos := iY mod colorbuffersize2;
+        for iX := iX1 to iX2 do
+          if drawlayer[iX, iY].pass < fopacity then
+          begin
+            drawlayer[iX, iY].pass := fopacity;
+            c1 := colorbuffer2[iX mod colorbuffersize2, ypos];
+            c2 := RGBSwap(tline[iX]);
+            c := coloraverage(c2, c1, fopacity);
+            tline[iX] := RGBSwap(c);
+          end;
+      end;
+      DoRefreshPaintBox(Rect(iX1 - 1, iY1 - 1, iX2 + 1, iY2 + 1));
+      changed := True;
+    end
+    else if PenSpeedButton2.Down then
+    begin
+      for iY := iY1 to iY2 do
+      begin
+        tline := tex.Texture.ScanLine[iY];
+        ypos := iY mod colorbuffersize2;
+        for iX := iX1 to iX2 do
         begin
-          if drawlayer[iX, iY].pass = 0 then
-            c2 := RGBSwap(tline[iX])
-          else
-            c2 := drawlayer[iX, iY].color;
-          drawlayer[iX, iY].color := c2;
-          drawlayer[iX, iY].pass := newopacity;
-//          c1 := colorbuffer[Round(iX / ftexturescale * 100) mod colorbuffersize, ypos];
-          c1 := colorbuffer[(iX * 100 div ftexturescale) mod colorbuffersize, ypos];
-          c := coloraverage(c2, c1, fopacity);
-          tline[iX] := RGBSwap(c);
+          newopacity := pen2mask[iX - X, iY - Y];
+          if drawlayer[iX, iY].pass < newopacity then
+          begin
+            if drawlayer[iX, iY].pass = 0 then
+              c2 := RGBSwap(tline[iX])
+            else
+              c2 := drawlayer[iX, iY].color;
+            drawlayer[iX, iY].color := c2;
+            drawlayer[iX, iY].pass := newopacity;
+            c1 := colorbuffer2[iX mod colorbuffersize2, ypos];
+            c := coloraverage(c2, c1, fopacity);
+            tline[iX] := RGBSwap(c);
+          end;
         end;
       end;
-    end;
-    DoRefreshPaintBox(Rect(iX1 - 1, iY1 - 1, iX2 + 1, iY2 + 1));
-    changed := True;
-  end
-  else if PenSpeedButton3.Down then
-  begin
-    for iY := iY1 to iY2 do
+      DoRefreshPaintBox(Rect(iX1 - 1, iY1 - 1, iX2 + 1, iY2 + 1));
+      changed := True;
+    end
+    else if PenSpeedButton3.Down then
     begin
-      tline := tex.Texture.ScanLine[iY];
-//      ypos := Round(iY / ftexturescale * 100) mod colorbuffersize;
-      ypos := (iY * 100 div ftexturescale) mod colorbuffersize;
-      for iX := iX1 to iX2 do
+      for iY := iY1 to iY2 do
       begin
-        newopacity := pen3mask[iX - X, iY - Y];
-        if drawlayer[iX, iY].pass < newopacity then
+        tline := tex.Texture.ScanLine[iY];
+        ypos := iY mod colorbuffersize2;
+        for iX := iX1 to iX2 do
         begin
-          if drawlayer[iX, iY].pass = 0 then
-            c2 := RGBSwap(tline[iX])
-          else
-            c2 := drawlayer[iX, iY].color;
-          drawlayer[iX, iY].color := c2;
-          drawlayer[iX, iY].pass := newopacity;
-//          c1 := colorbuffer[Round(iX / ftexturescale * 100) mod colorbuffersize, ypos];
-          c1 := colorbuffer[(iX * 100 div ftexturescale) mod colorbuffersize, ypos];
-          c := coloraverage(c2, c1, newopacity);
-          tline[iX] := RGBSwap(c);
+          newopacity := pen3mask[iX - X, iY - Y];
+          if drawlayer[iX, iY].pass < newopacity then
+          begin
+            if drawlayer[iX, iY].pass = 0 then
+              c2 := RGBSwap(tline[iX])
+            else
+              c2 := drawlayer[iX, iY].color;
+            drawlayer[iX, iY].color := c2;
+            drawlayer[iX, iY].pass := newopacity;
+            c1 := colorbuffer2[iX mod colorbuffersize2, ypos];
+            c := coloraverage(c2, c1, newopacity);
+            tline[iX] := RGBSwap(c);
+          end;
         end;
       end;
+      DoRefreshPaintBox(Rect(iX1 - 1, iY1 - 1, iX2 + 1, iY2 + 1));
+      changed := True;
     end;
-    DoRefreshPaintBox(Rect(iX1 - 1, iY1 - 1, iX2 + 1, iY2 + 1));
-    changed := True;
+  end
+
+  else
+  begin
+    if PenSpeedButton1.Down then
+    begin
+      for iY := iY1 to iY2 do
+      begin
+        tline := tex.Texture.ScanLine[iY];
+        ypos := (iY * 100 div ftexturescale) mod colorbuffersize;
+        for iX := iX1 to iX2 do
+          if drawlayer[iX, iY].pass < fopacity then
+          begin
+            drawlayer[iX, iY].pass := fopacity;
+            c1 := colorbuffer[(iX * 100 div ftexturescale) mod colorbuffersize, ypos];
+            c2 := RGBSwap(tline[iX]);
+            c := coloraverage(c2, c1, fopacity);
+            tline[iX] := RGBSwap(c);
+          end;
+      end;
+      DoRefreshPaintBox(Rect(iX1 - 1, iY1 - 1, iX2 + 1, iY2 + 1));
+      changed := True;
+    end
+    else if PenSpeedButton2.Down then
+    begin
+      for iY := iY1 to iY2 do
+      begin
+        tline := tex.Texture.ScanLine[iY];
+        ypos := (iY * 100 div ftexturescale) mod colorbuffersize;
+        for iX := iX1 to iX2 do
+        begin
+          newopacity := pen2mask[iX - X, iY - Y];
+          if drawlayer[iX, iY].pass < newopacity then
+          begin
+            if drawlayer[iX, iY].pass = 0 then
+              c2 := RGBSwap(tline[iX])
+            else
+              c2 := drawlayer[iX, iY].color;
+            drawlayer[iX, iY].color := c2;
+            drawlayer[iX, iY].pass := newopacity;
+            c1 := colorbuffer[(iX * 100 div ftexturescale) mod colorbuffersize, ypos];
+            c := coloraverage(c2, c1, fopacity);
+            tline[iX] := RGBSwap(c);
+          end;
+        end;
+      end;
+      DoRefreshPaintBox(Rect(iX1 - 1, iY1 - 1, iX2 + 1, iY2 + 1));
+      changed := True;
+    end
+    else if PenSpeedButton3.Down then
+    begin
+      for iY := iY1 to iY2 do
+      begin
+        tline := tex.Texture.ScanLine[iY];
+        ypos := (iY * 100 div ftexturescale) mod colorbuffersize;
+        for iX := iX1 to iX2 do
+        begin
+          newopacity := pen3mask[iX - X, iY - Y];
+          if drawlayer[iX, iY].pass < newopacity then
+          begin
+            if drawlayer[iX, iY].pass = 0 then
+              c2 := RGBSwap(tline[iX])
+            else
+              c2 := drawlayer[iX, iY].color;
+            drawlayer[iX, iY].color := c2;
+            drawlayer[iX, iY].pass := newopacity;
+            c1 := colorbuffer[(iX * 100 div ftexturescale) mod colorbuffersize, ypos];
+            c := coloraverage(c2, c1, newopacity);
+            tline[iX] := RGBSwap(c);
+          end;
+        end;
+      end;
+      DoRefreshPaintBox(Rect(iX1 - 1, iY1 - 1, iX2 + 1, iY2 + 1));
+      changed := True;
+    end;
   end;
 end;
 
@@ -2087,6 +2230,7 @@ begin
     PK3TexSizeLabel.Caption := Format('(%dx%d)', [128, 128]);
     colorbuffersize := 128;
     FillChar(colorbuffer^, SizeOf(colorbuffer_t), 255);
+    ColorBufferHalftoneAdjust;
     exit;
   end;
 
@@ -2101,6 +2245,7 @@ begin
   BitmapToColorBuffer(bm);
 
   colorbuffersize := MinI(bm.Height, MAXTEXTURESIZE);
+  ColorBufferHalftoneAdjust;
   PK3TexPreviewImage.Picture.Bitmap.Canvas.StretchDraw(Rect(0, 0, 128, 128), bm);
   PK3TextureNameLabel.Caption := ExtractFileName(PK3TexListBox.Items[idx]);
   PK3TexSizeLabel.Caption := Format('(%dx%d)', [bm.Width, bm.Height]);
@@ -2233,6 +2378,7 @@ begin
     DIRTexSizeLabel.Caption := Format('(%dx%d)', [128, 128]);
     colorbuffersize := 128;
     FillChar(colorbuffer^, SizeOf(colorbuffer_t), 255);
+    ColorBufferHalftoneAdjust;
     exit;
   end;
 
@@ -2252,6 +2398,7 @@ begin
   BitmapToColorBuffer(bm);
 
   colorbuffersize := MinI(bm.Height, MAXTEXTURESIZE);
+  ColorBufferHalftoneAdjust;
   DIRTexPreviewImage.Picture.Bitmap.Canvas.StretchDraw(Rect(0, 0, 128, 128), bm);
   DIRTextureNameLabel.Caption := ExtractFileName((fdirlist.Objects[idx] as TString).str);
   DIRTexSizeLabel.Caption := Format('(%dx%d)', [bm.Width, bm.Height]);
@@ -2388,6 +2535,7 @@ begin
   for x := 0 to 63 do
     for y := 0 to 63 do
       colorbuffer[x, y] := fdrawcolor;
+  ColorBufferHalftoneAdjust;
 end;
 
 procedure TForm1.RecreateColorPickPalette;
@@ -3131,6 +3279,78 @@ begin
     PaintBox1.Invalidate;
   end;
 
+end;
+
+procedure TForm1.ColorScaleTexture(const aR, aG, aB: byte);
+var
+  r, g, b: byte;
+  line: PLongWordArray;
+  x, y: integer;
+  cchanged: boolean;
+  c, cn: LongWord;
+begin
+  tex.Texture.PixelFormat := pf32bit;
+
+  cchanged := False;
+  for y := 0 to tex.textureheight - 1 do
+  begin
+    line := tex.Texture.ScanLine[y];
+    for x := 0 to tex.texturewidth - 1 do
+    begin
+      c := line[x];
+      r := (c shr 16) and $ff;
+      g := (c shr 8) and $ff;
+      b := c and $ff;
+
+      cn := Trunc(r * 0.299 + g * 0.587 + b * 0.114); // Human perceive;
+      if cn > 255 then cn := 255;
+      r := GetIntInRange(Round(aR / 255 * cn), 0, 255);
+      g := GetIntInRange(Round(aG / 255 * cn), 0, 255);
+      b := GetIntInRange(Round(aB / 255 * cn), 0, 255);
+      cn := b + g shl 8 + r shl 16;
+      if cn <> c then
+      begin
+        if not cchanged then
+        begin
+          cchanged := True;
+          SaveUndo(True);
+        end;
+        line[x] := cn;
+      end;
+    end;
+  end;
+
+  if cchanged then
+  begin
+    changed := True;
+    PaintBox1.Invalidate;
+  end;
+
+end;
+
+procedure TForm1.RedScale1Click(Sender: TObject);
+begin
+  ColorScaleTexture(255, 0, 0);
+end;
+
+procedure TForm1.GreenScale1Click(Sender: TObject);
+begin
+  ColorScaleTexture(0, 255, 0);
+end;
+
+procedure TForm1.BlueScale1Click(Sender: TObject);
+begin
+  ColorScaleTexture(0, 0, 255);
+end;
+
+procedure TForm1.Options1Click(Sender: TObject);
+begin
+  LinearScaling1.Checked := flinearscaling;
+end;
+
+procedure TForm1.LinearScaling1Click(Sender: TObject);
+begin
+  flinearscaling := not flinearscaling;
 end;
 
 end.

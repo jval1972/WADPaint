@@ -2518,7 +2518,7 @@ object Form1: TForm1
         Top = 0
         Width = 320
         Height = 485
-        ActivePage = DirTabSheet
+        ActivePage = WADTabSheet1
         Align = alClient
         TabOrder = 0
         OnChange = TexturePageControlChange
@@ -9758,6 +9758,21 @@ object Form1: TForm1
         Caption = '&Gray Scale'
         OnClick = Grayscale1Click
       end
+      object N3: TMenuItem
+        Caption = '-'
+      end
+      object RedScale1: TMenuItem
+        Caption = 'Red Scale'
+        OnClick = RedScale1Click
+      end
+      object GreenScale1: TMenuItem
+        Caption = 'Green Scale'
+        OnClick = GreenScale1Click
+      end
+      object BlueScale1: TMenuItem
+        Caption = 'Blue Scale'
+        OnClick = BlueScale1Click
+      end
       object N1: TMenuItem
         Caption = '-'
       end
@@ -9839,6 +9854,14 @@ object Form1: TForm1
       object FilterPsychedelicDistillation1: TMenuItem
         Caption = 'Psychedelic Distillation'
         OnClick = FilterPsychedelicDistillation1Click
+      end
+    end
+    object Options1: TMenuItem
+      Caption = 'Options'
+      OnClick = Options1Click
+      object LinearScaling1: TMenuItem
+        Caption = 'Linear Scaling'
+        OnClick = LinearScaling1Click
       end
     end
     object Help1: TMenuItem
