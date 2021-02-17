@@ -61,6 +61,9 @@ const
   MINZOOM = 1;
   MAXZOOM = 8;
 
+const
+  MOUSEWHEELTIMEOUT = 150; // Msecs until next mouse wheel even to be proccessed
+
 type
   TForm1 = class(TForm)
     ColorDialog1: TColorDialog;
@@ -423,6 +426,7 @@ type
     hasdrawPaintToolShape: boolean;
     LastShape: integer;
     fZoom: integer;
+    flastzoomwheel: int64;
     procedure Idle(Sender: TObject; var Done: Boolean);
     function CheckCanClose: boolean;
     procedure DoNewTexture(const twidth, theight: integer);
@@ -525,6 +529,7 @@ begin
 
   colorbuffer := nil;
   colorbuffer2 := nil;
+  flastzoomwheel := GetTickCount;
 
   DoubleBuffered := True;
   for i := 0 to ComponentCount - 1 do
@@ -2787,7 +2792,12 @@ procedure TForm1.FormMouseWheelDown(Sender: TObject; Shift: TShiftState;
 var
   pt: TPoint;
   r: TRect;
+  tick: int64;
 begin
+  tick := GetTickCount;
+  if tick <= flastzoomwheel + MOUSEWHEELTIMEOUT then
+    Exit;
+  flastzoomwheel := tick;
   pt := PaintBox1.Parent.ScreenToClient(MousePos);
   r := PaintBox1.ClientRect;
   if r.Right > PaintScrollBox.Width then
@@ -2803,7 +2813,12 @@ procedure TForm1.FormMouseWheelUp(Sender: TObject; Shift: TShiftState;
 var
   pt: TPoint;
   r: TRect;
+  tick: int64;
 begin
+  tick := GetTickCount;
+  if tick <= flastzoomwheel + MOUSEWHEELTIMEOUT then
+    Exit;
+  flastzoomwheel := tick;
   pt := PaintBox1.Parent.ScreenToClient(MousePos);
   r := PaintBox1.ClientRect;
   if r.Right > PaintScrollBox.Width then
