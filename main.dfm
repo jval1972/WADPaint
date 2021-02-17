@@ -9869,6 +9869,10 @@ object Form1: TForm1
         Caption = 'Blur (max)'
         OnClick = FilterBlurmax1Click
       end
+      object GaussianBlur1: TMenuItem
+        Caption = 'Gaussian Blur'
+        OnClick = GaussianBlur1Click
+      end
       object FilterGrease1: TMenuItem
         Caption = 'Grease'
         OnClick = FilterGrease1Click

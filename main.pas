@@ -286,6 +286,7 @@ type
     NegativeImage1: TMenuItem;
     N10: TMenuItem;
     RemapColorChannels1: TMenuItem;
+    GaussianBlur1: TMenuItem;
     procedure FormCreate(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
     procedure NewButton1Click(Sender: TObject);
@@ -389,6 +390,7 @@ type
     procedure ColorScale1Click(Sender: TObject);
     procedure NegativeImage1Click(Sender: TObject);
     procedure RemapColorChannels1Click(Sender: TObject);
+    procedure GaussianBlur1Click(Sender: TObject);
   private
     { Private declarations }
     ffilename: string;
@@ -3472,6 +3474,31 @@ var
 begin
   if RemapColorChannelsQuery(aR, aG, aB) then
     DoRemapColorChannels(aR, aG, aB);
+end;
+
+procedure TForm1.GaussianBlur1Click(Sender: TObject);
+var 
+  flt: TImageFilter5x5;
+begin
+  Screen.Cursor := crHourglass;
+  try
+    with flt do
+    begin
+      RAY[ 0] :=  1; RAY[ 1] :=  4; RAY[ 2] :=  6; RAY[ 3] :=  4; RAY[ 4] :=  1;
+      RAY[ 5] :=  4; RAY[ 6] := 16; RAY[ 7] := 24; RAY[ 8] := 16; RAY[ 9] :=  4;
+      RAY[10] :=  6; RAY[11] := 24; RAY[12] := 36; RAY[13] := 24; RAY[14] :=  6;
+      RAY[15] :=  4; RAY[16] := 16; RAY[17] := 24; RAY[18] := 16; RAY[19] :=  4;
+      RAY[20] :=  1; RAY[21] :=  4; RAY[22] :=  6; RAY[23] :=  4; RAY[24] :=  1;
+      DIVFACTOR := 256;
+      BIAS := 0;
+    end;
+    SaveUndo(True);
+    ApplyFilter5x5ToBitmap(flt, tex.Texture);
+    changed := true;
+    PaintBox1.Invalidate;
+  finally
+    Screen.Cursor := crDefault;
+  end;
 end;
 
 end.
