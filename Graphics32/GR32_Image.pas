@@ -1190,7 +1190,14 @@ begin
       // For example the rect (0, 0, 0, 1) is a one pixel long line while (0, 0, 0, 0) is empty.
       OffsetX := Round(CachedScaleX / 2);
       OffsetY := Round(CachedScaleY / 2);
+      {$IFDEF COMPILER7}
+      T.Left := T.Left + OffsetX;
+      T.Right := T.Right + OffsetX;
+      T.Top := T.Top + OffsetY;
+      T.Bottom := T.Bottom + OffsetY;
+      {$ELSE}
       T.Offset(OffsetX, OffsetY);
+      {$ENDIF}
     end else
     begin
       // Rect coordinates specify the pixel corners.
