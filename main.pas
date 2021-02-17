@@ -54,7 +54,7 @@ const
   MAXPENSIZE = 128;
 
 const
-  MINTEXTURESCALE = 10;
+  MINTEXTURESCALE = 8;
   MAXTEXTURESCALE = 400;
 
 const
@@ -3064,7 +3064,7 @@ end;
 
 procedure TForm1.SizeSpeedButton1Click(Sender: TObject);
 begin
-  if GetInputNumber('Enter value', 'Size: ', 1, 128, fpensize) then
+  if GetInputNumber('Enter value', 'Size: ', 1, MAXPENSIZE, fpensize) then
   begin
     UpdateSliders;
     SlidersToLabels;
@@ -3082,7 +3082,7 @@ end;
 
 procedure TForm1.ScaleSpeedButton1Click(Sender: TObject);
 begin
-  if GetInputNumber('Enter value', 'Scale %: ', 10, 400, ftexturescale) then
+  if GetInputNumber('Enter value', 'Scale %: ', MINTEXTURESCALE, MAXTEXTURESCALE, ftexturescale) then
   begin
     UpdateSliders;
     SlidersToLabels;

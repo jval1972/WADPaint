@@ -139,6 +139,8 @@ procedure RotateBitmap90DegreesCounterClockwise(var ABitmap: TBitmap);
 
 procedure RotateBitmap90DegreesClockwise(var ABitmap: TBitmap);
 
+procedure BitmapHalftoneDraw(const bm: TBitmap; const ACanvas: TCanvas; const Rect: TRect);
+
 procedure I_GoToWebPage(const cmd: string);
 
 function RGBSwap(const l: LongWord): LongWord;
@@ -2097,6 +2099,19 @@ begin
 
   MemoryStreamR.Free;
 
+end;
+
+procedure BitmapHalftoneDraw(const bm: TBitmap; const ACanvas: TCanvas; const Rect: TRect);
+var
+  p: TPoint;
+  dc: HDC;
+begin
+  dc := ACanvas.Handle;
+  GetBrushOrgEx(dc, p);
+  SetStretchBltMode(dc, HALFTONE);
+  SetBrushOrgEx(dc, p.x, p.y, @p);
+  StretchBlt(dc, Rect.Left, Rect.Top, Rect.Right - Rect.Left, Rect.Bottom - Rect.Top,
+    bm.Canvas.Handle, 0, 0, bm.Width, bm.Height, ACanvas.CopyMode);
 end;
 
 type
