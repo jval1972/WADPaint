@@ -20,4 +20,6 @@ Color manipulation
 
 ## Screenshots
 
-![Screenshot1](https://i.postimg.cc/hPv8f6q3/Image4.png "Screenshot1")
+![Screenshot1](https://i.postimg.cc/qBjWmJjL/Image1.png "Screenshot1")
+
+![Screenshot2](https://i.postimg.cc/hPv8f6q3/Image4.png "Screenshot1")
