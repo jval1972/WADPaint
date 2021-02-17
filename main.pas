@@ -276,8 +276,7 @@ type
     GreenScale1: TMenuItem;
     BlueScale1: TMenuItem;
     N3: TMenuItem;
-    Options1: TMenuItem;
-    LinearScaling1: TMenuItem;
+    LinearScaleCheckBox1: TCheckBox;
     procedure FormCreate(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
     procedure NewButton1Click(Sender: TObject);
@@ -378,8 +377,6 @@ type
     procedure RedScale1Click(Sender: TObject);
     procedure GreenScale1Click(Sender: TObject);
     procedure BlueScale1Click(Sender: TObject);
-    procedure Options1Click(Sender: TObject);
-    procedure LinearScaling1Click(Sender: TObject);
   private
     { Private declarations }
     ffilename: string;
@@ -392,7 +389,6 @@ type
     fdrawcolor: TColor;
     lpickcolormousedown: boolean;
     drawlayer: drawlayer_p;
-    flinearscaling: boolean;
     colorbuffersize: integer;
     colorbuffer: colorbuffer_p;
     colorbuffersize2: integer;
@@ -583,7 +579,7 @@ begin
   DIRFileNameEdit.Text := fdirdirectory;
   PopulateDirListBox;
 
-  flinearscaling := opt_linearscaling;
+  LinearScaleCheckBox1.Checked := opt_linearscaling;
 
   lmousedown := False;
   lmousedownx := 0;
@@ -841,7 +837,7 @@ begin
   stringtobigstring(fpalettename, @opt_defaultpalette);
   stringtobigstring(fpk3filename, @opt_lastpk3file);
   stringtobigstring(fdirdirectory, @opt_lastdirectory);
-  opt_linearscaling := flinearscaling;
+  opt_linearscaling := LinearScaleCheckBox1.Checked;
 
   ter_SaveSettingsToFile(ChangeFileExt(ParamStr(0), '.ini'));
 
@@ -1213,7 +1209,8 @@ begin
   bm2.PixelFormat := pf32bit;
   bm2.Width := bm1.Width * ftexturescale div 100;
   bm2.Height := bm2.Width;
-  BitmapHalftoneDraw(bm1, bm2.Canvas, Rect(0, 0, bm2.Width, bm2.Height));
+  BitmapLanczosDraw(bm1, bm2);
+//  BitmapHalftoneDraw(bm1, bm2.Canvas, Rect(0, 0, bm2.Width, bm2.Height));
   bm1.Free;
 
   // Copy to colorbuffer2
@@ -1816,7 +1813,7 @@ begin
 
   ftexturescale := GetIntInRange(ftexturescale, MINTEXTURESCALE, MAXTEXTURESCALE);
 
-  if flinearscaling then
+  if LinearScaleCheckBox1.Checked then
   begin
     if PenSpeedButton1.Down then
     begin
@@ -3341,16 +3338,6 @@ end;
 procedure TForm1.BlueScale1Click(Sender: TObject);
 begin
   ColorScaleTexture(0, 0, 255);
-end;
-
-procedure TForm1.Options1Click(Sender: TObject);
-begin
-  LinearScaling1.Checked := flinearscaling;
-end;
-
-procedure TForm1.LinearScaling1Click(Sender: TObject);
-begin
-  flinearscaling := not flinearscaling;
 end;
 
 end.

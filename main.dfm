@@ -2501,6 +2501,14 @@ object Form1: TForm1
             Flat = True
             OnClick = ScaleSpeedButton1Click
           end
+          object LinearScaleCheckBox1: TCheckBox
+            Left = 8
+            Top = 104
+            Width = 233
+            Height = 17
+            Caption = 'Linear scale resampling'
+            TabOrder = 0
+          end
         end
       end
     end
@@ -9854,14 +9862,6 @@ object Form1: TForm1
       object FilterPsychedelicDistillation1: TMenuItem
         Caption = 'Psychedelic Distillation'
         OnClick = FilterPsychedelicDistillation1Click
-      end
-    end
-    object Options1: TMenuItem
-      Caption = 'Options'
-      OnClick = Options1Click
-      object LinearScaling1: TMenuItem
-        Caption = 'Linear Scaling'
-        OnClick = LinearScaling1Click
       end
     end
     object Help1: TMenuItem

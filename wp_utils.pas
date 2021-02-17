@@ -31,6 +31,11 @@ unit wp_utils;
 interface
 
 uses
+  GR32_Image,
+  GR32_System,
+  GR32_RangeBars,
+  GR32,
+  GR32_Resamplers,
   Windows,
   Graphics;
 
@@ -140,6 +145,8 @@ procedure RotateBitmap90DegreesCounterClockwise(var ABitmap: TBitmap);
 procedure RotateBitmap90DegreesClockwise(var ABitmap: TBitmap);
 
 procedure BitmapHalftoneDraw(const bm: TBitmap; const ACanvas: TCanvas; const Rect: TRect);
+
+procedure BitmapLanczosDraw(const bm: TBitmap; const destbm: TBitmap);
 
 procedure I_GoToWebPage(const cmd: string);
 
@@ -2095,7 +2102,7 @@ begin
 
   ABitmap.LoadFromStream(MemoryStreamR);
 
- 
+
 
   MemoryStreamR.Free;
 
@@ -2112,6 +2119,53 @@ begin
   SetBrushOrgEx(dc, p.x, p.y, @p);
   StretchBlt(dc, Rect.Left, Rect.Top, Rect.Right - Rect.Left, Rect.Bottom - Rect.Top,
     bm.Canvas.Handle, 0, 0, bm.Width, bm.Height, ACanvas.CopyMode);
+end;
+
+procedure BitmapLanczosDraw(const bm: TBitmap; const destbm: TBitmap);
+var
+  R: TKernelResampler;
+  Src, Dst: TBitmap32;
+  bmp: TBitmap;
+  bi: TBitmapInfo;
+  abitmap: HBitmap;
+begin
+  Src := TBitmap32.Create;
+  Src.Assign(bm);
+  Dst := TBitmap32.Create;
+  Dst.Assign(destbm);
+
+  R := TKernelResampler.Create(Src);
+  R.Kernel := TLanczosKernel.Create;
+  Dst.Draw(Dst.BoundsRect, Src.BoundsRect, Src);
+
+  FillChar(bi, SizeOf(bi), 0);
+  with bi.bmiHeader do
+  begin
+     biSize := SizeOf(bi.bmiHeader);
+     biWidth := Dst.Width;
+     biHeight := Dst.height;
+     biPlanes := 1;
+     biBitCount := 32;
+     biCompression := BI_RGB;
+  end;
+
+  bmp := TBitmap.Create;
+
+  aBitmap := 0;
+  try
+    aBitmap := CreateDIBitmap(GetDC(0), bi.bmiHeader, CBM_INIT,  @Dst.Bits[0], bi, DIB_RGB_COLORS);
+    bmp.handle := aBitmap;
+    destbm.Assign(bmp);
+    destbm.PixelFormat := pf32bit;
+  finally
+    DeleteObject(aBitmap);
+    bmp.Free;
+  end;
+
+  FlipBitmapVertical(destbm);
+//  destbm.Canvas.CopyRect(Dst.BoundsRect, Dst.Canvas, Dst.BoundsRect);
+  Src.Free;
+  Dst.Free;
 end;
 
 type
