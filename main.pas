@@ -277,6 +277,8 @@ type
     BlueScale1: TMenuItem;
     N3: TMenuItem;
     LinearScaleCheckBox1: TCheckBox;
+    ColorDialog2: TColorDialog;
+    ColorScale1: TMenuItem;
     procedure FormCreate(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
     procedure NewButton1Click(Sender: TObject);
@@ -377,6 +379,7 @@ type
     procedure RedScale1Click(Sender: TObject);
     procedure GreenScale1Click(Sender: TObject);
     procedure BlueScale1Click(Sender: TObject);
+    procedure ColorScale1Click(Sender: TObject);
   private
     { Private declarations }
     ffilename: string;
@@ -3338,6 +3341,12 @@ end;
 procedure TForm1.BlueScale1Click(Sender: TObject);
 begin
   ColorScaleTexture(0, 0, 255);
+end;
+
+procedure TForm1.ColorScale1Click(Sender: TObject);
+begin
+  if ColorDialog2.Execute then
+    ColorScaleTexture(GetRValue(ColorDialog2.Color), GetGValue(ColorDialog2.Color), GetBValue(ColorDialog2.Color));
 end;
 
 end.

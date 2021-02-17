@@ -9781,6 +9781,10 @@ object Form1: TForm1
         Caption = 'Blue Scale'
         OnClick = BlueScale1Click
       end
+      object ColorScale1: TMenuItem
+        Caption = 'Color Scale...'
+        OnClick = ColorScale1Click
+      end
       object N1: TMenuItem
         Caption = '-'
       end
@@ -9965,5 +9969,10 @@ object Form1: TForm1
     Options = [ofOverwritePrompt, ofHideReadOnly, ofPathMustExist, ofEnableSizing]
     Left = 481
     Top = 153
+  end
+  object ColorDialog2: TColorDialog
+    Options = [cdFullOpen, cdAnyColor]
+    Left = 288
+    Top = 89
   end
 end
