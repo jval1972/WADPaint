@@ -54,7 +54,7 @@ implementation
 
 // Image proccessing specific routines
 type    // For scanline simplification
-  TRGBArray = array[0..32767] OF TRGBTriple;
+  TRGBArray = packed array[0..32767] OF TRGBTriple;
   PRGBArray = ^TRGBArray;
 
 {This just forces a value to be 0 - 255 for rgb purposes.  I used asm in an
@@ -79,12 +79,14 @@ var
   O, T, C, B: PRGBArray;  // Scanlines
   x, y: integer;
   tBufr: TBitmap; // temp bitmap for 'enlarged' image
+  oldf: TPixelFormat;
 begin
   tBufr := TBitmap.Create;
   try
     tBufr.Width := bmp.Width + 2;  // Add a box around the outside...
     tBufr.Height := bmp.Height + 2;
     tBufr.PixelFormat := pf24bit;
+    oldf := bmp.PixelFormat;
     bmp.PixelFormat := pf24bit;
     O := tBufr.ScanLine[0];   // Copy top corner pixels
     T := bmp.ScanLine[0];
@@ -146,6 +148,7 @@ begin
             );
       end;
     end;
+    bmp.PixelFormat := oldf;
   finally
     tBufr.Free;
   end;
@@ -156,12 +159,14 @@ var
   O, T, TT, C, B, BB: PRGBArray;  // Scanlines
   x, y: integer;
   tBufr: TBitmap; // temp bitmap for 'enlarged' image
+  oldf: TPixelFormat;
 begin
   tBufr := TBitmap.Create;
   try
     tBufr.Width := bmp.Width + 4;  // Add a box around the outside...
     tBufr.Height := bmp.Height + 4;
     tBufr.PixelFormat := pf24bit;
+    oldf := bmp.PixelFormat;
     bmp.PixelFormat := pf24bit;
     O := tBufr.ScanLine[0];   // Copy top corner pixels
     T := bmp.ScanLine[0];
@@ -284,6 +289,7 @@ begin
 
       end;
     end;
+    bmp.PixelFormat := oldf;
   finally
     tBufr.Free;
   end;
