@@ -9785,6 +9785,13 @@ object Form1: TForm1
         Caption = 'Color Scale...'
         OnClick = ColorScale1Click
       end
+      object N10: TMenuItem
+        Caption = '-'
+      end
+      object RemapColorChannels1: TMenuItem
+        Caption = 'Remap Color Channels...'
+        OnClick = RemapColorChannels1Click
+      end
       object N1: TMenuItem
         Caption = '-'
       end

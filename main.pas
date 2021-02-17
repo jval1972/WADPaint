@@ -284,6 +284,8 @@ type
     ColorScale1: TMenuItem;
     N4: TMenuItem;
     NegativeImage1: TMenuItem;
+    N10: TMenuItem;
+    RemapColorChannels1: TMenuItem;
     procedure FormCreate(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
     procedure NewButton1Click(Sender: TObject);
@@ -386,6 +388,7 @@ type
     procedure BlueScale1Click(Sender: TObject);
     procedure ColorScale1Click(Sender: TObject);
     procedure NegativeImage1Click(Sender: TObject);
+    procedure RemapColorChannels1Click(Sender: TObject);
   private
     { Private declarations }
     ffilename: string;
@@ -471,6 +474,7 @@ type
     procedure RotateBitmapFromRadiogroupIndex(var bm: TBitmap; const rg: TRadioGroup);
     function ZoomValue(const x: integer): integer;
     procedure ColorScaleTexture(const aR, aG, aB: byte);
+    procedure DoRemapColorChannels(const aR, aG, aB: integer);
   protected
     // Made protected to avoid "Private symbol never used" warning.
     function DIRTexEditNameSize: integer;
@@ -492,6 +496,7 @@ uses
   wp_palettes,
   frm_loadimagehelper,
   frm_inputnumber,
+  frm_remapcolorchannels,
   wp_colorpalettebmz,
   wp_cursors,
   wp_doomdata,
@@ -3410,6 +3415,63 @@ begin
     PaintBox1.Invalidate;
   end;
 
+end;
+
+procedure TForm1.DoRemapColorChannels(const aR, aG, aB: integer);
+var
+  r, g, b: byte;
+  A: array[0..2] of byte;
+  line: PLongWordArray;
+  x, y: integer;
+  cchanged: boolean;
+  c, cn: LongWord;
+begin
+  tex.Texture.PixelFormat := pf32bit;
+
+  cchanged := False;
+  for y := 0 to tex.textureheight - 1 do
+  begin
+    line := tex.Texture.ScanLine[y];
+    for x := 0 to tex.texturewidth - 1 do
+    begin
+      c := line[x];
+      r := (c shr 16) and $ff;
+      g := (c shr 8) and $ff;
+      b := c and $ff;
+
+      A[0] := r;
+      A[1] := g;
+      A[2] := b;
+      r := A[aR];
+      g := A[aG];
+      b := A[aB];
+      cn := b + g shl 8 + r shl 16;
+      if cn <> c then
+      begin
+        if not cchanged then
+        begin
+          cchanged := True;
+          SaveUndo(True);
+        end;
+        line[x] := cn;
+      end;
+    end;
+  end;
+
+  if cchanged then
+  begin
+    changed := True;
+    PaintBox1.Invalidate;
+  end;
+
+end;
+
+procedure TForm1.RemapColorChannels1Click(Sender: TObject);
+var
+  aR, aG, aB: integer;
+begin
+  if RemapColorChannelsQuery(aR, aG, aB) then
+    DoRemapColorChannels(aR, aG, aB);
 end;
 
 end.
