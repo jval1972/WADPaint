@@ -928,7 +928,7 @@ procedure TForm1.Idle(Sender: TObject; var Done: Boolean);
 begin
   if closing then
     Exit;
-    
+
   UpdateEnable;
 
   Done := False;
@@ -2738,7 +2738,7 @@ var
 begin
   ZoomInButton1.Enabled := fZoom < MAXZOOM;
   ZoomOutButton1.Enabled := fZoom > MINZOOM;
-  
+
   if hasdrawPaintToolShape then
   begin
     GetCursorPos(pt);
@@ -2851,7 +2851,7 @@ begin
 end;
 
 procedure TForm1.FilterLaplace1Click(Sender: TObject);
-var 
+var
   flt: TImageFilter3x3;
 begin
   Screen.Cursor := crHourglass;
@@ -2874,7 +2874,7 @@ begin
 end;
 
 procedure TForm1.FilterHiPass1Click(Sender: TObject);
-var 
+var
   flt: TImageFilter3x3;
 begin
   Screen.Cursor := crHourglass;
@@ -2897,7 +2897,7 @@ begin
 end;
 
 procedure TForm1.FilterFindEdges1Click(Sender: TObject);
-var 
+var
   flt: TImageFilter3x3;
 begin
   Screen.Cursor := crHourglass;
@@ -2920,7 +2920,7 @@ begin
 end;
 
 procedure TForm1.FilterSharpen1Click(Sender: TObject);
-var 
+var
   flt: TImageFilter3x3;
 begin
   Screen.Cursor := crHourglass;
@@ -2943,7 +2943,7 @@ begin
 end;
 
 procedure TForm1.FilterEdgeEnhance1Click(Sender: TObject);
-var 
+var
   flt: TImageFilter3x3;
 begin
   Screen.Cursor := crHourglass;
@@ -2966,7 +2966,7 @@ begin
 end;
 
 procedure TForm1.FilterColorEmboss1Click(Sender: TObject);
-var 
+var
   flt: TImageFilter3x3;
 begin
   Screen.Cursor := crHourglass;
@@ -2989,7 +2989,7 @@ begin
 end;
 
 procedure TForm1.FilterSoften1Click(Sender: TObject);
-var 
+var
   flt: TImageFilter3x3;
 begin
   Screen.Cursor := crHourglass;
@@ -3012,7 +3012,7 @@ begin
 end;
 
 procedure TForm1.FilterSofterless1Click(Sender: TObject);
-var 
+var
   flt: TImageFilter3x3;
 begin
   Screen.Cursor := crHourglass;
@@ -3035,7 +3035,7 @@ begin
 end;
 
 procedure TForm1.FilterBlur1Click(Sender: TObject);
-var 
+var
   flt: TImageFilter3x3;
 begin
   Screen.Cursor := crHourglass;
@@ -3058,7 +3058,7 @@ begin
 end;
 
 procedure TForm1.FilterGrease1Click(Sender: TObject);
-var 
+var
   flt: TImageFilter3x3;
 begin
   Screen.Cursor := crHourglass;
@@ -3081,7 +3081,7 @@ begin
 end;
 
 procedure TForm1.FilterSimpleEmboss1Click(Sender: TObject);
-var 
+var
   flt: TImageFilter3x3;
 begin
   Screen.Cursor := crHourglass;
@@ -3104,7 +3104,7 @@ begin
 end;
 
 procedure TForm1.FilterLithograph1Click(Sender: TObject);
-var 
+var
   flt: TImageFilter5x5;
 begin
   Screen.Cursor := crHourglass;
@@ -3129,7 +3129,7 @@ begin
 end;
 
 procedure TForm1.FilterPsychedelicDistillation1Click(Sender: TObject);
-var 
+var
   flt: TImageFilter5x5;
 begin
   Screen.Cursor := crHourglass;
@@ -3154,7 +3154,7 @@ begin
 end;
 
 procedure TForm1.FilterBlurmore1Click(Sender: TObject);
-var 
+var
   flt: TImageFilter3x3;
 begin
   Screen.Cursor := crHourglass;
@@ -3477,7 +3477,7 @@ begin
 end;
 
 procedure TForm1.GaussianBlur1Click(Sender: TObject);
-var 
+var
   flt: TImageFilter5x5;
 begin
   Screen.Cursor := crHourglass;

@@ -32,7 +32,7 @@ interface
 
 uses
   wp_utils;
-  
+
 const
   spalDEFAULT = 'DEFAULT';
   spalDOOM = 'DOOM';
@@ -330,7 +330,7 @@ implementation
 
 uses
   Windows;
-  
+
 function GetPaletteFromName(const spal: string): rawpalette_p;
 begin
   if spal = spalDOOM then
