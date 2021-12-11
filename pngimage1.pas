@@ -3218,7 +3218,7 @@ var
   i: Integer;
 begin
   {2 bits is not supported, this routine will converted into 4 bits}
-  FOR i := 1 TO Row_Bytes do
+  for i := 1 to Row_Bytes do
   begin
     Byte(Dest^) := ((Byte(Src^) shr 2) and $F) or ((Byte(Src^)) and $F0);
       inc(Dest);
@@ -3235,7 +3235,7 @@ var
   i: Integer;
 begin
   {2 bits is not supported, this routine will converted into 4 bits}
-  FOR i := 1 TO Row_Bytes do
+  for i := 1 to Row_Bytes do
   begin
     Byte(Dest^) := ((Byte(Src^) shr 4) and $3) or ((Byte(Src^) shr 2) and $30);
       inc(Dest);
@@ -3251,7 +3251,7 @@ procedure TChunkIDAT.CopyNonInterlacedGrayscale16(
 var
   I: Integer;
 begin
-  FOR I := 1 TO ImageWidth DO
+  for I := 1 to ImageWidth do
   begin
     {Windows does not supports 16 bits for each pixel in grayscale}
     {mode, so reduce to 8}
@@ -3271,7 +3271,7 @@ procedure TChunkIDAT.CopyNonInterlacedRGBAlpha8(
 var
   i: Integer;
 begin
-  FOR I := 1 TO ImageWidth DO
+  for I := 1 to ImageWidth do
   begin
     {Copy pixel values and transparency}
     Trans^ := pChar(Longint(Src) + 3)^;
@@ -3289,7 +3289,7 @@ procedure TChunkIDAT.CopyNonInterlacedRGBAlpha16(
 var
   I: Integer;
 begin
-  FOR I := 1 TO ImageWidth DO
+  for I := 1 to ImageWidth do
   begin
     //Copy rgb and alpha values (transforming from 16 bits to 8 bits)
     {Copy pixel values}
@@ -3314,7 +3314,7 @@ procedure TChunkIDAT.CopyNonInterlacedGrayscaleAlpha8(
 var
   I: Integer;
 begin
-  FOR I := 1 TO ImageWidth DO
+  for I := 1 to ImageWidth do
   begin
     {Copy alpha value and then gray value}
     Dest^  := Src^;  inc(Src);
@@ -3329,7 +3329,7 @@ procedure TChunkIDAT.CopyNonInterlacedGrayscaleAlpha16(
 var
   I: Integer;
 begin
-  FOR I := 1 TO ImageWidth DO
+  for I := 1 to ImageWidth do
   begin
     {Copy alpha value and then gray value}
     {$IFDEF Store16bits}
@@ -3392,7 +3392,7 @@ begin
     Header.BytesPerRow * (ImageHeight - 1);
   {$ENDIF}
   {Reads each line}
-  FOR j := 0 to ImageHeight - 1 do
+  for j := 0 to ImageHeight - 1 do
   begin
     {Read this line Row_Buffer[RowUsed][0] if the filter type for this line}
     if IDATZlibRead(ZLIBStream, @Row_Buffer[RowUsed][0], Row_Bytes + 1, EndPos,
@@ -3428,17 +3428,17 @@ begin
     {AND 255 serves only to never let the result be larger than one byte}
     {Sub filter}
     FILTER_SUB:
-      FOR Col := Offset + 1 to Row_Bytes DO
+      for Col := Offset + 1 to Row_Bytes do
         Row_Buffer[RowUsed][Col] := (Row_Buffer[RowUsed][Col] +
           Row_Buffer[RowUsed][Col - Offset]) and 255;
     {Up filter}
     FILTER_UP:
-      FOR Col := 1 to Row_Bytes DO
+      for Col := 1 to Row_Bytes do
         Row_Buffer[RowUsed][Col] := (Row_Buffer[RowUsed][Col] +
           Row_Buffer[not RowUsed][Col]) and 255;
     {Average filter}
     FILTER_AVERAGE:
-      FOR Col := 1 to Row_Bytes DO
+      for Col := 1 to Row_Bytes do
       begin
         {Obtains up and left pixels}
         above := Row_Buffer[not RowUsed][Col];
@@ -3458,12 +3458,12 @@ begin
       left := 0;
       aboveleft := 0;
       {Test each byte}
-      FOR Col := 1 to Row_Bytes DO
+      for Col := 1 to Row_Bytes do
       begin
         {Obtains above pixel}
         above := Row_Buffer[not RowUsed][Col];
         {Obtains left and top-left pixels}
-        if (col - 1 >= offset) Then
+        if col - 1 >= offset then
         begin
           left := row_buffer[RowUsed][col - offset];
           aboveleft := row_buffer[not RowUsed][col - offset];
@@ -3514,7 +3514,7 @@ begin
   GetMem(Row_Buffer[true], Row_Bytes + 1);
   ZeroMemory(Row_Buffer[false], Row_bytes + 1);
   {Set the variable to alternate the Row_Buffer item to use}
-  RowUsed := TRUE;
+  RowUsed := true;
 
   {Call special methods for the different interlace methods}
   case Owner.InterlaceMethod of
@@ -3541,7 +3541,7 @@ begin
       Owner.RaiseError(EPngInvalidCRC, EPngInvalidCRCText);
       exit;
     end;
-  {$ELSE}Result := TRUE; {$ENDIF}
+  {$ELSE}Result := true; {$ENDIF}
 end;
 
 const
@@ -3600,7 +3600,7 @@ begin
     FreeMem(Encode_Buffer[FILTER_PAETH], Row_Bytes);
 
   {Everything went ok}
-  Result := True;
+  Result := true;
 end;
 
 {Writes the IDAT using the settings}
@@ -3698,7 +3698,7 @@ procedure TChunkIDAT.EncodeNonInterlacedRGB16(Src, Dest, Trans: pChar);
 var
   I: Integer;
 begin
-  FOR I := 1 TO ImageWidth DO
+  for I := 1 to ImageWidth do
   begin
     //Now we copy from 1 byte for each sample stored to a 2 bytes (or 1 word)
     //for sample
@@ -3724,7 +3724,7 @@ procedure TChunkIDAT.EncodeNonInterlacedGrayscale16(Src, Dest, Trans: pChar);
 var
   I: Integer;
 begin
-  FOR I := 1 TO ImageWidth DO
+  for I := 1 to ImageWidth do
   begin
     //Now we copy from 1 byte for each sample stored to a 2 bytes (or 1 word)
     //for sample
@@ -3740,7 +3740,7 @@ var
   i: Integer;
 begin
   {Copy the data to the destination, including data from Trans pointer}
-  FOR i := 1 TO ImageWidth do
+  for i := 1 to ImageWidth do
   begin
     Byte(Dest^) := Owner.InverseGamma[PByte(Longint(Src) + 2)^]; inc(Dest);
     Byte(Dest^) := Owner.InverseGamma[PByte(Longint(Src) + 1)^]; inc(Dest);
@@ -3756,7 +3756,7 @@ var
   i: Integer;
 begin
   {Copy the data to the destination, including data from Trans pointer}
-  FOR i := 1 TO ImageWidth do
+  for i := 1 to ImageWidth do
   begin
     pWord(Dest)^ := Owner.InverseGamma[PByte(Longint(Src) + 2)^]; inc(Dest, 2);
     pWord(Dest)^ := Owner.InverseGamma[PByte(Longint(Src) + 1)^]; inc(Dest, 2);
@@ -3773,7 +3773,7 @@ var
   i: Integer;
 begin
   {Copy the data to the destination, including data from Trans pointer}
-  FOR i := 1 TO ImageWidth do
+  for i := 1 to ImageWidth do
   begin
     Dest^ := Src^; inc(Dest);
     Dest^ := Trans^; inc(Dest);
@@ -3788,7 +3788,7 @@ var
   i: Integer;
 begin
   {Copy the data to the destination, including data from Trans pointer}
-  FOR i := 1 TO ImageWidth do
+  for i := 1 to ImageWidth do
   begin
     pWord(Dest)^ := pByte(Src)^;    inc(Dest, 2);
     pWord(Dest)^ := pByte(Trans)^;  inc(Dest, 2);
@@ -3845,7 +3845,7 @@ begin
   Trans := Header.ImageAlpha;
 
   {Writes each line}
-  FOR j := 0 to ImageHeight - 1 do
+  for j := 0 to ImageHeight - 1 do
   begin
     {Copy data into buffer}
     CopyProc(Data, @Encode_Buffer[BUFFER][0], Trans);
@@ -4103,7 +4103,7 @@ begin
   end {case Header.ColorType};
 
   {Compress the image using the seven passes for ADAM 7}
-  FOR CurrentPass := 0 TO 6 DO
+  for CurrentPass := 0 to 6 do
   begin
     {Calculates the number of pixels and bytes for this pass row}
     PixelsThisRow := (ImageWidth - ColumnStart[CurrentPass] +
@@ -4307,7 +4307,7 @@ begin
   palEntries.palVersion := $300;
   palEntries.palNumEntries := fCount;
   PalColor := Data;
-  FOR j := 0 TO fCount - 1 DO
+  for j := 0 to fCount - 1 do
     with palEntries.palPalEntry[j] do
     begin
       peRed  :=  Owner.GammaTable[PalColor.r];
@@ -4339,7 +4339,7 @@ begin
 
   {Copy palette items}
   BitmapInfo := Header.BitmapInfo;
-  FOR j := 0 TO fCount - 1 DO
+  for j := 0 to fCount - 1 do
     with palEntries.palPalEntry[j] do
     begin
       DataPtr^ := Owner.InverseGamma[peRed]; inc(DataPtr);
@@ -4418,7 +4418,7 @@ begin
   {Build gamma table and inverse table for saving}
   if Value <> 0 then
     with Owner do
-      FOR i := 0 TO 255 DO
+      for i := 0 to 255 do
       begin
         GammaTable[I] := Round(Power((I / 255), 1 /
           (Value / 100000 * 2.2)) * 255);
@@ -4465,7 +4465,7 @@ begin
   {Initialize gamma}
   InitializeGamma();
   {Free all the objects and memory (0 chunks Bug fixed by Noel Sharpe)}
-  for i := 0 TO Integer(Chunks.Count) - 1 do
+  for i := 0 to Integer(Chunks.Count) - 1 do
     TChunk(Chunks.Item[i]).Free;
   Chunks.Count := 0;
 end;
@@ -4544,28 +4544,28 @@ begin
     LineSize := BytesForPixels(Header.Width, Header.ColorType, Header.BitDepth);
 
     {Calculates byte offset}
-    Case Header.ColorType of
+    case Header.ColorType of
       {Grayscale}
       COLOR_GRAYSCALE:
-        If Header.BitDepth = 16 Then
+        if Header.BitDepth = 16 then
           Offset := 2
-        Else
+        else
           Offset := 1 ;
       {It always smaller or equal one byte, so it occupes one byte}
       COLOR_PALETTE:
         offset := 1;
       {It might be 3 or 6 bytes}
       COLOR_RGB:
-        offset := 3 * Header.BitDepth Div 8;
+        offset := 3 * Header.BitDepth div 8;
       {It might be 2 or 4 bytes}
       COLOR_GRAYSCALEALPHA:
-        offset := 2 * Header.BitDepth Div 8;
+        offset := 2 * Header.BitDepth div 8;
       {4 or 8 bytes}
       COLOR_RGBALPHA:
-        offset := 4 * Header.BitDepth Div 8;
+        offset := 4 * Header.BitDepth div 8;
       else
         Offset := 0;
-      End ;
+    end;
 
   end
   else
@@ -4583,7 +4583,8 @@ begin
   {There must be a Header chunk to get the size, otherwise returns 0}
   if HeaderPresent then
     Result := TChunkIHDR(Chunks.Item[0]).Height
-  else Result := 0;
+  else
+    Result := 0;
 end;
 
 {Returns image width}
@@ -4592,7 +4593,8 @@ begin
   {There must be a Header chunk to get the size, otherwise returns 0}
   if HeaderPresent then
     Result := Header.Width
-  else Result := 0;
+  else
+    Result := 0;
 end;
 
 {Returns if the image is empty}
